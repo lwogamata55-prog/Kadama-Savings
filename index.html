@@ -1,495 +1,961 @@
-```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kadama Saving Group — Portal</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
 
-<title>Kadama Saving Group</title>
+  <!-- Icons for some browsers -->
+  <link rel="icon" href="icon-192.png" sizes="192x192">
+  <meta name="theme-color" content="#22c55e">
 
-<style>
+  <style>
+    :root{
+      --bg:#071026;
+      --card: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.06);
+      --accent:#22c55e;
+      --accent-2:#16a34a;
+      --gold:#D4AF37;
+      --muted:#9aa7b2;
+      --danger:#ef4444;
+      --toast-bg: rgba(0,0,0,0.6);
+      --positive:#16a34a;
+      --negative:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#fff;background:linear-gradient(180deg,#071026 0%, #081a2b 70%);overflow-x:hidden}
+    section.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}
+    .glass{background:var(--card);backdrop-filter:blur(8px);border-radius:16px;padding:20px;border:1px solid var(--glass-border);max-width:1100px;width:100%}
+    button{background:var(--accent);border:none;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700;transition:transform .12s ease,opacity .12s}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted)}
+    button.danger{background:var(--danger)}
+    button:active{transform:translateY(1px)}
+    .muted{color:var(--muted)}
+    .hidden{display:none!important}
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
+    /* WELCOME PAGE */
+    #page-welcome .glass{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px;min-height:60vh}
+    #welcome-msg{font-size:4rem;line-height:1;letter-spacing:0.6px;text-align:center;margin:0 0 12px 0;font-weight:800;opacity:0;transform:translateY(18px);animation:welcomeIn 1s ease forwards}
+    @keyframes welcomeIn{to{opacity:1;transform:translateY(0)}}
+    #welcome-sub{font-size:1.05rem;color:var(--muted);margin-bottom:18px;opacity:0;transform:translateY(18px);animation:welcomeIn 1s ease .15s forwards}
+    .welcome-actions{display:flex;gap:12px;margin-top:18px;opacity:0;transform:translateY(18px);animation:welcomeIn 1s ease .3s forwards}
+    .welcome-underline{height:6px;width:260px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--gold));margin-top:18px;opacity:0;transform:scaleX(0);animation:underlineIn 1s ease .6s forwards}
+    @keyframes underlineIn{to{opacity:1;transform:scaleX(1)}}
 
-body{
-background:linear-gradient(120deg,#0f172a,#1e293b);
-color:white;
-overflow-x:hidden;
-}
+    /* Install button styling */
+    #install-btn{display:none;background:linear-gradient(90deg,var(--gold),#f0c86b);color:#000;font-weight:800}
 
-/* HEADER */
+    /* Confetti canvas */
+    #confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
 
-header{
-background:#020617;
-padding:15px 30px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+    /* Toasts */
+    .toast-wrap{position:fixed;right:18px;bottom:18px;z-index:99999;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+    .toast{background:var(--toast-bg);color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.4);font-weight:600}
 
-.logo{
-font-size:22px;
-font-weight:bold;
-color:#22c55e;
-}
+    /* Dashboard & Ledger */
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+    .totals{display:flex;gap:12px;flex-wrap:wrap}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);min-width:160px}
+    .flex{display:flex;gap:12px;align-items:center}
+    .member-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:12px 0}
+    .member-card{padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.03);position:relative}
+    .member-name{font-weight:800}
+    .balance{font-weight:800;font-size:1rem}
+    .balance.positive{color:var(--positive)}
+    .balance.negative{color:var(--negative)}
+    .balance.neutral{color:var(--muted)}
+    .rating-badge{position:absolute;top:12px;right:12px;padding:6px 8px;border-radius:999px;background:rgba(0,0,0,0.25);font-weight:700;font-size:0.85rem}
+    .stars{color:var(--gold);margin-left:6px}
+    .trend-small{font-size:0.85rem;margin-top:6px}
 
-/* WELCOME PAGE */
+    table{width:100%;border-collapse:collapse;margin-top:12px;background:#fff;color:#000;border-radius:8px;overflow:hidden}
+    th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;font-size:0.95rem}
+    thead th{background:linear-gradient(90deg,var(--gold),#f0c86b);color:#000;font-weight:700}
 
-#welcome{
-height:80vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-text-align:center;
-}
+    /* Reports */
+    .report-card{padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.03);margin-top:12px}
 
-#welcome h1{
-font-size:45px;
-color:#22c55e;
-margin-bottom:15px;
-}
-
-#welcome p{
-opacity:0.8;
-margin-bottom:25px;
-}
-
-button{
-padding:10px 18px;
-border:none;
-border-radius:6px;
-background:#22c55e;
-color:white;
-cursor:pointer;
-}
-
-button:hover{
-background:#16a34a;
-}
-
-/* CONTAINER */
-
-.container{
-max-width:1100px;
-margin:auto;
-padding:20px;
-}
-
-/* CARDS */
-
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:10px;
-margin-bottom:20px;
-}
-
-/* INPUTS */
-
-input,select{
-width:100%;
-padding:10px;
-margin-top:8px;
-margin-bottom:12px;
-border:none;
-border-radius:5px;
-}
-
-/* STATS */
-
-.stats{
-display:flex;
-flex-wrap:wrap;
-gap:15px;
-}
-
-.stat{
-background:#0f172a;
-padding:15px;
-flex:1;
-min-width:160px;
-border-radius:8px;
-text-align:center;
-}
-
-/* TABLE */
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-th{
-background:#22c55e;
-padding:10px;
-}
-
-td{
-padding:10px;
-border-bottom:1px solid #334155;
-}
-
-/* HIDDEN */
-
-.hidden{
-display:none;
-}
-
-/* BUBBLES */
-
-.bubble{
-position:absolute;
-bottom:-100px;
-background:rgba(255,255,255,0.2);
-border-radius:50%;
-animation:rise 15s infinite;
-}
-
-@keyframes rise{
-
-0%{
-transform:translateY(0)
-}
-
-100%{
-transform:translateY(-1200px)
-}
-
-}
-
-</style>
-
+    @media (max-width:720px){
+      #welcome-msg{font-size:2.2rem}
+      .member-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+    }
+  </style>
 </head>
-
 <body>
 
-<header>
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-<div class="logo">
-Kadama Saving Group
-</div>
+  <!-- Toast container -->
+  <div class="toast-wrap" id="toast-wrap" aria-live="polite"></div>
 
-<button onclick="showLogin()">Admin</button>
+  <!-- WELCOME PAGE -->
+  <section id="page-welcome" class="page" aria-label="Welcome">
+    <div class="glass" role="main" aria-labelledby="welcome-msg">
+      <h1 id="welcome-msg">Welcome to Kadama Saving Group</h1>
+      <div id="welcome-sub" class="small">Kabondo Branch</div>
 
-</header>
+      <div class="welcome-actions" role="navigation" aria-label="Primary actions">
+        <button id="enter-dashboard-btn" onclick="enterDashboard()" aria-label="Open Dashboard">Enter Dashboard</button>
+        <button class="secondary" onclick="showPage('page-login')" aria-label="Admin Access">Admin Access</button>
+        <a class="secondary" href="https://lwogamata55-prog.github.io/Kadama-Savings" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);border:1px solid rgba(255,255,255,0.06)">Online Preview</a>
+        <button id="install-btn" title="Install Kadama app">Install App</button>
+      </div>
 
-<!-- WELCOME PAGE -->
+      <div class="welcome-underline" aria-hidden="true"></div>
+    </div>
+  </section>
 
-<section id="welcome">
+  <!-- LOGIN PAGE -->
+  <section id="page-login" class="page" style="display:none" aria-label="Admin login">
+    <div class="glass" style="max-width:520px;width:100%">
+      <h2>Admin Authentication</h2>
+      <p class="muted">Enter admin password to unlock management features.</p>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <input id="admin-pass" type="password" placeholder="Password" aria-label="Admin password" />
+        <button onclick="checkAdmin()">Unlock</button>
+        <button class="secondary" onclick="showPage('page-welcome')">Back</button>
+      </div>
+    </div>
+  </section>
 
-<h1>Welcome to Kadama Savings</h1>
+  <!-- DASHBOARD PAGE -->
+  <section id="page-dashboard" class="page" style="display:none;align-items:flex-start;padding-top:36px" aria-label="Dashboard">
+    <div class="glass" style="width:100%;max-width:1100px;position:relative;z-index:2">
+      <div class="topbar">
+        <div>
+          <h2 style="margin:0">Group Dashboard</h2>
+          <div class="muted small">Overview: totals, balances, ratings</div>
+        </div>
+        <div class="flex">
+          <button onclick="showPage('page-ledger')">Open Ledger</button>
+          <button class="secondary" id="manage-members-btn" style="display:none" onclick="showPage('page-manage-members')">Manage Members</button>
+          <button class="secondary" id="manage-ledger-btn" style="display:none" onclick="showPage('page-manage-ledger')">Manage Ledger</button>
+          <button class="secondary" id="admin-logout" style="display:none" onclick="lockAdmin()">Lock Admin</button>
+          <button class="secondary" onclick="showPage('page-welcome')">Return to Start</button>
+        </div>
+      </div>
 
-<p>Manage your saving group easily and transparently.</p>
+      <div id="admin-controls" class="hidden" style="margin-bottom:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <div class="small muted">Admin mode active</div>
+          <button class="secondary" onclick="showPage('page-manage-members')">Open Member Manager</button>
+          <button class="secondary" onclick="showPage('page-manage-ledger')">Open Ledger Manager</button>
+          <button class="secondary" onclick="showPage('page-chat')">Open Chat</button>
+        </div>
+      </div>
 
-<button onclick="enterApp()">Enter App</button>
+      <div class="totals" style="margin-top:12px">
+        <div class="card">
+          <div class="muted">Total Group Savings</div>
+          <div id="total-sum" style="font-weight:800;font-size:1.1rem">UGX 0</div>
+        </div>
+        <div class="card">
+          <div class="muted">Members</div>
+          <div id="member-count" style="font-weight:700">0</div>
+        </div>
+        <div class="card">
+          <div class="muted">Last Transaction</div>
+          <div id="last-tx" class="muted">—</div>
+        </div>
+      </div>
 
-</section>
+      <div style="margin-top:14px">
+        <div class="muted">Member Balances & Ratings</div>
+        <div class="member-grid" id="member-cards" aria-live="polite"></div>
+      </div>
 
-<!-- ADMIN LOGIN -->
+      <div class="report-card" id="reports-overview" aria-live="polite">
+        <h3 style="margin:0 0 8px 0">Reports</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="min-width:220px">
+            <div class="small muted">Weekly Summary</div>
+            <div id="weekly-summary" class="small">—</div>
+          </div>
+          <div style="min-width:220px">
+            <div class="small muted">Monthly Summary</div>
+            <div id="monthly-summary" class="small">—</div>
+          </div>
+          <div style="min-width:220px">
+            <div class="small muted">Change (week → week)</div>
+            <div id="weekly-change" class="small">—</div>
+          </div>
+          <div style="min-width:220px">
+            <div class="small muted">Change (month → month)</div>
+            <div id="monthly-change" class="small">—</div>
+          </div>
+        </div>
+      </div>
 
-<section id="login" class="container hidden">
+    </div>
+  </section>
 
-<div class="card">
+  <!-- LEDGER PAGE -->
+  <section id="page-ledger" class="page" style="display:none;align-items:flex-start;padding-top:36px" aria-label="Ledger">
+    <div class="glass" style="width:100%;max-width:1100px;position:relative;z-index:2">
+      <div class="topbar">
+        <div>
+          <h2 style="margin:0">Ledger</h2>
+          <div class="muted small">All transactions (newest first)</div>
+        </div>
+        <div class="flex">
+          <button onclick="showPage('page-dashboard')">Back to Dashboard</button>
+          <button class="secondary" onclick="downloadLedger()">Download CSV</button>
+          <button class="secondary" onclick="showPage('page-welcome')">Return to Start</button>
+        </div>
+      </div>
 
-<h2>Admin Login</h2>
+      <div style="margin-top:12px">
+        <table aria-live="polite">
+          <thead>
+            <tr><th>Date</th><th>Member</th><th>Type</th><th style="text-align:right">Amount (UGX)</th><th style="text-align:right">Balance (UGX)</th><th style="text-align:center">Actions</th></tr>
+          </thead>
+          <tbody id="body-row"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-<input type="password" id="pass" placeholder="Enter Admin Password">
+  <!-- MANAGE MEMBERS -->
+  <section id="page-manage-members" class="page" style="display:none;align-items:center;justify-content:center" aria-label="Manage members">
+    <div class="glass" style="max-width:720px;width:100%">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Member Manager</h3>
+        <div>
+          <button class="secondary" onclick="showPage('page-dashboard')">Close</button>
+        </div>
+      </div>
 
-<button onclick="login()">Login</button>
+      <div style="margin-top:12px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="new-member-name" placeholder="New member name" aria-label="New member name" />
+          <button onclick="addMember()">Add Member</button>
+        </div>
 
-</div>
+        <div class="member-list" id="member-list" style="margin-top:12px"></div>
+        <div style="margin-top:12px" class="small muted">Editing a name updates all ledger entries. Removing a member removes their ledger entries.</div>
+      </div>
+    </div>
+  </section>
 
-</section>
+  <!-- MANAGE LEDGER -->
+  <section id="page-manage-ledger" class="page" style="display:none;align-items:center;justify-content:center" aria-label="Manage ledger">
+    <div class="glass" style="max-width:900px;width:100%">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Ledger Manager</h3>
+        <div>
+          <button class="secondary" onclick="showPage('page-dashboard')">Close</button>
+        </div>
+      </div>
 
-<!-- APP -->
+      <div style="margin-top:12px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <select id="mg-member-select" aria-label="Select member"></select>
+          <select id="mg-type-select">
+            <option value="deposit">Deposit</option>
+            <option value="withdraw">Withdraw</option>
+            <option value="welfare">Welfare</option>
+          </select>
+          <input id="mg-amount" type="number" placeholder="Amount UGX" aria-label="Amount" />
+          <input id="mg-date" type="date" aria-label="Date" />
+          <button onclick="mgAddTransaction()">Add Transaction</button>
+        </div>
 
-<section id="app" class="container hidden">
+        <div style="margin-top:12px">
+          <table>
+            <thead><tr><th>Date</th><th>Member</th><th>Type</th><th style="text-align:right">Amount</th><th style="text-align:right">Balance</th><th>Actions</th></tr></thead>
+            <tbody id="mg-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<!-- STATS -->
+  <!-- CHAT PAGE -->
+  <section id="page-chat" class="page" style="display:none;align-items:center;justify-content:center" aria-label="Chat with admin">
+    <div class="glass" style="max-width:420px;width:100%">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Chat with Admin</h3>
+        <div>
+          <button class="secondary" onclick="showPage('page-dashboard')">Close</button>
+        </div>
+      </div>
 
-<div class="stats">
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+        <div id="chat-list" style="max-height:50vh;overflow:auto;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02)"></div>
 
-<div class="stat">
-<h3>Total Savings</h3>
-<p id="totalSavings">0</p>
-</div>
+        <div style="display:flex;gap:8px">
+          <input id="chat-new-input" placeholder="Type a message..." style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff" />
+          <button onclick="chatSend()">Send</button>
+        </div>
 
-<div class="stat">
-<h3>Total Welfare</h3>
-<p id="totalWelfare">0</p>
-</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="secondary" onclick="adminReadChat()">Admin: Quick Reply</button>
+          <button class="secondary" onclick="clearChat()">Clear Chat</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="stat">
-<h3>Total Expenditure</h3>
-<p id="totalExp">0</p>
-</div>
-
-<div class="stat">
-<h3>Balance</h3>
-<p id="balance">0</p>
-</div>
-
-</div>
-
-<!-- ADMIN PANEL -->
-
-<div id="adminPanel" class="card hidden">
-
-<h2>Admin Panel</h2>
-
-<h3>Add Member</h3>
-
-<input id="memberName" placeholder="Member name">
-
-<button onclick="addMember()">Add Member</button>
-
-<h3>Add Transaction</h3>
-
-<select id="memberSelect"></select>
-
-<input id="save" type="number" placeholder="Savings">
-
-<input id="wel" type="number" placeholder="Welfare">
-
-<input id="exp" type="number" placeholder="Expenditure">
-
-<button onclick="addTransaction()">Add Transaction</button>
-
-</div>
-
-<!-- MEMBER LIST -->
-
-<div class="card">
-
-<h2>Members</h2>
-
-<ul id="memberList"></ul>
-
-</div>
-
-<!-- LEDGER -->
-
-<div class="card">
-
-<h2>Transactions</h2>
-
-<table>
-
-<thead>
-
-<tr>
-<th>Member</th>
-<th>Savings</th>
-<th>Welfare</th>
-<th>Expenditure</th>
-</tr>
-
-</thead>
-
-<tbody id="ledger"></tbody>
-
-</table>
-
-</div>
-
-</section>
+  <!-- GOODBYE PAGE -->
+  <section id="page-goodbye" class="page" style="display:none">
+    <div class="glass" style="max-width:720px">
+      <div style="text-align:center">
+        <div class="goodbye-emoji">👋</div>
+        <h2>Goodbye from Kadama</h2>
+        <p id="goodbye-msg" class="muted">We wish you the best in your future endeavors.</p>
+        <div style="margin-top:18px">
+          <button onclick="showPage('page-welcome')">Return to Start</button>
+          <button class="secondary" onclick="downloadPayouts()">Download Summary</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
 <script>
+/* ============================
+   PWA install handling
+   ============================ */
+let deferredPrompt = null;
+const installBtn = document.getElementById('install-btn');
 
-/* ADMIN PASSWORD */
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'inline-block';
+});
 
-let adminPassword="kadama123"
+installBtn.addEventListener('click', async () => {
+  installBtn.style.display = 'none';
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const choice = await deferredPrompt.userChoice;
+  if (choice && choice.outcome === 'accepted') {
+    showToast('App installed');
+  } else {
+    showToast('Install dismissed', true);
+  }
+  deferredPrompt = null;
+});
 
-/* DATA */
-
-let data=JSON.parse(localStorage.getItem("kadama"))||{
-
-members:[],
-transactions:[]
-
+/* Register service worker */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(()=>{ /* ignore registration errors */ });
 }
 
-/* NAVIGATION */
+/* ============================
+   App state and persistence
+   ============================ */
+let members = ["Hajji","Hajjat","Mutebi","Nansubu","Namsoke","Nakkazi","Lwoga","Nakiberu","Namutebi"];
+let ledger = []; // newest-first entries: {id,date,member,type,amount}
+let adminUnlocked = false;
+const STORAGE_KEY = 'kadama_pwa_state';
+const CHAT_KEY = 'kadama_pwa_chat';
 
-function showLogin(){
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({members,ledger})); }catch(e){}
+}
+function loadState(){
+  try{
+    const s = localStorage.getItem(STORAGE_KEY);
+    if(!s) return;
+    const obj = JSON.parse(s);
+    if(Array.isArray(obj.members)) members = obj.members.slice();
+    if(Array.isArray(obj.ledger)) ledger = obj.ledger.slice();
+  }catch(e){}
+}
+loadState();
 
-document.getElementById("welcome").classList.add("hidden")
-
-document.getElementById("login").classList.remove("hidden")
-
+/* ============================
+   Navigation
+   ============================ */
+function showPage(id){
+  document.querySelectorAll('section.page').forEach(s => s.style.display = 'none');
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.display = 'flex';
+  if(id === 'page-dashboard') renderDashboard();
+  if(id === 'page-ledger') renderLedger();
+  if(id === 'page-manage-members') renderManageMembers();
+  if(id === 'page-manage-ledger') renderManageLedger();
+  if(id === 'page-chat') renderChatList();
 }
 
-function enterApp(){
-
-document.getElementById("welcome").classList.add("hidden")
-
-document.getElementById("app").classList.remove("hidden")
-
-render()
-
+/* ============================
+   Enter dashboard (user interaction enables notifications)
+   ============================ */
+const notifySound = new Audio(); // silent placeholder; browsers require user gesture to play real audio
+function enterDashboard(){
+  if("Notification" in window && Notification.permission !== "granted"){
+    Notification.requestPermission().then(()=>{});
+  }
+  showPage('page-dashboard');
+  renderDashboard();
 }
 
-/* LOGIN */
-
-function login(){
-
-let p=document.getElementById("pass").value
-
-if(p===adminPassword){
-
-document.getElementById("login").classList.add("hidden")
-
-document.getElementById("app").classList.remove("hidden")
-
-document.getElementById("adminPanel").classList.remove("hidden")
-
-render()
-
+/* ============================
+   Admin auth & controls
+   ============================ */
+function checkAdmin(){
+  const pass = document.getElementById('admin-pass').value || '';
+  if(pass === 'kadama123'){
+    adminUnlocked = true;
+    document.getElementById('admin-pass').value = '';
+    document.getElementById('admin-logout').style.display = 'inline-block';
+    document.getElementById('manage-members-btn').style.display = 'inline-block';
+    document.getElementById('manage-ledger-btn').style.display = 'inline-block';
+    document.getElementById('admin-controls').classList.remove('hidden');
+    showToast('Admin unlocked');
+    showPage('page-dashboard');
+  } else {
+    showToast('Wrong password', true);
+  }
+}
+function lockAdmin(){
+  adminUnlocked = false;
+  document.getElementById('admin-logout').style.display = 'none';
+  document.getElementById('manage-members-btn').style.display = 'none';
+  document.getElementById('manage-ledger-btn').style.display = 'none';
+  document.getElementById('admin-controls').classList.add('hidden');
+  showToast('Admin locked');
 }
 
-else{
-
-alert("Wrong password")
-
+/* ============================
+   Compute balances
+   ============================ */
+function computeBalances(){
+  const balances = {};
+  members.forEach(m => balances[m] = 0);
+  const chronological = ledger.slice().reverse();
+  chronological.forEach(e => {
+    if(!balances.hasOwnProperty(e.member)) return;
+    if(e.type === 'deposit' || e.type === 'welfare') balances[e.member] += Number(e.amount);
+    else if(e.type === 'withdraw') balances[e.member] -= Number(e.amount);
+  });
+  return balances;
 }
 
+/* ============================
+   Member rating (saving discipline)
+*/
+function computeMemberRating(member){
+  const now = new Date();
+  const periodDays = 90;
+  const start = new Date(now); start.setDate(now.getDate() - periodDays);
+  const deposits = ledger.filter(e => e.member === member && (e.type === 'deposit' || e.type === 'welfare') && new Date(e.date + 'T00:00:00') >= start);
+  const freq = deposits.length;
+  const avg = deposits.length ? deposits.reduce((s,e)=>s+Number(e.amount),0)/deposits.length : 0;
+  const weeks = Math.ceil(periodDays / 7);
+  const weeksWith = new Set();
+  deposits.forEach(d => {
+    const dt = new Date(d.date + 'T00:00:00');
+    const weekIndex = Math.floor((dt - start) / (7*24*3600*1000));
+    weeksWith.add(weekIndex);
+  });
+  const consistency = weeks ? (weeksWith.size / weeks) : 0;
+  const freqNorm = Math.min(freq / 20, 1);
+  const avgNorm = Math.min(avg / 200000, 1);
+  const consistencyNorm = consistency;
+  const score = freqNorm * 0.4 + avgNorm * 0.3 + consistencyNorm * 0.3;
+  let label = 'Poor', stars = 1, color = 'var(--negative)';
+  if(score >= 0.8){ label = 'Excellent'; stars = 5; color = 'var(--positive)'; }
+  else if(score >= 0.6){ label = 'Good'; stars = 4; color = 'var(--positive)'; }
+  else if(score >= 0.4){ label = 'Fair'; stars = 3; color = 'var(--muted)'; }
+  else { label = 'Poor'; stars = 2; color = 'var(--negative)'; }
+  return { score, label, stars, color, freq, avg: Math.round(avg), consistency: Math.round(consistency*100) };
 }
 
-/* ADD MEMBER */
+/* ============================
+   Dashboard & Ledger rendering
+   ============================ */
+function renderDashboard(){
+  const balances = computeBalances();
+  const total = Object.values(balances).reduce((a,b)=>a+b,0);
+  document.getElementById('total-sum').innerText = `UGX ${formatNumber(total)}`;
+  document.getElementById('member-count').innerText = members.length;
+  document.getElementById('last-tx').innerText = ledger.length ? `${ledger[0].member} ${ledger[0].type} UGX ${formatNumber(ledger[0].amount)} on ${ledger[0].date}` : '—';
 
+  const weekly = computePeriodTotals('week');
+  const monthly = computePeriodTotals('month');
+  document.getElementById('weekly-summary').innerText = `UGX ${formatNumber(weekly.current.total)}`;
+  document.getElementById('monthly-summary').innerText = `UGX ${formatNumber(monthly.current.total)}`;
+  document.getElementById('weekly-change').innerHTML = formatChange(weekly.previous.total, weekly.current.total);
+  document.getElementById('monthly-change').innerHTML = formatChange(monthly.previous.total, monthly.current.total);
+
+  const cards = members.map(m => {
+    const bal = balances[m] || 0;
+    const trend = computeTrendForMember(m);
+    const cls = bal <= 0 ? 'negative' : (trend.change >= 0 ? 'positive' : 'negative');
+    const rating = computeMemberRating(m);
+    const stars = '★'.repeat(rating.stars) + '☆'.repeat(5-rating.stars);
+    return `<div class="member-card" role="group" aria-label="${escapeHtml(m)}">
+              <div class="rating-badge" style="background:${rating.color};color:#000">${escapeHtml(rating.label)} <span class="stars">${stars}</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="member-name">${escapeHtml(m)}</div>
+                <div class="balance ${cls}">UGX ${formatNumber(bal)}</div>
+              </div>
+              <div class="trend-small" style="color:${trend.change>=0? 'var(--positive)':'var(--negative)'}">
+                ${trend.text}
+              </div>
+              <div class="small muted" style="margin-top:8px">Deposits (90d): ${rating.freq} • Avg: UGX ${formatNumber(rating.avg)} • Consistency: ${rating.consistency}%</div>
+            </div>`;
+  }).join('');
+  document.getElementById('member-cards').innerHTML = cards;
+
+  document.getElementById('manage-members-btn').style.display = adminUnlocked ? 'inline-block' : 'none';
+  document.getElementById('manage-ledger-btn').style.display = adminUnlocked ? 'inline-block' : 'none';
+  document.getElementById('admin-logout').style.display = adminUnlocked ? 'inline-block' : 'none';
+  document.getElementById('admin-controls').classList.toggle('hidden', !adminUnlocked);
+}
+
+function renderLedger(){
+  const balances = computeBalances();
+  const rows = ledger.map((l, idx) => {
+    const actions = adminUnlocked ? `<button class="secondary" onclick="promptEditLedger(${idx})">Edit</button> <button class="danger" onclick="deleteLedger(${idx})">Delete</button>` : '';
+    return `<tr>
+      <td>${escapeHtml(l.date)}</td>
+      <td>${escapeHtml(l.member)}</td>
+      <td>${escapeHtml(l.type)}</td>
+      <td style="text-align:right">${formatNumber(l.amount)}</td>
+      <td style="text-align:right">${formatNumber(balances[l.member]||0)}</td>
+      <td style="text-align:center">${actions}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('body-row').innerHTML = rows;
+}
+
+/* ============================
+   Period totals and comparisons
+   ============================ */
+function computePeriodTotals(period){
+  const now = new Date();
+  const startCurrent = period === 'week' ? startOfISOWeek(now) : startOfMonth(now);
+  const startPrevious = period === 'week' ? addDays(startCurrent, -7) : addMonths(startCurrent, -1);
+  const endPrevious = addDays(startCurrent, -1);
+  const endCurrent = period === 'week' ? addDays(startCurrent, 6) : endOfMonth(startCurrent);
+
+  const current = { total:0, byMember: {} };
+  const previous = { total:0, byMember: {} };
+  members.forEach(m => { current.byMember[m]=0; previous.byMember[m]=0; });
+
+  ledger.forEach(entry => {
+    const d = new Date(entry.date + 'T00:00:00');
+    if(d >= startCurrent && d <= endCurrent){
+      if(entry.type === 'deposit' || entry.type === 'welfare') { current.total += Number(entry.amount); current.byMember[entry.member] = (current.byMember[entry.member]||0) + Number(entry.amount); }
+      else if(entry.type === 'withdraw') { current.total -= Number(entry.amount); current.byMember[entry.member] = (current.byMember[entry.member]||0) - Number(entry.amount); }
+    } else if(d >= startPrevious && d <= endPrevious){
+      if(entry.type === 'deposit' || entry.type === 'welfare') { previous.total += Number(entry.amount); previous.byMember[entry.member] = (previous.byMember[entry.member]||0) + Number(entry.amount); }
+      else if(entry.type === 'withdraw') { previous.total -= Number(entry.amount); previous.byMember[entry.member] = (previous.byMember[entry.member]||0) - Number(entry.amount); }
+    }
+  });
+
+  return { current, previous };
+}
+
+function formatChange(prev, curr){
+  prev = Number(prev||0); curr = Number(curr||0);
+  if(prev === 0 && curr === 0) return '<span class="small muted">No activity</span>';
+  if(prev === 0) return `<span style="color:var(--positive)">+${formatNumber(curr)} (new)</span>`;
+  const diff = curr - prev;
+  const pct = ((diff / Math.abs(prev)) * 100).toFixed(1);
+  const sign = diff >= 0 ? '+' : '';
+  const color = diff >= 0 ? 'var(--positive)' : 'var(--negative)';
+  return `<span style="color:${color}">${sign}${formatNumber(diff)} (${sign}${pct}%)</span>`;
+}
+
+/* date helpers */
+function startOfISOWeek(d){
+  const date = new Date(d);
+  const day = (date.getDay() + 6) % 7;
+  date.setDate(date.getDate() - day);
+  date.setHours(0,0,0,0);
+  return date;
+}
+function addDays(d, n){ const x = new Date(d); x.setDate(x.getDate()+n); x.setHours(0,0,0,0); return x; }
+function startOfMonth(d){ const x = new Date(d.getFullYear(), d.getMonth(), 1); x.setHours(0,0,0,0); return x; }
+function addMonths(d, n){ const x = new Date(d.getFullYear(), d.getMonth()+n, 1); x.setHours(0,0,0,0); return x; }
+function endOfMonth(d){ const x = new Date(d.getFullYear(), d.getMonth()+1, 0); x.setHours(23,59,59,999); return x; }
+
+/* ============================
+   Member management & ledger actions
+   ============================ */
 function addMember(){
-
-let name=document.getElementById("memberName").value
-
-if(!name)return
-
-data.members.push(name)
-
-save()
-
-render()
-
+  if(!adminUnlocked) return showToast('Unlock admin first', true);
+  const nameInput = document.getElementById('new-member-name');
+  const name = (nameInput.value || '').trim();
+  if(!name) return showToast('Enter a name', true);
+  if(members.includes(name)) return showToast('Member already exists', true);
+  members.push(name);
+  nameInput.value = '';
+  saveState();
+  renderManageMembers();
+  renderDashboard();
+  showToast(`Added member: ${name}`);
+  playConfetti();
 }
 
-/* ADD TRANSACTION */
-
-function addTransaction(){
-
-let m=document.getElementById("memberSelect").value
-
-let s=Number(document.getElementById("save").value)||0
-
-let w=Number(document.getElementById("wel").value)||0
-
-let e=Number(document.getElementById("exp").value)||0
-
-data.transactions.push({m,s,w,e})
-
-save()
-
-render()
-
+function renderManageMembers(){
+  const list = document.getElementById('member-list');
+  list.innerHTML = '';
+  members.forEach((m, idx) => {
+    const row = document.createElement('div');
+    row.className = 'member-row';
+    row.innerHTML = `
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="font-weight:700">${escapeHtml(m)}</div>
+        <div class="small muted">#${idx+1}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="secondary" onclick="promptEditMember(${idx})">Edit</button>
+        <button class="danger" onclick="removeMember(${idx})">Remove</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
 }
 
-/* RENDER */
-
-function render(){
-
-let list=document.getElementById("memberList")
-
-let select=document.getElementById("memberSelect")
-
-let ledger=document.getElementById("ledger")
-
-list.innerHTML=""
-select.innerHTML=""
-ledger.innerHTML=""
-
-data.members.forEach(m=>{
-
-let li=document.createElement("li")
-
-li.innerText=m
-
-list.appendChild(li)
-
-let opt=document.createElement("option")
-
-opt.value=m
-
-opt.innerText=m
-
-select.appendChild(opt)
-
-})
-
-let ts=0
-let tw=0
-let te=0
-
-data.transactions.forEach(t=>{
-
-ts+=t.s
-tw+=t.w
-te+=t.e
-
-ledger.innerHTML+=`
-<tr>
-<td>${t.m}</td>
-<td>${t.s}</td>
-<td>${t.w}</td>
-<td>${t.e}</td>
-</tr>
-`
-
-})
-
-document.getElementById("totalSavings").innerText=ts
-document.getElementById("totalWelfare").innerText=tw
-document.getElementById("totalExp").innerText=te
-document.getElementById("balance").innerText=(ts+tw)-te
-
+function promptEditMember(index){
+  if(!adminUnlocked) return showToast('Unlock admin first', true);
+  const oldName = members[index];
+  const newName = prompt('Edit member name', oldName);
+  if(newName === null) return;
+  const trimmed = (newName || '').trim();
+  if(!trimmed) return showToast('Name cannot be empty', true);
+  if(members.includes(trimmed) && trimmed !== oldName) return showToast('Another member already has that name', true);
+  members[index] = trimmed;
+  ledger.forEach(e => { if(e.member === oldName) e.member = trimmed; });
+  saveState();
+  renderManageMembers();
+  renderDashboard();
+  renderLedger();
+  showToast(`Updated name: ${oldName} → ${trimmed}`);
 }
 
-/* SAVE */
-
-function save(){
-
-localStorage.setItem("kadama",JSON.stringify(data))
-
+function removeMember(index){
+  if(!adminUnlocked) return showToast('Unlock admin first', true);
+  if(!confirm('Remove this member and all their ledger entries? This cannot be undone.')) return;
+  const name = members[index];
+  members.splice(index,1);
+  ledger = ledger.filter(e => e.member !== name);
+  saveState();
+  renderManageMembers();
+  renderDashboard();
+  renderLedger();
+  showToast(`Removed member: ${name}`);
+  playConfetti();
 }
 
-/* BUBBLES */
-
-for(let i=0;i<25;i++){
-
-let b=document.createElement("div")
-
-b.className="bubble"
-
-b.style.width=Math.random()*40+20+"px"
-
-b.style.height=b.style.width
-
-b.style.left=Math.random()*100+"%"
-
-b.style.animationDuration=10+Math.random()*10+"s"
-
-document.body.appendChild(b)
-
+function mgAddTransaction(){
+  if(!adminUnlocked) return showToast('Unlock admin first', true);
+  const member = document.getElementById('mg-member-select').value;
+  const type = document.getElementById('mg-type-select').value;
+  const amount = parseFloat(document.getElementById('mg-amount').value);
+  const date = document.getElementById('mg-date').value;
+  if(!member || !type || !date || isNaN(amount) || amount <= 0) return showToast('Fill all fields with valid values', true);
+  const entry = { id: Date.now() + Math.random(), date, member, type, amount: Math.round(amount) };
+  ledger.unshift(entry);
+  saveState();
+  renderManageLedger();
+  renderLedger();
+  renderDashboard();
+  document.getElementById('mg-amount').value = '';
+  document.getElementById('mg-date').value = '';
+  showToast('Transaction added');
+  notifyMemberPayment(member, amount);
 }
 
+function renderManageLedger(){
+  const sel = document.getElementById('mg-member-select');
+  if(sel){
+    sel.innerHTML = '';
+    members.forEach(m => { const opt = document.createElement('option'); opt.value = m; opt.text = m; sel.appendChild(opt); });
+  }
+  const tbody = document.getElementById('mg-body');
+  if(tbody){
+    tbody.innerHTML = ledger.map((l, idx) => {
+      return `<tr>
+        <td>${escapeHtml(l.date)}</td>
+        <td>${escapeHtml(l.member)}</td>
+        <td>${escapeHtml(l.type)}</td>
+        <td style="text-align:right">${formatNumber(l.amount)}</td>
+        <td style="text-align:center">
+          <button class="secondary" onclick="promptEditLedger(${idx})">Edit</button>
+          <button class="danger" onclick="deleteLedger(${idx})">Delete</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function promptEditLedger(index){
+  if(!adminUnlocked) return showToast('Unlock admin first', true);
+  const entry = ledger[index];
+  const newDate = prompt('Edit date (YYYY-MM-DD)', entry.date);
+  if(newDate === null) return;
+  const newMember = prompt('Edit member', entry.member);
+  if(newMember === null) return;
+  if(!members.includes(newMember)) return showToast('Member not found. Edit member list first.', true);
+  const newType = prompt('Edit type (deposit / withdraw / welfare)', entry.type);
+  if(newType === null) return;
+  if(!['deposit','withdraw','welfare'].includes(newType)) return showToast('Invalid type', true);
+  const newAmountRaw = prompt('Edit amount', String(entry.amount));
+  if(newAmountRaw === null) return;
+  const newAmount = parseFloat(newAmountRaw);
+  if(isNaN(newAmount) || newAmount <= 0) return showToast('Invalid amount', true);
+  entry.date = newDate;
+  entry.member = newMember;
+  entry.type = newType;
+  entry.amount = Math.round(newAmount);
+  saveState();
+  renderManageLedger();
+  renderLedger();
+  renderDashboard();
+  showToast('Ledger entry updated');
+}
+
+function deleteLedger(index){
+  if(!adminUnlocked) return showToast('Unlock admin first', true);
+  if(!confirm('Delete this ledger entry?')) return;
+  ledger.splice(index,1);
+  saveState();
+  renderManageLedger();
+  renderLedger();
+  renderDashboard();
+  showToast('Ledger entry deleted');
+}
+
+/* ============================
+   Notifications & sound
+   ============================ */
+function notifyMemberPayment(member, amount){
+  showToast(`${member} paid UGX ${formatNumber(amount)}`);
+  if("Notification" in window && Notification.permission === "granted"){
+    try{ new Notification('Kadama: Payment received', { body: `${member} paid UGX ${formatNumber(amount)}` }); }catch(e){}
+  }
+}
+
+/* ============================
+   Chat (stored in localStorage)
+   ============================ */
+function loadChat(){ try{ const s = localStorage.getItem(CHAT_KEY); return s ? JSON.parse(s) : []; }catch(e){ return []; } }
+function saveChat(messages){ try{ localStorage.setItem(CHAT_KEY, JSON.stringify(messages)); }catch(e){} }
+
+function renderChatList(){
+  const wrap = document.getElementById('chat-list');
+  const messages = loadChat();
+  if(!wrap) return;
+  wrap.innerHTML = messages.map(m => {
+    const who = m.from === 'user' ? 'User' : 'Admin';
+    return `<div class="chat-list-item"><div class="chat-from">${escapeHtml(who)}</div><div>${escapeHtml(m.text)}</div><div class="small muted">${escapeHtml(m.time)}</div></div>`;
+  }).join('');
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function chatSend(){
+  const input = document.getElementById('chat-new-input');
+  const text = (input.value || '').trim();
+  if(!text) return;
+  const messages = loadChat();
+  const now = new Date().toLocaleString();
+  messages.push({ from:'user', text, time: now, id: Date.now() + Math.random() });
+  saveChat(messages);
+  input.value = '';
+  renderChatList();
+  showToast('Message sent to admin');
+}
+
+function adminReadChat(){
+  if(!adminUnlocked) return showToast('Unlock admin first', true);
+  const messages = loadChat();
+  if(messages.length === 0) return showToast('No messages');
+  const last = messages.slice(-10).map(m => `${m.from === 'user' ? 'User' : 'Admin'}: ${m.text}`).join('\n');
+  const reply = prompt('Recent messages:\n\n' + last + '\n\nType a reply to append as Admin message (leave empty to skip):');
+  if(reply && reply.trim()){
+    messages.push({ from:'admin', text: reply.trim(), time: new Date().toLocaleString(), id: Date.now() + Math.random() });
+    saveChat(messages);
+    showToast('Reply saved');
+    renderChatList();
+  }
+}
+
+function clearChat(){
+  if(!confirm('Clear all chat messages?')) return;
+  localStorage.removeItem(CHAT_KEY);
+  renderChatList();
+  showToast('Chat cleared');
+}
+
+/* ============================
+   Confetti / Sprinkler
+   ============================ */
+const confettiCanvas = document.getElementById('confetti-canvas');
+const confettiCtx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+function resizeCanvas(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function createConfettiBurst(x=null,y=null,count=80){
+  const w = confettiCanvas.width, h = confettiCanvas.height;
+  const cx = x === null ? w/2 : x;
+  const cy = y === null ? h/2 : y;
+  for(let i=0;i<count;i++){
+    confettiPieces.push({
+      x: cx + (Math.random()-0.5)*200,
+      y: cy + (Math.random()-0.5)*100,
+      vx: (Math.random()-0.5)*8,
+      vy: - (Math.random()*8 + 2),
+      size: Math.random()*8 + 6,
+      color: ['#22c55e','#D4AF37','#ffffff','#16a34a'][Math.floor(Math.random()*4)],
+      rot: Math.random()*360,
+      vr: (Math.random()-0.5)*8,
+      life: 0
+    });
+  }
+}
+
+function playConfetti(){
+  createConfettiBurst(null,null,80);
+  if(!confettiLooping) startConfettiLoop();
+}
+let confettiLooping = false;
+function startConfettiLoop(){
+  confettiLooping = true;
+  (function loop(){
+    confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    for(let i=confettiPieces.length-1;i>=0;i--){
+      const p = confettiPieces[i];
+      p.life += 1;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.35;
+      p.rot += p.vr;
+      confettiCtx.save();
+      confettiCtx.translate(p.x,p.y);
+      confettiCtx.rotate(p.rot * Math.PI/180);
+      confettiCtx.fillStyle = p.color;
+      confettiCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
+      confettiCtx.restore();
+      if(p.y > confettiCanvas.height + 50 || p.life > 300) confettiPieces.splice(i,1);
+    }
+    if(confettiPieces.length>0) requestAnimationFrame(loop);
+    else confettiLooping = false;
+  })();
+}
+
+/* ============================
+   Toast notifications
+   ============================ */
+function showToast(msg, isError=false, timeout=3500){
+  const wrap = document.getElementById('toast-wrap');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.style.background = isError ? 'linear-gradient(90deg,#ef4444,#f97316)' : 'var(--toast-bg)';
+  el.innerText = msg;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.style.opacity = '0'; el.style.transform = 'translateY(8px)'; setTimeout(()=>el.remove(),400); }, timeout);
+}
+
+/* ============================
+   Downloads & exports
+   ============================ */
+function downloadPayouts(){
+  const balances = computeBalances();
+  const rows = [['Member','Balance']];
+  members.forEach(m => rows.push([m, balances[m]||0]));
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'kadama_payouts.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  showToast('Payouts downloaded');
+}
+
+function downloadLedger(){
+  const rows = [['Date','Member','Type','Amount','Balance']];
+  const balances = computeBalances();
+  ledger.forEach(l => rows.push([l.date,l.member,l.type,l.amount, balances[l.member]||0]));
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'kadama_ledger.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  showToast('Ledger downloaded');
+}
+
+/* ============================
+   Utilities & init
+   ============================ */
+function formatNumber(n){ return Number(n).toLocaleString('en-UG'); }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
+function recentForMember(member){
+  const found = ledger.find(l => l.member === member);
+  return found ? `${found.type} UGX ${formatNumber(found.amount)} on ${found.date}` : '<span class="muted">No transactions</span>';
+}
+
+function computeTrendForMember(member){
+  const now = new Date();
+  const startCurrent = startOfMonth(now);
+  const startPrevious = addMonths(startCurrent, -1);
+  const endPrevious = addDays(startCurrent, -1);
+  let currentTotal = 0, previousTotal = 0;
+  ledger.forEach(e => {
+    if(e.member !== member) return;
+    const d = new Date(e.date + 'T00:00:00');
+    if(d >= startCurrent) {
+      if(e.type === 'deposit' || e.type === 'welfare') currentTotal += Number(e.amount);
+      else if(e.type === 'withdraw') currentTotal -= Number(e.amount);
+    } else if(d >= startPrevious && d <= endPrevious){
+      if(e.type === 'deposit' || e.type === 'welfare') previousTotal += Number(e.amount);
+      else if(e.type === 'withdraw') previousTotal -= Number(e.amount);
+    }
+  });
+  const change = currentTotal - previousTotal;
+  const text = (currentTotal === 0 && previousTotal === 0) ? 'No recent activity' : `${change >= 0 ? '▲' : '▼'} ${formatNumber(Math.abs(change))} vs previous month`;
+  return { currentTotal, previousTotal, change, text };
+}
+
+/* initialize */
+function init(){
+  renderManageLedger();
+  renderManageMembers();
+  renderDashboard();
+  renderLedger();
+  showPage('page-welcome');
+  setTimeout(()=>{ playConfetti(); }, 700);
+}
+init();
+
+/* prevent Enter from submitting forms accidentally */
+window.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT'))){
+    e.preventDefault();
+  }
+});
+
+/* expose functions used by inline handlers */
+window.showPage = showPage;
+window.checkAdmin = checkAdmin;
+window.lockAdmin = lockAdmin;
+window.addMember = addMember;
+window.promptEditMember = promptEditMember;
+window.removeMember = removeMember;
+window.mgAddTransaction = mgAddTransaction;
+window.promptEditLedger = promptEditLedger;
+window.deleteLedger = deleteLedger;
+window.downloadPayouts = downloadPayouts;
+window.downloadLedger = downloadLedger;
+window.chatSend = chatSend;
+window.renderChatList = renderChatList;
+window.renderManageLedger = renderManageLedger;
+window.renderManageMembers = renderManageMembers;
+window.renderLedger = renderLedger;
+window.renderDashboard = renderDashboard;
+window.playConfetti = playConfetti;
+window.enterDashboard = enterDashboard;
+window.adminReadChat = adminReadChat;
 </script>
-
 </body>
-
 </html>
-```
