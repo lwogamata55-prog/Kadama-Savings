@@ -1,200 +1,132 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Kadama Saving Group Tracker</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<title>Kadama Saving Group</title>
 
 <style>
 
-:root{
---bg:#F9FAFB;
---card:#FFFFFF;
---border:#E5E7EB;
---accent:#CA8A04;
---header-yellow:#FFFF00;
---text-main:#111827;
---text-sub:#6B7280;
---danger:#EF4444;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;}
-
 body{
-background:var(--bg);
-font-family:'Inter',sans-serif;
-color:var(--text-main);
-min-height:100vh;
+margin:0;
+font-family:Arial;
+background:linear-gradient(120deg,#0f172a,#1e293b);
+color:white;
+overflow-x:hidden;
 }
 
-#canvas-bg{
-position:fixed;
-inset:0;
-z-index:-1;
-pointer-events:none;
-opacity:0.4;
+/* bubbles */
+
+.bubble{
+position:absolute;
+bottom:-100px;
+background:rgba(255,255,255,0.2);
+border-radius:50%;
+animation:rise 15s infinite;
+}
+
+@keyframes rise{
+0%{transform:translateY(0)}
+100%{transform:translateY(-1200px)}
 }
 
 header{
-padding:15px 30px;
-background:var(--card);
-border-bottom:1px solid var(--border);
+padding:15px;
+background:#111827;
 display:flex;
 justify-content:space-between;
 align-items:center;
-position:sticky;
-top:0;
-z-index:100;
 }
 
 .logo{
-font-family:'Playfair Display',serif;
-font-size:1.2rem;
-font-weight:700;
-color:var(--accent);
-}
-
-.sync-badge{
-font-size:0.65rem;
-font-weight:700;
-text-transform:uppercase;
-display:flex;
-align-items:center;
-gap:8px;
-}
-
-.dot{
-width:8px;
-height:8px;
-background:#D1D5DB;
-border-radius:50%;
-}
-
-.dot.online{
-background:#10B981;
-box-shadow:0 0 8px #10B981;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
-padding:20px 30px;
-}
-
-.stat-card{
-background:var(--card);
-padding:20px;
-border-radius:8px;
-border:1px solid var(--border);
-}
-
-.stat-label{
-font-size:0.7rem;
-color:var(--text-sub);
-text-transform:uppercase;
-margin-bottom:5px;
-}
-
-.stat-value{
-font-size:1.5rem;
-font-weight:700;
+font-size:20px;
+font-weight:bold;
+color:#22c55e;
 }
 
 .container{
-display:grid;
-grid-template-columns:1fr 350px;
-gap:20px;
-padding:0 30px 30px;
+padding:20px;
+max-width:1100px;
+margin:auto;
 }
 
-.ledger-box{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:8px;
-overflow-x:auto;
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:8px;
+margin-bottom:12px;
+border:none;
+border-radius:5px;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:5px;
+background:#22c55e;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#16a34a;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-min-width:700px;
+margin-top:10px;
 }
 
 th{
-background:var(--header-yellow);
-padding:12px;
-font-size:0.75rem;
-text-align:left;
-border-bottom:2px solid var(--border);
+background:#22c55e;
+padding:10px;
 }
 
 td{
-padding:12px;
-border-bottom:1px solid var(--border);
-font-size:0.85rem;
-}
-
-.exp-text{
-color:var(--danger);
-font-weight:600;
-}
-
-.sidebar{
-display:flex;
-flex-direction:column;
-gap:15px;
-}
-
-.form-panel{
-background:var(--card);
-padding:20px;
-border-radius:8px;
-border:1px solid var(--border);
-}
-
-h3{
-font-size:0.9rem;
-margin-bottom:15px;
-border-left:4px solid var(--accent);
-padding-left:10px;
-}
-
-input{
-width:100%;
 padding:10px;
-margin-bottom:12px;
-border:1px solid var(--border);
-border-radius:4px;
+border-bottom:1px solid #334155;
 }
 
-.btn{
-padding:12px;
-border:none;
-border-radius:4px;
-font-weight:600;
-cursor:pointer;
-width:100%;
-margin-bottom:8px;
+.hidden{
+display:none;
 }
 
-.btn-main{
-background:var(--accent);
-color:white;
+.stats{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
 }
 
-.btn-share{
-background:#F3F4F6;
-border:1px solid #D1D5DB;
+.stat{
+background:#0f172a;
+padding:15px;
+border-radius:8px;
+flex:1;
+min-width:150px;
+text-align:center;
 }
 
-@media(max-width:950px){
-.container{grid-template-columns:1fr;}
+.welcome{
+text-align:center;
+padding:80px 20px;
+}
+
+.welcome h1{
+font-size:40px;
+color:#22c55e;
+}
+
+.welcome p{
+opacity:0.8;
 }
 
 </style>
@@ -202,90 +134,114 @@ border:1px solid #D1D5DB;
 
 <body>
 
-<canvas id="canvas-bg"></canvas>
-
 <header>
 
-<div class="logo">Kadama Saving Group Kabondo</div>
+<div class="logo">Kadama Saving Group</div>
 
-<div style="display:flex;align-items:center;gap:15px">
-
-<div class="sync-badge">
-<div class="dot" id="sync-dot"></div>
-<span id="sync-status">Offline Mode</span>
-</div>
-
-<button class="btn btn-share" style="width:auto;padding:8px 15px" onclick="copyLink()">Share Link</button>
-
-</div>
+<button onclick="showLogin()">Admin</button>
 
 </header>
 
+<div id="welcome" class="welcome">
+
+<h1>Welcome to Kadama Savings</h1>
+
+<p>Manage group savings easily and transparently.</p>
+
+<button onclick="showApp()">Enter App</button>
+
+</div>
+
+<div id="login" class="container hidden">
+
+<div class="card">
+
+<h2>Admin Login</h2>
+
+<input type="password" id="adminPass" placeholder="Enter Admin Password">
+
+<button onclick="login()">Login</button>
+
+</div>
+
+</div>
+
+<div id="app" class="container hidden">
+
 <div class="stats">
 
-<div class="stat-card">
-<div class="stat-label">Total Cash (Balance)</div>
-<div class="stat-value" id="stat-balance">0</div>
+<div class="stat">
+<h3>Total Savings</h3>
+<div id="totalSavings">0</div>
 </div>
 
-<div class="stat-card">
-<div class="stat-label">Total Savings</div>
-<div class="stat-value" id="stat-savings">0</div>
+<div class="stat">
+<h3>Total Welfare</h3>
+<div id="totalWelfare">0</div>
 </div>
 
-<div class="stat-card">
-<div class="stat-label">Expenditure</div>
-<div class="stat-value" style="color:var(--danger)" id="stat-exp">0</div>
+<div class="stat">
+<h3>Total Expenditure</h3>
+<div id="totalExp">0</div>
+</div>
+
+<div class="stat">
+<h3>Balance</h3>
+<div id="balance">0</div>
 </div>
 
 </div>
 
-<div class="container">
+<div id="adminPanel" class="card hidden">
 
-<div class="ledger-box">
+<h2>Admin Control Panel</h2>
+
+<h3>Add Member</h3>
+
+<input id="memberName" placeholder="Member name">
+
+<button onclick="addMember()">Add Member</button>
+
+<h3>Add Transaction</h3>
+
+<select id="memberSelect"></select>
+
+<input type="number" id="savings" placeholder="Savings">
+
+<input type="number" id="welfare" placeholder="Welfare">
+
+<input type="number" id="exp" placeholder="Expenditure">
+
+<button onclick="addTransaction()">Add</button>
+
+</div>
+
+<div class="card">
+
+<h2>Members</h2>
+
+<ul id="memberList"></ul>
+
+</div>
+
+<div class="card">
+
+<h2>Transactions</h2>
 
 <table>
 
 <thead>
 <tr>
-<th>Date</th>
 <th>Member</th>
 <th>Savings</th>
 <th>Welfare</th>
-<th>Total Cash</th>
 <th>Expenditure</th>
 </tr>
 </thead>
 
-<tbody id="ledger-body"></tbody>
+<tbody id="ledger"></tbody>
 
 </table>
-
-</div>
-
-<div class="sidebar">
-
-<div class="form-panel">
-
-<h3>Record Transaction</h3>
-
-<input type="text" id="member-name" placeholder="Member Name">
-
-<input type="date" id="in-date">
-
-<input type="number" id="in-savings" placeholder="Savings Amount">
-
-<input type="number" id="in-welfare" placeholder="Welfare Amount">
-
-<input type="number" id="in-exp" placeholder="Expenditure (Optional)">
-
-<button class="btn btn-main" onclick="addEntry()">Update Sheet</button>
-
-<button class="btn btn-share" onclick="shareMember()">Copy Member Link</button>
-
-<button class="btn btn-share" onclick="enableCloud()">Go Live / Sync</button>
-
-</div>
 
 </div>
 
@@ -293,319 +249,161 @@ border:1px solid #D1D5DB;
 
 <script>
 
-let state={entries:[]}
+let adminPassword="kadama123"
 
-let binId=window.location.hash.substring(1)
-
-const API_URL="https://keyvalue.immanual.workers.dev/api/keyval"
-
-
-
-function initBg(){
-
-const scene=new THREE.Scene()
-
-const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
-
-const renderer=new THREE.WebGLRenderer({canvas:document.getElementById("canvas-bg"),alpha:true})
-
-renderer.setSize(window.innerWidth,window.innerHeight)
-
-const geometry=new THREE.SphereGeometry(15,32,32)
-
-const material=new THREE.MeshBasicMaterial({color:0xCA8A04,wireframe:true,transparent:true,opacity:0.1})
-
-const sphere=new THREE.Mesh(geometry,material)
-
-scene.add(sphere)
-
-camera.position.z=25
-
-function animate(){
-
-requestAnimationFrame(animate)
-
-sphere.rotation.y+=0.003
-
-renderer.render(scene,camera)
-
+let data=JSON.parse(localStorage.getItem("kadamaData"))||{
+members:[],
+transactions:[]
 }
 
-animate()
-
+function showLogin(){
+document.getElementById("welcome").classList.add("hidden")
+document.getElementById("login").classList.remove("hidden")
 }
 
-
-
-function render(){
-
-const body=document.getElementById("ledger-body")
-
-body.innerHTML=""
-
-let runningTotal=0
-
-let totalSavings=0
-
-let totalExp=0
-
-
-
-state.entries.sort((a,b)=>new Date(a.date)-new Date(b.date))
-
-
-
-state.entries.forEach(e=>{
-
-const savings=Number(e.savings||0)
-
-const welfare=Number(e.welfare||0)
-
-const exp=Number(e.exp||0)
-
-
-
-totalSavings+=savings
-
-totalExp+=exp
-
-
-
-runningTotal=(runningTotal+savings+welfare)-exp
-
-
-
-body.innerHTML+=`
-
-<tr>
-
-<td>${e.date}</td>
-
-<td>${e.member}</td>
-
-<td>${savings.toLocaleString()}</td>
-
-<td>${welfare.toLocaleString()}</td>
-
-<td style="font-weight:700">${runningTotal.toLocaleString()}</td>
-
-<td class="exp-text">${exp>0?exp.toLocaleString():"-"}</td>
-
-</tr>
-
-`
-
-})
-
-
-
-document.getElementById("stat-balance").innerText=runningTotal.toLocaleString()
-
-document.getElementById("stat-savings").innerText=totalSavings.toLocaleString()
-
-document.getElementById("stat-exp").innerText=totalExp.toLocaleString()
-
+function showApp(){
+document.getElementById("welcome").classList.add("hidden")
+document.getElementById("app").classList.remove("hidden")
+render()
 }
 
+function login(){
 
+let pass=document.getElementById("adminPass").value
 
-function addEntry(){
+if(pass===adminPassword){
 
-const member=document.getElementById("member-name").value
+document.getElementById("login").classList.add("hidden")
 
-const date=document.getElementById("in-date").value
+document.getElementById("app").classList.remove("hidden")
 
-const savings=document.getElementById("in-savings").value
-
-const welfare=document.getElementById("in-welfare").value||0
-
-const exp=document.getElementById("in-exp").value||0
-
-
-
-if(!member||!date||!savings){
-
-alert("Member, Date and Savings required")
-
-return
-
-}
-
-
-
-state.entries.push({member,date,savings,welfare,exp})
-
-
+document.getElementById("adminPanel").classList.remove("hidden")
 
 render()
+
+}else{
+
+alert("Wrong password")
+
+}
+
+}
+
+function addMember(){
+
+let name=document.getElementById("memberName").value
+
+if(!name)return
+
+data.members.push(name)
 
 save()
 
-
-
-document.getElementById("in-savings").value=""
-
-document.getElementById("in-welfare").value=""
-
-document.getElementById("in-exp").value=""
+render()
 
 }
 
+function addTransaction(){
 
+let member=document.getElementById("memberSelect").value
 
-async function save(){
+let s=Number(document.getElementById("savings").value)||0
 
-if(!binId){
+let w=Number(document.getElementById("welfare").value)||0
 
-localStorage.setItem("kadama_data",JSON.stringify(state))
+let e=Number(document.getElementById("exp").value)||0
 
-return
+data.transactions.push({member,s,w,e})
 
-}
-
-
-
-document.getElementById("sync-status").innerText="Syncing..."
-
-
-
-try{
-
-await fetch(`${API_URL}/${binId}`,{method:"POST",body:JSON.stringify(state)})
-
-document.getElementById("sync-status").innerText="Live"
-
-document.getElementById("sync-dot").classList.add("online")
-
-}catch(e){
-
-console.log(e)
-
-}
-
-}
-
-
-
-async function enableCloud(){
-
-if(!binId){
-
-binId="kadama_"+Math.random().toString(36).substr(2,9)
-
-window.location.hash=binId
-
-}
-
-
-
-await save()
-
-copyLink()
-
-alert("Tracker is now LIVE. Link copied.")
-
-}
-
-
-
-async function load(){
-
-if(binId){
-
-try{
-
-const res=await fetch(`${API_URL}/${binId}`)
-
-const data=await res.json()
-
-if(data) state=data
-
-
-
-document.getElementById("sync-dot").classList.add("online")
-
-document.getElementById("sync-status").innerText="Live"
-
-}catch(e){}
-
-}
-
-else{
-
-const local=localStorage.getItem("kadama_data")
-
-if(local) state=JSON.parse(local)
-
-}
-
-
+save()
 
 render()
 
 }
 
+function render(){
 
+let mList=document.getElementById("memberList")
 
-function copyLink(){
+let mSelect=document.getElementById("memberSelect")
 
-if(!binId){
+let ledger=document.getElementById("ledger")
 
-alert("Click Go Live first")
+mList.innerHTML=""
+mSelect.innerHTML=""
+ledger.innerHTML=""
 
-return
+data.members.forEach(m=>{
+
+let li=document.createElement("li")
+
+li.innerText=m
+
+mList.appendChild(li)
+
+let opt=document.createElement("option")
+
+opt.value=m
+
+opt.innerText=m
+
+mSelect.appendChild(opt)
+
+})
+
+let ts=0
+let tw=0
+let te=0
+
+data.transactions.forEach(t=>{
+
+ts+=t.s
+tw+=t.w
+te+=t.e
+
+let row=`
+<tr>
+<td>${t.member}</td>
+<td>${t.s}</td>
+<td>${t.w}</td>
+<td>${t.e}</td>
+</tr>
+`
+
+ledger.innerHTML+=row
+
+})
+
+document.getElementById("totalSavings").innerText=ts
+document.getElementById("totalWelfare").innerText=tw
+document.getElementById("totalExp").innerText=te
+document.getElementById("balance").innerText=(ts+tw)-te
 
 }
 
+function save(){
 
-
-navigator.clipboard.writeText(window.location.href)
-
-alert("Group link copied")
+localStorage.setItem("kadamaData",JSON.stringify(data))
 
 }
 
+/* bubbles */
 
+for(let i=0;i<20;i++){
 
-function shareMember(){
+let b=document.createElement("div")
 
-const member=document.getElementById("member-name").value
+b.className="bubble"
 
+b.style.width=Math.random()*40+20+"px"
 
+b.style.height=b.style.width
 
-if(!member){
+b.style.left=Math.random()*100+"%"
 
-alert("Enter member name first")
+b.style.animationDuration=10+Math.random()*10+"s"
 
-return
-
-}
-
-
-
-const link=window.location.origin+window.location.pathname+"#"+binId+"?member="+encodeURIComponent(member)
-
-
-
-navigator.clipboard.writeText(link)
-
-
-
-alert("Member link copied for "+member)
-
-}
-
-
-
-setInterval(load,5000)
-
-
-
-window.onload=()=>{
-
-initBg()
-
-load()
+document.body.appendChild(b)
 
 }
 
@@ -613,3 +411,4 @@ load()
 
 </body>
 </html>
+```
