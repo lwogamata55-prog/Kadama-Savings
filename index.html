@@ -1,55 +1,89 @@
 ```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Kadama Saving Group</title>
 
 <style>
 
-body{
+*{
 margin:0;
-font-family:Arial;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
 background:linear-gradient(120deg,#0f172a,#1e293b);
 color:white;
 overflow-x:hidden;
 }
 
-/* bubbles */
-
-.bubble{
-position:absolute;
-bottom:-100px;
-background:rgba(255,255,255,0.2);
-border-radius:50%;
-animation:rise 15s infinite;
-}
-
-@keyframes rise{
-0%{transform:translateY(0)}
-100%{transform:translateY(-1200px)}
-}
+/* HEADER */
 
 header{
-padding:15px;
-background:#111827;
+background:#020617;
+padding:15px 30px;
 display:flex;
 justify-content:space-between;
 align-items:center;
 }
 
 .logo{
-font-size:20px;
+font-size:22px;
 font-weight:bold;
 color:#22c55e;
 }
 
+/* WELCOME PAGE */
+
+#welcome{
+height:80vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+}
+
+#welcome h1{
+font-size:45px;
+color:#22c55e;
+margin-bottom:15px;
+}
+
+#welcome p{
+opacity:0.8;
+margin-bottom:25px;
+}
+
+button{
+padding:10px 18px;
+border:none;
+border-radius:6px;
+background:#22c55e;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#16a34a;
+}
+
+/* CONTAINER */
+
 .container{
-padding:20px;
 max-width:1100px;
 margin:auto;
+padding:20px;
 }
+
+/* CARDS */
 
 .card{
 background:#1e293b;
@@ -57,6 +91,8 @@ padding:20px;
 border-radius:10px;
 margin-bottom:20px;
 }
+
+/* INPUTS */
 
 input,select{
 width:100%;
@@ -67,23 +103,28 @@ border:none;
 border-radius:5px;
 }
 
-button{
-padding:10px 15px;
-border:none;
-border-radius:5px;
-background:#22c55e;
-color:white;
-cursor:pointer;
+/* STATS */
+
+.stats{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
 }
 
-button:hover{
-background:#16a34a;
+.stat{
+background:#0f172a;
+padding:15px;
+flex:1;
+min-width:160px;
+border-radius:8px;
+text-align:center;
 }
+
+/* TABLE */
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:10px;
 }
 
 th{
@@ -96,105 +137,113 @@ padding:10px;
 border-bottom:1px solid #334155;
 }
 
+/* HIDDEN */
+
 .hidden{
 display:none;
 }
 
-.stats{
-display:flex;
-gap:20px;
-flex-wrap:wrap;
+/* BUBBLES */
+
+.bubble{
+position:absolute;
+bottom:-100px;
+background:rgba(255,255,255,0.2);
+border-radius:50%;
+animation:rise 15s infinite;
 }
 
-.stat{
-background:#0f172a;
-padding:15px;
-border-radius:8px;
-flex:1;
-min-width:150px;
-text-align:center;
+@keyframes rise{
+
+0%{
+transform:translateY(0)
 }
 
-.welcome{
-text-align:center;
-padding:80px 20px;
+100%{
+transform:translateY(-1200px)
 }
 
-.welcome h1{
-font-size:40px;
-color:#22c55e;
-}
-
-.welcome p{
-opacity:0.8;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <header>
 
-<div class="logo">Kadama Saving Group</div>
+<div class="logo">
+Kadama Saving Group
+</div>
 
 <button onclick="showLogin()">Admin</button>
 
 </header>
 
-<div id="welcome" class="welcome">
+<!-- WELCOME PAGE -->
+
+<section id="welcome">
 
 <h1>Welcome to Kadama Savings</h1>
 
-<p>Manage group savings easily and transparently.</p>
+<p>Manage your saving group easily and transparently.</p>
 
-<button onclick="showApp()">Enter App</button>
+<button onclick="enterApp()">Enter App</button>
 
-</div>
+</section>
 
-<div id="login" class="container hidden">
+<!-- ADMIN LOGIN -->
+
+<section id="login" class="container hidden">
 
 <div class="card">
 
 <h2>Admin Login</h2>
 
-<input type="password" id="adminPass" placeholder="Enter Admin Password">
+<input type="password" id="pass" placeholder="Enter Admin Password">
 
 <button onclick="login()">Login</button>
 
 </div>
 
-</div>
+</section>
 
-<div id="app" class="container hidden">
+<!-- APP -->
+
+<section id="app" class="container hidden">
+
+<!-- STATS -->
 
 <div class="stats">
 
 <div class="stat">
 <h3>Total Savings</h3>
-<div id="totalSavings">0</div>
+<p id="totalSavings">0</p>
 </div>
 
 <div class="stat">
 <h3>Total Welfare</h3>
-<div id="totalWelfare">0</div>
+<p id="totalWelfare">0</p>
 </div>
 
 <div class="stat">
 <h3>Total Expenditure</h3>
-<div id="totalExp">0</div>
+<p id="totalExp">0</p>
 </div>
 
 <div class="stat">
 <h3>Balance</h3>
-<div id="balance">0</div>
+<p id="balance">0</p>
 </div>
 
 </div>
+
+<!-- ADMIN PANEL -->
 
 <div id="adminPanel" class="card hidden">
 
-<h2>Admin Control Panel</h2>
+<h2>Admin Panel</h2>
 
 <h3>Add Member</h3>
 
@@ -206,15 +255,17 @@ opacity:0.8;
 
 <select id="memberSelect"></select>
 
-<input type="number" id="savings" placeholder="Savings">
+<input id="save" type="number" placeholder="Savings">
 
-<input type="number" id="welfare" placeholder="Welfare">
+<input id="wel" type="number" placeholder="Welfare">
 
-<input type="number" id="exp" placeholder="Expenditure">
+<input id="exp" type="number" placeholder="Expenditure">
 
-<button onclick="addTransaction()">Add</button>
+<button onclick="addTransaction()">Add Transaction</button>
 
 </div>
+
+<!-- MEMBER LIST -->
 
 <div class="card">
 
@@ -224,6 +275,8 @@ opacity:0.8;
 
 </div>
 
+<!-- LEDGER -->
+
 <div class="card">
 
 <h2>Transactions</h2>
@@ -231,12 +284,14 @@ opacity:0.8;
 <table>
 
 <thead>
+
 <tr>
 <th>Member</th>
 <th>Savings</th>
 <th>Welfare</th>
 <th>Expenditure</th>
 </tr>
+
 </thead>
 
 <tbody id="ledger"></tbody>
@@ -245,33 +300,50 @@ opacity:0.8;
 
 </div>
 
-</div>
+</section>
 
 <script>
 
+/* ADMIN PASSWORD */
+
 let adminPassword="kadama123"
 
-let data=JSON.parse(localStorage.getItem("kadamaData"))||{
+/* DATA */
+
+let data=JSON.parse(localStorage.getItem("kadama"))||{
+
 members:[],
 transactions:[]
+
 }
+
+/* NAVIGATION */
 
 function showLogin(){
+
 document.getElementById("welcome").classList.add("hidden")
+
 document.getElementById("login").classList.remove("hidden")
+
 }
 
-function showApp(){
+function enterApp(){
+
 document.getElementById("welcome").classList.add("hidden")
+
 document.getElementById("app").classList.remove("hidden")
+
 render()
+
 }
+
+/* LOGIN */
 
 function login(){
 
-let pass=document.getElementById("adminPass").value
+let p=document.getElementById("pass").value
 
-if(pass===adminPassword){
+if(p===adminPassword){
 
 document.getElementById("login").classList.add("hidden")
 
@@ -281,13 +353,17 @@ document.getElementById("adminPanel").classList.remove("hidden")
 
 render()
 
-}else{
+}
+
+else{
 
 alert("Wrong password")
 
 }
 
 }
+
+/* ADD MEMBER */
 
 function addMember(){
 
@@ -303,17 +379,19 @@ render()
 
 }
 
+/* ADD TRANSACTION */
+
 function addTransaction(){
 
-let member=document.getElementById("memberSelect").value
+let m=document.getElementById("memberSelect").value
 
-let s=Number(document.getElementById("savings").value)||0
+let s=Number(document.getElementById("save").value)||0
 
-let w=Number(document.getElementById("welfare").value)||0
+let w=Number(document.getElementById("wel").value)||0
 
 let e=Number(document.getElementById("exp").value)||0
 
-data.transactions.push({member,s,w,e})
+data.transactions.push({m,s,w,e})
 
 save()
 
@@ -321,16 +399,18 @@ render()
 
 }
 
+/* RENDER */
+
 function render(){
 
-let mList=document.getElementById("memberList")
+let list=document.getElementById("memberList")
 
-let mSelect=document.getElementById("memberSelect")
+let select=document.getElementById("memberSelect")
 
 let ledger=document.getElementById("ledger")
 
-mList.innerHTML=""
-mSelect.innerHTML=""
+list.innerHTML=""
+select.innerHTML=""
 ledger.innerHTML=""
 
 data.members.forEach(m=>{
@@ -339,7 +419,7 @@ let li=document.createElement("li")
 
 li.innerText=m
 
-mList.appendChild(li)
+list.appendChild(li)
 
 let opt=document.createElement("option")
 
@@ -347,7 +427,7 @@ opt.value=m
 
 opt.innerText=m
 
-mSelect.appendChild(opt)
+select.appendChild(opt)
 
 })
 
@@ -361,16 +441,14 @@ ts+=t.s
 tw+=t.w
 te+=t.e
 
-let row=`
+ledger.innerHTML+=`
 <tr>
-<td>${t.member}</td>
+<td>${t.m}</td>
 <td>${t.s}</td>
 <td>${t.w}</td>
 <td>${t.e}</td>
 </tr>
 `
-
-ledger.innerHTML+=row
 
 })
 
@@ -381,15 +459,17 @@ document.getElementById("balance").innerText=(ts+tw)-te
 
 }
 
+/* SAVE */
+
 function save(){
 
-localStorage.setItem("kadamaData",JSON.stringify(data))
+localStorage.setItem("kadama",JSON.stringify(data))
 
 }
 
-/* bubbles */
+/* BUBBLES */
 
-for(let i=0;i<20;i++){
+for(let i=0;i<25;i++){
 
 let b=document.createElement("div")
 
@@ -410,5 +490,6 @@ document.body.appendChild(b)
 </script>
 
 </body>
+
 </html>
 ```
