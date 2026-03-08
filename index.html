@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#020810">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Kadama Saving Group</title>
+<title>Kadama Saving Group - Live</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════ TOKENS */
@@ -228,7 +228,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   50%{opacity:1;transform:translateX(-50%) scale(1.5);}
 }
 
-/* rest of styles unchanged */
 /* ═══════════════════════════════════════ LOADING */
 #loading{
   position:fixed;inset:0;z-index:7000;
@@ -280,11 +279,11 @@ textarea.inp{resize:vertical;min-height:80px;}
 @keyframes sdotPulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .chat-badge{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:var(--red);border-radius:50%;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);}
 
-/* ═══════════════════════════════════════ CONTENT + NAV */
-#content{flex:1;overflow:hidden;position:relative;}
-.tab{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(var(--nav)+14px);opacity:0;pointer-events:none;transform:translateX(16px);transition:opacity .22s,transform .22s;}
+/* ═══════════════════════════════════════ CONTENT + NAV - FIXED SCROLLING */
+#content{flex:1;overflow-y:auto;position:relative;height:100%;}
+.tab{min-height:100%;padding:14px 14px calc(var(--nav) + 20px);opacity:0;pointer-events:none;transform:translateX(16px);transition:opacity .22s,transform .22s;}
 .tab.on{opacity:1;pointer-events:all;transform:none;}
-#nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav);display:flex;background:rgba(2,8,16,.98);backdrop-filter:blur(20px);border-top:1px solid var(--br);padding-bottom:env(safe-area-inset-bottom);z-index:20;}
+#nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);display:flex;background:rgba(2,8,16,.98);backdrop-filter:blur(20px);border-top:1px solid var(--br);padding-bottom:env(safe-area-inset-bottom);z-index:20;}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;color:var(--t3);font-size:.6rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;position:relative;}
 .ni:active{background:rgba(255,255,255,.04);}
 .ni.on{color:var(--g);}
@@ -331,7 +330,7 @@ textarea.inp{resize:vertical;min-height:80px;}
 .bp{color:var(--g);}.bn{color:var(--red);}.bz{color:var(--t2);}
 .stars{color:var(--gold);font-size:.75rem;}
 
-/* ═══════════════════════════════════════ SHARE BANNER */
+/* ═══════════════════════════════════════ SHARE BANNER - FIXED */
 #share-banner{
   display:none;margin-bottom:14px;
   background:linear-gradient(90deg,rgba(34,197,94,.07),rgba(245,197,67,.05));
@@ -443,7 +442,7 @@ svg.chart{width:100%;overflow:visible;}
   <div class="ld-bar"><div class="ld-fill"></div></div>
 </div>
 
-<!-- ═══════════════════════════ MAIN APP (with all original data) -->
+<!-- ═══════════════════════════ MAIN APP -->
 <div id="app">
   <div id="hdr">
     <div class="hdr-l">
@@ -508,12 +507,15 @@ svg.chart{width:100%;overflow:visible;}
       </div>
       <div class="section-h">Recent Transactions</div>
       <div id="h-recent"></div>
+      <!-- Extra padding to ensure scroll to bottom -->
+      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── MEMBERS ─── -->
     <div id="t-members" class="tab">
       <div class="section-h">All Members (<span id="m-count">0</span>)</div>
       <div id="members-list"></div>
+      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── LEDGER ─── -->
@@ -529,6 +531,7 @@ svg.chart{width:100%;overflow:visible;}
         <button class="btn btn-sm btn-sec" onclick="setLF('welfare',this)" id="lf-welfare">Welfare</button>
       </div>
       <div id="ledger-list"></div>
+      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── CHARTS ─── -->
@@ -554,6 +557,7 @@ svg.chart{width:100%;overflow:visible;}
         <div class="stat-card"><div class="stat-lbl">Top Saver</div><div class="stat-val sv-go" style="font-size:1rem;font-weight:900;" id="cs-top">—</div><div class="stat-sub" id="cs-top-sub">member</div></div>
         <div class="stat-card"><div class="stat-lbl">All Transactions</div><div class="stat-val sv-s mono" id="cs-cnt">0</div><div class="stat-sub">records</div></div>
       </div>
+      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── CHAT ─── -->
@@ -572,6 +576,7 @@ svg.chart{width:100%;overflow:visible;}
         <button class="btn btn-g" style="min-height:46px;padding:0 18px;" onclick="sendMsg()">Send</button>
       </div>
       <div style="font-size:.65rem;color:var(--t3);margin-top:6px;text-align:center;">Chat syncs live. Admin replies appear in gold.</div>
+      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── ADMIN ─── -->
@@ -671,6 +676,7 @@ svg.chart{width:100%;overflow:visible;}
           <button class="btn btn-sm btn-sec" onclick="downloadPayouts()">⬇ Payouts CSV</button>
         </div>
       </div>
+      <div style="height:20px;"></div>
     </div>
   </div><!-- #content -->
 
@@ -769,7 +775,7 @@ svg.chart{width:100%;overflow:visible;}
 })();
 
 /* ════════════════════════════════════════
-   STATE — with all original data restored
+   STATE — with all original data
 ════════════════════════════════════════ */
 let S={
   groupName:'Kadama Saving Group',
@@ -804,27 +810,11 @@ let lastChatLen=0;
 const LKEY='ksg_v5';
 
 /* ════════════════════════════════════════
-   LOCAL STORAGE
-════════════════════════════════════════ */
-function saveLocal(){
-  try{localStorage.setItem(LKEY,JSON.stringify({...S,binId}));}catch(e){}
-}
-function loadLocal(){
-  try{
-    const d=JSON.parse(localStorage.getItem(LKEY)||'null');
-    if(!d)return false;
-    ['groupName','branch','welcomeMsg','members','ledger','expenses','chat','adminHash'].forEach(k=>{
-      if(d[k]!==undefined)S[k]=d[k];
-    });
-    if(d.binId)binId=d.binId;
-    return true;
-  }catch(e){return false;}
-}
-
-/* ════════════════════════════════════════
-   JSONBIN LIVE SYNC
+   JSONBIN CONFIG — YOUR KEYS ADDED
 ════════════════════════════════════════ */
 const BIN='https://api.jsonbin.io/v3/b';
+const MASTER_KEY = '$2a$10$.n47qk8gaFhf0WVRwLGI5edzEmxAOkp1VA72QqCiF0UpP8My3lmVC';
+const ACCESS_KEY = '$2a$10$Wh14Z/uJ3DSRigLWe4z64eSIrklUjaAAv09QG5pBWkiw5l80Cn1Mm';
 
 function getBinFromUrl(){const h=location.hash.replace('#','');return h.length>10?h:null;}
 function setBinId(id){
@@ -846,7 +836,13 @@ async function createBin(){
   try{
     const r=await fetch(BIN,{
       method:'POST',
-      headers:{'Content-Type':'application/json','X-Bin-Private':'false','X-Bin-Name':S.groupName},
+      headers:{
+        'Content-Type':'application/json',
+        'X-Master-Key': MASTER_KEY,
+        'X-Access-Key': ACCESS_KEY,
+        'X-Bin-Private':'false',
+        'X-Bin-Name':S.groupName
+      },
       body:JSON.stringify(payload)
     });
     if(r.ok){
@@ -867,7 +863,15 @@ async function pushBin(){
   if(isSaving)return;
   isSaving=true;setSdot('sync');
   try{
-    const r=await fetch(`${BIN}/${binId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(S)});
+    const r=await fetch(`${BIN}/${binId}`,{
+      method:'PUT',
+      headers:{
+        'Content-Type':'application/json',
+        'X-Master-Key': MASTER_KEY,
+        'X-Access-Key': ACCESS_KEY
+      },
+      body:JSON.stringify(S)
+    });
     setSdot(r.ok?'live':'');
   }catch(e){setSdot('');}
   isSaving=false;
@@ -875,7 +879,12 @@ async function pushBin(){
 
 async function loadBin(id){
   try{
-    const r=await fetch(`${BIN}/${id}/latest`);
+    const r=await fetch(`${BIN}/${id}/latest`,{
+      headers:{
+        'X-Master-Key': MASTER_KEY,
+        'X-Access-Key': ACCESS_KEY
+      }
+    });
     if(r.ok){
       const d=await r.json(),rec=d.record;
       ['groupName','branch','welcomeMsg','members','ledger','expenses','chat','adminHash'].forEach(k=>{
@@ -888,13 +897,33 @@ async function loadBin(id){
   return false;
 }
 
+function saveLocal(){
+  try{localStorage.setItem(LKEY,JSON.stringify({...S,binId}));}catch(e){}
+}
+function loadLocal(){
+  try{
+    const d=JSON.parse(localStorage.getItem(LKEY)||'null');
+    if(!d)return false;
+    ['groupName','branch','welcomeMsg','members','ledger','expenses','chat','adminHash'].forEach(k=>{
+      if(d[k]!==undefined)S[k]=d[k];
+    });
+    if(d.binId)binId=d.binId;
+    return true;
+  }catch(e){return false;}
+}
+
 let lastRemote=null;
 function startPoll(){
   clearInterval(pollTimer);clearInterval(chatPollTimer);
   const doCheck=async()=>{
     if(!binId||isSaving)return;
     try{
-      const r=await fetch(`${BIN}/${binId}/latest`);
+      const r=await fetch(`${BIN}/${binId}/latest`,{
+        headers:{
+          'X-Master-Key': MASTER_KEY,
+          'X-Access-Key': ACCESS_KEY
+        }
+      });
       if(r.ok){
         const d=await r.json();
         if(d.record.lastUpdated!==lastRemote){
@@ -918,9 +947,9 @@ function startPoll(){
 }
 
 function refreshShareUrl(){
-  const url=binId?location.origin+location.pathname+'#'+binId:'Generating your permanent link…';
+  const url=binId?window.location.origin+window.location.pathname+'#'+binId:'Generating your permanent link…';
   const inp=document.getElementById('share-inp');
-  if(inp)inp.value=url;
+  if(inp) inp.value=url;
 }
 
 /* ════════════════════════════════════════
