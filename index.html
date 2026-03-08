@@ -9,7 +9,7 @@
 <title>Kadama Saving Group</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ========== FULL STYLES (unchanged) ========== */
+/* ========== FULL STYLES (unchanged from previous working version) ========== */
 :root{
   --bg:#020810;--bg2:#071226;--bg3:#0C1C38;--bg4:#112244;
   --g:#22c55e;--g2:#16a34a;--g3:rgba(34,197,94,.14);--g4:rgba(34,197,94,.06);
@@ -687,7 +687,7 @@ svg.chart{width:100%;overflow:visible;}
   </div>
 </div><!-- #app -->
 
-<!-- MODALS -->
+<!-- MODALS (unchanged) -->
 <div class="ov" id="ov-admin" onclick="maybeClose(event,'ov-admin')">
   <div class="bs">
     <div class="bs-handle"></div>
@@ -770,19 +770,16 @@ svg.chart{width:100%;overflow:visible;}
   })();
 })();
 
-/* ========== PWA INSTALL PROMPT (improved) ========== */
+/* ========== PWA INSTALL PROMPT ========== */
 let deferredPrompt;
 const installButton = document.getElementById('installButton');
-
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  installButton.style.display = 'flex'; // show button
+  installButton.style.display = 'flex';
 });
-
 function installApp() {
   if (!deferredPrompt) {
-    // On Android, if not prompted, maybe already installed or not supported
     toast('To install, use browser menu "Add to Home screen"', '#F5C543');
     return;
   }
@@ -794,7 +791,6 @@ function installApp() {
       toast('Installation cancelled', '#ef4444');
     }
     deferredPrompt = null;
-    installButton.style.display = 'flex'; // keep visible (optional)
   });
 }
 
@@ -1094,7 +1090,8 @@ function renderAll(){
   setEl('bs-s',fmtN(ts,true));setEl('bs-e',fmtN(te,true));setEl('bs-n',fmtN(cb,true));
   const rr=document.getElementById('h-recent');
   if(rr){
-    const items=S.ledger.slice(0,8);
+    // Show 8 most recent transactions (newest first)
+    const items=S.ledger.slice(0,8); // already newest first due to unshift
     rr.innerHTML=items.length?items.map((l,i)=>txHtml(l,i)).join(''):'<div class="muted" style="text-align:center;padding:24px;font-size:.85rem;">No transactions yet</div>';
   }
   setEl('m-count',S.members.length);
@@ -1448,7 +1445,7 @@ function removeMember(i){
   pushBin();renderAll();renderAdmLists();toast(name+' removed','#ef4444');
 }
 
-/* ========== LEDGER ACTIONS ========== */
+/* ========== LEDGER ACTIONS – unshift ensures newest at top ========== */
 function mgAddTx(){
   if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
   const mbr=document.getElementById('mg-mbr').value;
@@ -1457,7 +1454,7 @@ function mgAddTx(){
   const date=document.getElementById('mg-date').value;
   const note=(document.getElementById('mg-note').value||'').trim();
   if(!mbr||!date||isNaN(amt)||amt<=0){toast('Fill all required fields','#ef4444');return;}
-  S.ledger.unshift({id:Date.now(),date,member:mbr,type,amount:Math.round(amt),note});
+  S.ledger.unshift({id:Date.now(),date,member:mbr,type,amount:Math.round(amt),note}); // unshift = newest at top
   document.getElementById('mg-amt').value='';document.getElementById('mg-note').value='';
   pushBin();renderAll();
   toast(`${mbr}: ${type} UGX ${fmtN(amt)}`,'#22c55e');
