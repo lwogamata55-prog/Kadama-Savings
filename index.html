@@ -5,12 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#020810">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<!-- Web App Manifest (points to your manifest.json) -->
 <link rel="manifest" href="manifest.json">
 <title>Kadama Saving Group</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ========== TOKENS (same as original) ========== */
+/* ========== FULL STYLES (unchanged) ========== */
 :root{
   --bg:#020810;--bg2:#071226;--bg3:#0C1C38;--bg4:#112244;
   --g:#22c55e;--g2:#16a34a;--g3:rgba(34,197,94,.14);--g4:rgba(34,197,94,.06);
@@ -456,9 +455,11 @@ svg.chart{width:100%;overflow:visible;}
     </div>
     <div class="hdr-r">
       <div class="sdot" id="sdot" title="Sync"></div>
-      <!-- WORKING INSTALL BUTTON (replaces old placeholder) -->
+      <!-- INSTALL APP BUTTON -->
       <button class="btn-icon" id="installButton" onclick="installApp()" title="Install App">📲</button>
-      <button class="btn-icon" onclick="toggleShare()" title="Share">⬆</button>
+      <!-- WHATSAPP SHARE BUTTON -->
+      <button class="btn-icon" onclick="shareViaWhatsApp()" title="Share on WhatsApp">📱</button>
+      <button class="btn-icon" onclick="toggleShare()" title="Copy Link">⬆</button>
       <div style="position:relative;display:inline-block;">
         <button class="btn-icon" onclick="goChat()" title="Chat">💬</button>
         <div class="chat-badge hidden" id="chat-badge">0</div>
@@ -686,7 +687,7 @@ svg.chart{width:100%;overflow:visible;}
   </div>
 </div><!-- #app -->
 
-<!-- MODALS (unchanged) -->
+<!-- MODALS -->
 <div class="ov" id="ov-admin" onclick="maybeClose(event,'ov-admin')">
   <div class="bs">
     <div class="bs-handle"></div>
@@ -769,19 +770,20 @@ svg.chart{width:100%;overflow:visible;}
   })();
 })();
 
-/* ========== PWA INSTALL PROMPT ========== */
+/* ========== PWA INSTALL PROMPT (improved) ========== */
 let deferredPrompt;
 const installButton = document.getElementById('installButton');
 
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  if (installButton) installButton.style.display = 'flex'; // ensure visible
+  installButton.style.display = 'flex'; // show button
 });
 
 function installApp() {
   if (!deferredPrompt) {
-    toast('App already installed or not available', '#F5C543');
+    // On Android, if not prompted, maybe already installed or not supported
+    toast('To install, use browser menu "Add to Home screen"', '#F5C543');
     return;
   }
   deferredPrompt.prompt();
@@ -792,9 +794,16 @@ function installApp() {
       toast('Installation cancelled', '#ef4444');
     }
     deferredPrompt = null;
-    // Optionally hide button after install
-    // installButton.style.display = 'none';
+    installButton.style.display = 'flex'; // keep visible (optional)
   });
+}
+
+/* ========== WHATSAPP SHARE ========== */
+function shareViaWhatsApp() {
+  const url = binId ? location.origin + location.pathname + '#' + binId : location.href;
+  const text = encodeURIComponent(`Join Kadama Saving Group: ${url}`);
+  const whatsappUrl = `https://wa.me/?text=${text}`;
+  window.open(whatsappUrl, '_blank');
 }
 
 /* ========== CONFIGURATION – YOUR LIVE SYNC KEY ========== */
@@ -1558,7 +1567,7 @@ document.addEventListener('keydown',e=>{
 /* ========== UTILITY ========== */
 function setEl(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 
-/* ========== INIT (with service worker registration) ========== */
+/* ========== INIT ========== */
 async function init(){
   const today=new Date().toISOString().split('T')[0];
   ['mg-date','ex-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=today;});
@@ -1582,10 +1591,9 @@ async function init(){
   } else {
     loadLocal();
     applyGroupMeta();
-    // Welcome screen is already visible
   }
 
-  // Register service worker for PWA
+  // Register service worker
   if ('serviceWorker' in navigator) {
     try {
       const registration = await navigator.serviceWorker.register('sw.js');
