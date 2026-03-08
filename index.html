@@ -33,7 +33,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .muted{color:var(--t2);}
 .micro{font-size:.7rem;color:var(--t3);}
 
-/* ══════════════════════════════════════ WELCOME — UPGRADED ANIMATIONS */
+/* ===== WELCOME ===== */
 #welcome{
   position:fixed;inset:0;z-index:8000;
   background:linear-gradient(145deg,#030C1E 0%,#071226 60%,#020810 100%);
@@ -44,12 +44,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 }
 #welcome.out{opacity:0;transform:scale(1.08) translateY(-20px);pointer-events:none;}
 #welcome canvas{position:absolute;inset:0;pointer-events:none;}
-
-/* Floating orbs behind content */
-.orb{
-  position:absolute;border-radius:50%;pointer-events:none;
-  filter:blur(60px);animation:orbFloat 8s ease-in-out infinite;
-}
+.orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(60px);animation:orbFloat 8s ease-in-out infinite;}
 .orb1{width:300px;height:300px;background:rgba(34,197,94,.08);top:-80px;left:-80px;animation-delay:0s;}
 .orb2{width:250px;height:250px;background:rgba(245,197,67,.06);bottom:-60px;right:-60px;animation-delay:2s;}
 .orb3{width:200px;height:200px;background:rgba(56,189,248,.06);top:40%;left:60%;animation-delay:4s;}
@@ -58,10 +53,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   33%{transform:translate(20px,-30px) scale(1.1);}
   66%{transform:translate(-15px,20px) scale(0.95);}
 }
-
 .welcome-content{position:relative;z-index:2;max-width:600px;width:100%;}
-
-/* Title: each letter enters one by one */
 .welcome-title{
   font-size:clamp(3rem,13vw,6.5rem);
   font-weight:900;line-height:1.1;margin-bottom:16px;
@@ -77,7 +69,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 @keyframes letterDrop{
   to{opacity:1;transform:translateY(0) rotate(0deg) scale(1);}
 }
-/* gradient cycling per letter */
 .wt-letter:nth-child(odd){
   background:linear-gradient(135deg,#fff 0%,var(--g) 60%,var(--gold) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -86,7 +77,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   background:linear-gradient(135deg,var(--g) 0%,#fff 50%,var(--gold) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-/* subtle continuous float on each letter after entrance */
 .wt-letter.floated{
   animation:letterDrop .6s cubic-bezier(0.34,1.56,.64,1) forwards,
             letterWave 4s ease-in-out infinite;
@@ -96,8 +86,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   0%,100%{transform:translateY(0);}
   50%{transform:translateY(-8px);}
 }
-
-/* Shimmering underline */
 .title-underline{
   height:4px;width:0;border-radius:99px;margin:12px auto 0;
   background:linear-gradient(90deg,var(--g),var(--gold),var(--g));
@@ -106,7 +94,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 }
 @keyframes underlineGrow{to{width:240px;}}
 @keyframes shimmer{0%{background-position:0% 0%;}100%{background-position:200% 0%;}}
-
 .welcome-sub{
   font-size:clamp(1rem,4vw,1.5rem);font-weight:400;color:var(--t2);
   margin:20px 0 0;letter-spacing:2px;
@@ -114,7 +101,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   animation:slideUp .8s ease 1.6s forwards;
 }
 @keyframes slideUp{to{opacity:1;transform:translateY(0);}}
-
 .welcome-stats{
   display:flex;gap:24px;justify-content:center;margin:32px 0 24px;
   opacity:0;transform:scale(0.8);
@@ -127,8 +113,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;
 }
 .welcome-stat .label{font-size:.82rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
-
-/* Buttons with stagger */
 .welcome-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
 .welcome-btn{
   padding:15px 36px;border-radius:60px;font-weight:800;font-size:1rem;
@@ -152,8 +136,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .welcome-btn.secondary:hover{background:var(--g);color:#000;transform:scale(1.08) translateY(-2px);}
 .welcome-btn.exit{background:rgba(255,255,255,.04);border:2px solid var(--t3);color:var(--t2);}
 .welcome-btn.exit:hover{border-color:var(--red);color:#fff;background:rgba(239,68,68,.18);transform:scale(1.04);}
-
-/* pulsing dot at bottom */
 .pulse-dot{
   position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
   width:10px;height:10px;background:var(--g);border-radius:50%;
@@ -163,7 +145,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 @keyframes pulseIn{to{opacity:1;}}
 @keyframes pulseAnim{0%,100%{transform:translateX(-50%) scale(1);box-shadow:0 0 24px var(--g);}50%{transform:translateX(-50%) scale(1.6);box-shadow:0 0 40px var(--g);}}
 
-/* ══════════════════════════════════════ LOADING */
+/* ===== LOADING ===== */
 #loading{position:fixed;inset:0;z-index:7000;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 #loading.show{display:flex;}
 .ld-icon{font-size:2.8rem;animation:bounce .9s ease-in-out infinite;}
@@ -172,7 +154,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .ld-fill{height:100%;background:linear-gradient(90deg,var(--g),var(--gold));border-radius:99px;animation:ldAnim 1.6s ease-in-out infinite;}
 @keyframes ldAnim{0%{width:0;margin-left:0;}60%{width:100%;margin-left:0;}100%{width:0;margin-left:100%};}
 
-/* ══════════════════════════════════════ BUTTONS */
+/* ===== BUTTONS ===== */
 button{cursor:pointer;border:none;outline:none;transition:all .18s;}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:14px 22px;border-radius:var(--r3);font-weight:700;font-size:.92rem;min-height:50px;letter-spacing:.2px;}
 .btn-g{background:var(--g);color:#000;}.btn-g:active{background:var(--g2);}
@@ -184,7 +166,7 @@ button{cursor:pointer;border:none;outline:none;transition:all .18s;}
 .btn-icon:active{background:rgba(255,255,255,.14);}
 .btn:active{transform:scale(.97);}
 
-/* ══════════════════════════════════════ INPUTS */
+/* ===== INPUTS ===== */
 .inp{width:100%;background:rgba(255,255,255,.07);border:1.5px solid var(--br);border-radius:var(--r3);color:var(--t);padding:13px 14px;font-size:.92rem;font-family:'Outfit',sans-serif;outline:none;transition:border .2s;}
 .inp:focus{border-color:rgba(34,197,94,.5);}
 .inp::placeholder{color:var(--t3);}
@@ -193,7 +175,7 @@ select.inp option{background:var(--bg3);}
 .fld{margin-bottom:12px;}
 textarea.inp{resize:vertical;min-height:80px;}
 
-/* ══════════════════════════════════════ APP SHELL */
+/* ===== APP SHELL ===== */
 #app{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .4s;pointer-events:none;}
 #app.on{opacity:1;transform:none;pointer-events:all;}
 #hdr{height:var(--hdr);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:rgba(2,8,16,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--br);z-index:20;}
@@ -208,21 +190,17 @@ textarea.inp{resize:vertical;min-height:80px;}
 @keyframes sdotPulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .chat-badge{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:var(--red);border-radius:50%;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);}
 
-/* ══════════════════════════════════════ CONTENT + NAV */
+/* ===== CONTENT + NAV ===== */
 #content{flex:1;overflow:hidden;position:relative;}
-
-/* KEY FIX: generous bottom padding so last item is never hidden under nav */
 .tab{
   position:absolute;inset:0;
   overflow-y:auto;-webkit-overflow-scrolling:touch;
-  /* extra 56px beyond nav so last card clears nav + has breathing room */
   padding:14px 14px calc(var(--nav) + 56px);
   opacity:0;pointer-events:none;transform:translateX(16px);
   transition:opacity .22s,transform .22s;
   scroll-behavior:smooth;
 }
 .tab.on{opacity:1;pointer-events:all;transform:none;}
-
 #nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav);display:flex;background:rgba(2,8,16,.98);backdrop-filter:blur(20px);border-top:1px solid var(--br);padding-bottom:env(safe-area-inset-bottom);z-index:20;}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;color:var(--t3);font-size:.6rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;position:relative;}
 .ni:active{background:rgba(255,255,255,.04);}
@@ -230,7 +208,7 @@ textarea.inp{resize:vertical;min-height:80px;}
 .ni .ico{font-size:1.35rem;line-height:1;}
 .ni.on .ico{filter:drop-shadow(0 0 5px var(--g));}
 
-/* ══════════════════════════════════════ CARDS */
+/* ===== CARDS ===== */
 .card{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:16px;}
 .stat-card{background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid var(--br);border-radius:var(--r);padding:15px 16px;flex:1;}
 .stat-lbl{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:6px;}
@@ -251,7 +229,7 @@ textarea.inp{resize:vertical;min-height:80px;}
 .t-expense{background:var(--gd2);color:var(--gold);}.t-expense::before{background:var(--gold);}
 .t-paid{background:var(--g3);color:var(--g);}.t-pending{background:var(--gd2);color:var(--gold);}
 
-/* ══════════════════════════════════════ TX CARD */
+/* ===== TX CARD ===== */
 .txc{background:var(--card);border:1px solid var(--br);border-radius:var(--r2);padding:12px 13px;margin-bottom:8px;display:flex;align-items:center;gap:11px;}
 .txc-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
 .tic-d{background:var(--g3);}.tic-w{background:var(--rd2);}.tic-we{background:var(--sk2);}
@@ -260,19 +238,17 @@ textarea.inp{resize:vertical;min-height:80px;}
 .txc-amt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;text-align:right;flex-shrink:0;}
 .amt-p{color:var(--g);}.amt-n{color:var(--red);}
 
-/* ══════════════════════════════════════ MEMBER CARD */
+/* ===== MEMBER CARD ===== */
 .mc{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:14px;margin-bottom:10px;}
 .mc-av{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1.5px solid var(--br);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:var(--gold);flex-shrink:0;}
 .mc-name{font-weight:800;font-size:.95rem;}
 .mc-bal{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.95rem;}
 .bp{color:var(--g);}.bn{color:var(--red);}.bz{color:var(--t2);}
 .stars{color:var(--gold);font-size:.75rem;}
-
-/* newly added item highlight */
-@keyframes newItem{from{background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.5);}to{background:var(--card);border-color:var(--br);}}
 .new-item{animation:newItem 1.8s ease forwards;}
+@keyframes newItem{from{background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.5);}to{background:var(--card);border-color:var(--br);}}
 
-/* ══════════════════════════════════════ SHARE BANNER */
+/* ===== SHARE BANNER ===== */
 #share-banner{display:none;margin-bottom:14px;background:linear-gradient(90deg,rgba(34,197,94,.07),rgba(245,197,67,.05));border:1.5px solid rgba(34,197,94,.22);border-radius:var(--r2);padding:12px;}
 #share-banner.show{display:block;animation:fadeUp .3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
@@ -283,13 +259,13 @@ textarea.inp{resize:vertical;min-height:80px;}
 .copy-b{background:var(--g);color:#000;border:none;border-radius:6px;padding:10px 16px;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .18s;flex-shrink:0;}
 .copy-b:active{background:var(--g2);}.copy-b.ok{background:var(--gold);color:#000;}
 
-/* ══════════════════════════════════════ CHART */
+/* ===== CHART ===== */
 .chart-wrap{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:16px;margin-bottom:13px;overflow:hidden;}
 .chart-h{font-size:.88rem;font-weight:800;margin-bottom:2px;}
 .chart-sub{font-size:.67rem;color:var(--t3);margin-bottom:14px;}
 svg.chart{width:100%;overflow:visible;}
 
-/* ══════════════════════════════════════ CHAT */
+/* ===== CHAT ===== */
 .chat-msg{margin-bottom:8px;max-width:85%;}
 .chat-msg.me{margin-left:auto;}
 .chat-msg.me .chat-bubble{background:var(--g);color:#000;border-radius:14px 14px 4px 14px;}
@@ -304,7 +280,7 @@ svg.chart{width:100%;overflow:visible;}
 .chat-input-row textarea{flex:1;min-height:46px;max-height:100px;border-radius:12px;}
 .chat-name-row{display:flex;gap:8px;margin-bottom:8px;}
 
-/* ══════════════════════════════════════ MODAL / BOTTOM SHEET */
+/* ===== MODAL / BOTTOM SHEET ===== */
 .ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s;}
 .ov.on{opacity:1;pointer-events:all;}
 .bs{width:100%;background:var(--bg2);border:1px solid var(--br);border-radius:20px 20px 0 0;padding:8px 20px 36px;transform:translateY(100%);transition:transform .3s cubic-bezier(.22,1,.36,1);max-height:92vh;overflow-y:auto;}
@@ -314,7 +290,7 @@ svg.chart{width:100%;overflow:visible;}
 .pwd-row{position:relative;}.pwd-row .inp{padding-right:46px;}
 .pwd-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--t3);font-size:1rem;cursor:pointer;padding:4px;}
 
-/* ══════════════════════════════════════ TOAST */
+/* ===== TOAST ===== */
 .twrap{position:fixed;bottom:calc(var(--nav)+12px);left:14px;right:14px;z-index:9999;pointer-events:none;display:flex;flex-direction:column;gap:7px;}
 .toast{background:rgba(7,18,38,.95);border:1px solid var(--br);border-radius:var(--r2);padding:11px 14px;display:flex;align-items:center;gap:10px;font-size:.85rem;font-weight:600;box-shadow:var(--sh);animation:toastIn .3s ease;}
 .toast.out{animation:toastOut .3s ease forwards;}
@@ -325,6 +301,24 @@ svg.chart{width:100%;overflow:visible;}
 .lock-wrap{display:flex;flex-direction:column;align-items:center;padding:50px 20px;text-align:center;gap:14px;}
 .lock-ico{font-size:3.5rem;margin-bottom:4px;}
 #cc{position:fixed;inset:0;pointer-events:none;z-index:9998;}
+
+/* ===== NEW: Admin sub-nav ===== */
+.admin-subnav{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;
+}
+.admin-subnav .btn{
+  flex:1 0 auto; min-width:100px; padding:10px; font-size:.8rem;
+}
+
+/* ===== NEW: Summary cards ===== */
+.summary-period{
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.03); border-radius:var(--r2); padding:14px;
+  margin-bottom:8px;
+}
+.summary-period .period{font-weight:700; font-size:1rem;}
+.summary-period .amount{font-family:'JetBrains Mono'; font-size:1.2rem;}
+.summary-note{font-size:.7rem; color:var(--t3); text-align:center; margin-top:12px;}
 </style>
 </head>
 <body>
@@ -332,27 +326,19 @@ svg.chart{width:100%;overflow:visible;}
 <canvas id="cc" aria-hidden="true"></canvas>
 <div class="twrap" id="twrap"></div>
 
-<!-- ══════════ WELCOME PAGE ══════════ -->
+<!-- WELCOME PAGE -->
 <div id="welcome">
   <canvas id="wlc-canvas"></canvas>
-  <!-- background orbs -->
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
-
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
   <div class="welcome-content">
-    <div class="welcome-title" id="wt">
-      <!-- letters injected by JS for per-letter animation -->
-    </div>
+    <div class="welcome-title" id="wt"></div>
     <div class="title-underline" id="t-ul"></div>
     <div class="welcome-sub">Kabondo Branch · Est. 2024</div>
-
     <div class="welcome-stats">
       <div class="welcome-stat"><div class="number" id="ws-members">9</div><div class="label">Members</div></div>
       <div class="welcome-stat"><div class="number">24/7</div><div class="label">Live Sync</div></div>
       <div class="welcome-stat"><div class="number">💬</div><div class="label">Live Chat</div></div>
     </div>
-
     <div class="welcome-buttons">
       <button class="welcome-btn primary" onclick="enterApp()">🚀 Enter Dashboard</button>
       <button class="welcome-btn secondary" onclick="openOv('ov-admin')">🔐 Admin</button>
@@ -411,14 +397,25 @@ svg.chart{width:100%;overflow:visible;}
         <div class="stat-card"><div class="stat-lbl">Members</div><div class="stat-val sv-s mono" id="h-mem">0</div><div class="stat-sub">active</div></div>
         <div class="stat-card"><div class="stat-lbl">Total Tx</div><div class="stat-val sv-g mono" id="h-tx">0</div><div class="stat-sub">all time</div></div>
       </div>
+      <!-- Total Paid Members (existing) -->
       <div class="card" style="margin-bottom:12px;">
         <div class="pbar-r">
-          <span class="section-h" style="margin:0;">Paid Members</span>
+          <span class="section-h" style="margin:0;">Total Paid Members</span>
           <span style="font-weight:800;font-size:.88rem;color:var(--g);" id="h-pct">0%</span>
         </div>
         <div class="pbar"><div class="pbar-f" id="h-pbar" style="width:0%"></div></div>
         <div style="font-size:.7rem;color:var(--t3);" id="h-pbar-sub"></div>
       </div>
+      <!-- NEW: Weekly Paid Members Progress Bar -->
+      <div class="card" style="margin-bottom:12px;">
+        <div class="pbar-r">
+          <span class="section-h" style="margin:0;">Weekly Paid Members</span>
+          <span style="font-weight:800;font-size:.88rem;color:var(--g);" id="weekly-pct">0%</span>
+        </div>
+        <div class="pbar"><div class="pbar-f" id="weekly-pbar" style="width:0%"></div></div>
+        <div style="font-size:.7rem;color:var(--t3);" id="weekly-pbar-sub"></div>
+      </div>
+      <!-- Balance Summary -->
       <div style="background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:14px;margin-bottom:12px;">
         <div class="section-h">Balance Summary</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
@@ -437,7 +434,7 @@ svg.chart{width:100%;overflow:visible;}
       <div id="members-list"></div>
     </div>
 
-    <!-- LEDGER -->
+    <!-- LEDGER (with View All) -->
     <div id="t-ledger" class="tab">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
         <div class="section-h" style="margin:0;">All Transactions</div>
@@ -448,33 +445,61 @@ svg.chart{width:100%;overflow:visible;}
         <button class="btn btn-sm btn-sec" onclick="setLF('deposit',this)" id="lf-deposit">Deposits</button>
         <button class="btn btn-sm btn-sec" onclick="setLF('withdraw',this)" id="lf-withdraw">Withdrawals</button>
         <button class="btn btn-sm btn-sec" onclick="setLF('welfare',this)" id="lf-welfare">Welfare</button>
+        <!-- NEW: View All / Show Less toggle -->
+        <button class="btn btn-sm btn-sec" id="viewAllBtn" onclick="toggleLedgerView()">View All</button>
       </div>
       <div id="ledger-list"></div>
     </div>
 
-    <!-- CHARTS -->
-    <div id="t-charts" class="tab">
-      <div class="chart-wrap">
-        <div class="chart-h">📈 Savings Trend</div>
-        <div class="chart-sub">Monthly deposits — all time</div>
-        <svg class="chart" id="chart-line" height="160" viewBox="0 0 320 160" preserveAspectRatio="none"></svg>
+    <!-- SUMMARY (new tab) -->
+    <div id="t-summary" class="tab">
+      <div class="section-h">📆 Weekly Summary</div>
+      <div class="summary-period">
+        <span class="period">This Week</span>
+        <span class="amount sv-g" id="weekSavings">0</span>
       </div>
-      <div class="chart-wrap">
-        <div class="chart-h">📊 Member Balances</div>
-        <div class="chart-sub">Current UGX balance per member</div>
-        <div id="chart-bars"></div>
+      <div class="summary-period">
+        <span class="period">Expenses</span>
+        <span class="amount sv-r" id="weekExpenses">0</span>
       </div>
-      <div class="chart-wrap">
-        <div class="chart-h">💸 Expense Breakdown</div>
-        <div class="chart-sub">By category</div>
-        <div id="chart-exp"></div>
+      <div class="summary-period">
+        <span class="period">Net</span>
+        <span class="amount sv-go" id="weekNet">0</span>
       </div>
-      <div class="g2">
-        <div class="stat-card"><div class="stat-lbl">Avg Deposit</div><div class="stat-val sv-g mono" id="cs-avg">0</div><div class="stat-sub">UGX per tx</div></div>
-        <div class="stat-card"><div class="stat-lbl">Group Age</div><div class="stat-val sv-s mono" id="cs-age">—</div><div class="stat-sub">days active</div></div>
-        <div class="stat-card"><div class="stat-lbl">Top Saver</div><div class="stat-val sv-go" style="font-size:1rem;font-weight:900;" id="cs-top">—</div><div class="stat-sub" id="cs-top-sub">member</div></div>
-        <div class="stat-card"><div class="stat-lbl">All Transactions</div><div class="stat-val sv-s mono" id="cs-cnt">0</div><div class="stat-sub">records</div></div>
+      <div class="micro" style="margin:-4px 0 16px 14px;">Transactions: <span id="weekTx">0</span></div>
+
+      <div class="section-h">📅 Monthly Summary</div>
+      <div class="summary-period">
+        <span class="period">This Month</span>
+        <span class="amount sv-g" id="monthSavings">0</span>
       </div>
+      <div class="summary-period">
+        <span class="period">Expenses</span>
+        <span class="amount sv-r" id="monthExpenses">0</span>
+      </div>
+      <div class="summary-period">
+        <span class="period">Net</span>
+        <span class="amount sv-go" id="monthNet">0</span>
+      </div>
+      <div class="micro" style="margin:-4px 0 16px 14px;">Transactions: <span id="monthTx">0</span></div>
+
+      <div class="section-h">📊 Yearly Summary</div>
+      <div class="summary-period">
+        <span class="period">This Year</span>
+        <span class="amount sv-g" id="yearSavings">0</span>
+      </div>
+      <div class="summary-period">
+        <span class="period">Expenses</span>
+        <span class="amount sv-r" id="yearExpenses">0</span>
+      </div>
+      <div class="summary-period">
+        <span class="period">Net</span>
+        <span class="amount sv-go" id="yearNet">0</span>
+      </div>
+      <div class="micro" style="margin:-4px 0 16px 14px;">Transactions: <span id="yearTx">0</span></div>
+
+      <div class="summary-note">📈 Avg weekly savings: <span id="avgWeekSavings">0</span> UGX</div>
+      <div class="summary-note">📊 Projected annual: <span id="projAnnual">0</span> UGX</div>
     </div>
 
     <!-- CHAT -->
@@ -508,6 +533,16 @@ svg.chart{width:100%;overflow:visible;}
           <div><div style="font-size:1.05rem;font-weight:800;">Admin Panel</div><div class="micro">Full management access</div></div>
           <button class="btn btn-sm btn-red" onclick="lockAdmin()">Lock</button>
         </div>
+
+        <!-- NEW: Admin sub-navigation -->
+        <div class="admin-subnav">
+          <button class="btn btn-sm btn-sec" onclick="scrollToAdminSection('add-member')">➕ Add Member</button>
+          <button class="btn btn-sm btn-sec" onclick="scrollToAdminSection('settings')">⚙️ Settings</button>
+          <button class="btn btn-sm btn-sec" onclick="scrollToAdminSection('manage-members')">👥 Manage</button>
+          <button class="btn btn-sm btn-sec" onclick="scrollToAdminSection('recent-tx')">📋 Recent Tx</button>
+        </div>
+
+        <!-- Add Transaction (always visible) -->
         <div class="card" style="margin-bottom:12px;">
           <div class="section-h">Add Transaction</div>
           <div class="fld"><label class="inp-label">Member</label><select class="inp" id="mg-mbr"></select></div>
@@ -525,11 +560,15 @@ svg.chart{width:100%;overflow:visible;}
           <div class="fld"><label class="inp-label">Note (optional)</label><input class="inp" id="mg-note" placeholder="e.g. Week 12 contribution"/></div>
           <button class="btn btn-g" style="width:100%;" onclick="mgAddTx()">+ Add Transaction</button>
         </div>
-        <div class="card" style="margin-bottom:12px;">
+
+        <!-- Add Member section (id for subnav) -->
+        <div id="add-member" class="card" style="margin-bottom:12px; scroll-margin-top:70px;">
           <div class="section-h">Add Member</div>
           <div class="fld"><label class="inp-label">Full Name</label><input class="inp" id="nm-name" placeholder="e.g. Nakato Sarah"/></div>
           <button class="btn btn-g" style="width:100%;" onclick="addMember()">+ Add Member</button>
         </div>
+
+        <!-- Add Expense -->
         <div class="card" style="margin-bottom:12px;">
           <div class="section-h">Record Expense</div>
           <div class="fld"><label class="inp-label">Description</label><input class="inp" id="ex-desc" placeholder="e.g. Meeting venue"/></div>
@@ -542,7 +581,9 @@ svg.chart{width:100%;overflow:visible;}
           <div class="fld"><label class="inp-label">Date</label><input class="inp" id="ex-date" type="date"/></div>
           <button class="btn btn-gold" style="width:100%;" onclick="addExpense()">+ Record Expense</button>
         </div>
-        <div class="card" style="margin-bottom:12px;">
+
+        <!-- Group Settings (id for subnav) -->
+        <div id="settings" class="card" style="margin-bottom:12px; scroll-margin-top:70px;">
           <div class="section-h">⚙️ Group Settings</div>
           <div class="fld"><label class="inp-label">Group Name</label><input class="inp" id="st-gname" placeholder="Group name"/></div>
           <div class="fld"><label class="inp-label">Branch Name</label><input class="inp" id="st-branch" placeholder="Branch name"/></div>
@@ -565,12 +606,28 @@ svg.chart{width:100%;overflow:visible;}
           <div class="fld"><textarea class="inp" id="adm-reply" rows="2" placeholder="Type admin reply to send in chat…"></textarea></div>
           <button class="btn btn-gold" style="width:100%;margin-bottom:8px;" onclick="adminSendMsg()">📢 Send as Admin</button>
         </div>
-        <div class="section-h">Manage Members</div>
-        <div id="adm-mbr-list" style="margin-bottom:12px;"></div>
+
+        <!-- Manage Members (id for subnav) -->
+        <div id="manage-members" style="scroll-margin-top:70px;">
+          <div class="section-h">Manage Members</div>
+          <div id="adm-mbr-list" style="margin-bottom:12px;"></div>
+        </div>
+
+        <!-- Manage Expenses -->
         <div class="section-h">Manage Expenses</div>
         <div id="adm-exp-list" style="margin-bottom:12px;"></div>
-        <div class="section-h">Recent Transactions (tap to edit/delete)</div>
-        <div id="adm-tx-list" style="margin-bottom:14px;"></div>
+
+        <!-- Recent Transactions (id for subnav) with Delete All button -->
+        <div id="recent-tx" style="scroll-margin-top:70px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div class="section-h" style="margin:0;">Recent Transactions (tap to edit/delete)</div>
+            <!-- NEW: Delete All Transactions button -->
+            <button class="btn btn-sm btn-red" onclick="deleteAllTransactions()">🗑 Delete All</button>
+          </div>
+          <div id="adm-tx-list" style="margin-bottom:14px;"></div>
+        </div>
+
+        <!-- Downloads -->
         <div style="display:flex;gap:8px;flex-wrap:wrap;padding-bottom:8px;">
           <button class="btn btn-sm btn-sec" onclick="downloadLedger()">⬇ Ledger CSV</button>
           <button class="btn btn-sm btn-sec" onclick="downloadPayouts()">⬇ Payouts CSV</button>
@@ -584,12 +641,13 @@ svg.chart{width:100%;overflow:visible;}
     <button class="ni on" onclick="goTab('home',this)" id="ni-home"><span class="ico">🏠</span><span>Home</span></button>
     <button class="ni" onclick="goTab('members',this)" id="ni-members"><span class="ico">👥</span><span>Members</span></button>
     <button class="ni" onclick="goTab('ledger',this)" id="ni-ledger"><span class="ico">📋</span><span>Ledger</span></button>
-    <button class="ni" onclick="goTab('charts',this)" id="ni-charts"><span class="ico">📊</span><span>Charts</span></button>
+    <button class="ni" onclick="goTab('summary',this)" id="ni-summary"><span class="ico">📊</span><span>Summary</span></button>
+    <button class="ni" onclick="goTab('chat',this)" id="ni-chat"><span class="ico">💬</span><span>Chat</span></button>
     <button class="ni" onclick="goTab('admin',this)" id="ni-admin"><span class="ico">⚙️</span><span>Admin</span></button>
   </div>
 </div><!-- #app -->
 
-<!-- MODALS -->
+<!-- MODALS (unchanged) -->
 <div class="ov" id="ov-admin" onclick="maybeClose(event,'ov-admin')">
   <div class="bs">
     <div class="bs-handle"></div>
@@ -636,9 +694,7 @@ svg.chart{width:100%;overflow:visible;}
 </div>
 
 <script>
-/* ══════════════════════════════════════
-   WELCOME TITLE — letter-by-letter entrance
-══════════════════════════════════════ */
+/* ===== WELCOME TITLE ===== */
 (function buildTitle(){
   const words = ['Kadama', 'Saving', 'Group'];
   const container = document.getElementById('wt');
@@ -658,15 +714,12 @@ svg.chart{width:100%;overflow:visible;}
     }
     container.appendChild(line);
   });
-  // after all letters land, add wave float class
   setTimeout(() => {
     document.querySelectorAll('.wt-letter').forEach(el => el.classList.add('floated'));
   }, totalDelay * 1000 + 400);
 })();
 
-/* ══════════════════════════════════════
-   WELCOME PARTICLE CANVAS
-══════════════════════════════════════ */
+/* ===== WELCOME CANVAS ===== */
 (function(){
   const c=document.getElementById('wlc-canvas');
   const x=c.getContext('2d');
@@ -695,9 +748,7 @@ svg.chart{width:100%;overflow:visible;}
   })();
 })();
 
-/* ══════════════════════════════════════
-   PWA
-══════════════════════════════════════ */
+/* ===== PWA ===== */
 let deferredPrompt;
 const installButton = document.getElementById('installButton');
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -716,20 +767,15 @@ function shareViaWhatsApp(){
   window.open(`https://wa.me/?text=${encodeURIComponent('Join Kadama Saving Group: '+url)}`, '_blank');
 }
 
-/* ══════════════════════════════════════
-   SCROLL HELPERS
-══════════════════════════════════════ */
-// scroll to the very end of a tab's content
+/* ===== SCROLL HELPERS ===== */
 function scrollTabToBottom(tabId){
   const t=document.getElementById(tabId);
   if(t) requestAnimationFrame(()=>{ t.scrollTop=t.scrollHeight; });
 }
-// scroll to top of a tab
 function scrollTabToTop(tabId){
   const t=document.getElementById(tabId);
   if(t) requestAnimationFrame(()=>{ t.scrollTo({top:0,behavior:'smooth'}); });
 }
-// scroll last child of container into view
 function scrollLastIntoView(containerId, tabId){
   const c=document.getElementById(containerId);
   if(!c)return;
@@ -742,7 +788,6 @@ function scrollLastIntoView(containerId, tabId){
     }
   });
 }
-// scroll first child into view (for prepended items like ledger)
 function scrollFirstIntoView(containerId){
   const c=document.getElementById(containerId);
   if(!c)return;
@@ -755,10 +800,13 @@ function scrollFirstIntoView(containerId){
     }
   });
 }
+// NEW: scroll to admin section
+function scrollToAdminSection(sectionId){
+  const el = document.getElementById(sectionId);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
 
-/* ══════════════════════════════════════
-   STATE
-══════════════════════════════════════ */
+/* ===== STATE ===== */
 let S={
   groupName:'Kadama Saving Group',
   branch:'Kabondo Branch',
@@ -783,13 +831,15 @@ S.expenses=[
 
 let adminUnlocked=false,binId=null,isSaving=false,pollTimer=null;
 let editTxIdx=null,editMbrIdx=null,lfilt='all';
+// NEW: ledger view limit flag
+let ledgerShowAll = false;
 let myName=localStorage.getItem('ksg_myname')||'';
 let lastChatLen=0;
 const LKEY='ksg_v5';
 const BIN='https://api.jsonbin.io/v3/b';
 const MASTER_KEY='$2a$10$.n47qk8gaFhf0WVRwLGI5edzEmxAOkp1VA72QqCiF0UpP8My3lmVC';
 
-/* ══════════════════════════════════════ LOCAL STORAGE */
+/* ===== LOCAL STORAGE ===== */
 function saveLocal(){try{localStorage.setItem(LKEY,JSON.stringify({...S,binId}));}catch(e){}}
 function loadLocal(){
   try{
@@ -799,7 +849,7 @@ function loadLocal(){
   }catch(e){return false;}
 }
 
-/* ══════════════════════════════════════ JSONBIN SYNC */
+/* ===== JSONBIN SYNC ===== */
 function getBinFromUrl(){const h=location.hash.replace('#','');return h.length>10?h:null;}
 function setBinId(id){binId=id;history.replaceState(null,'',location.pathname+location.search+'#'+id);refreshShareUrl();saveLocal();}
 function setSdot(s){const d=document.getElementById('sdot');d.className='sdot';if(s==='live')d.classList.add('live');else if(s==='sync')d.classList.add('sync');}
@@ -856,7 +906,7 @@ function refreshShareUrl(){
   const inp=document.getElementById('share-inp');if(inp)inp.value=url;
 }
 
-/* ══════════════════════════════════════ NAVIGATION */
+/* ===== NAVIGATION ===== */
 function enterApp(){
   document.getElementById('welcome').classList.add('out');
   setTimeout(()=>{
@@ -879,6 +929,7 @@ function goTab(name,btn){
   document.getElementById('t-'+name).classList.add('on');
   (btn||document.getElementById('ni-'+name)).classList.add('on');
   curTab=name;
+  if(name==='summary')renderSummary();
   if(name==='charts')renderCharts();
   if(name==='admin')renderAdmLists();
   if(name==='members')renderMembers();
@@ -906,7 +957,7 @@ function doCopy(){
   .catch(()=>{try{document.getElementById('share-inp').select();document.execCommand('copy');toast('Link copied!','#22c55e');}catch(e){toast('Select the link manually to copy','#ef4444');}});
 }
 
-/* ══════════════════════════════════════ GROUP META */
+/* ===== GROUP META ===== */
 function applyGroupMeta(){
   const n=S.groupName||'Kadama Saving Group',b=S.branch||'Kabondo Branch';
   setEl('hdr-title',n.length>16?n.slice(0,14)+'…':n);setEl('hdr-sub',b);
@@ -917,7 +968,7 @@ function applyGroupMeta(){
   const wsc=document.getElementById('ws-members');if(wsc)wsc.textContent=S.members.length;
 }
 
-/* ══════════════════════════════════════ COMPUTATIONS */
+/* ===== COMPUTATIONS ===== */
 function balances(){
   const b={};S.members.forEach(m=>b[m]=0);
   S.ledger.slice().reverse().forEach(e=>{
@@ -930,6 +981,48 @@ function balances(){
 function totalSav(){return Object.values(balances()).reduce((a,c)=>a+c,0);}
 function totalExp(){return S.expenses.reduce((s,e)=>s+Number(e.amount),0);}
 function cashBal(){return totalSav()-totalExp();}
+
+// NEW: Weekly target amount (can be adjusted)
+const WEEKLY_TARGET = 50000;
+// Get current week range (Monday to Sunday)
+function getWeekRange(date = new Date()){
+  const d = new Date(date);
+  const day = d.getDay(); // 0=Sun,1=Mon,...6=Sat
+  // Set to Monday (if Sunday, go back 6 days)
+  const monday = new Date(d);
+  monday.setDate(d.getDate() - (day === 0 ? 6 : day-1));
+  monday.setHours(0,0,0,0);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23,59,59,999);
+  return { start: monday, end: sunday };
+}
+function getWeekNumber(date){
+  const d = new Date(date);
+  d.setHours(0,0,0,0);
+  const firstJan = new Date(d.getFullYear(),0,1);
+  return Math.ceil((((d - firstJan) / 86400000) + firstJan.getDay()+1)/7);
+}
+// Count members who have deposited >= WEEKLY_TARGET this week
+function weeklyPaidMembers(){
+  const { start, end } = getWeekRange();
+  const depositsThisWeek = S.ledger.filter(tx => 
+    (tx.type==='deposit'||tx.type==='welfare') && 
+    new Date(tx.date+'T00:00:00') >= start &&
+    new Date(tx.date+'T00:00:00') <= end
+  );
+  const memberTotal = {};
+  depositsThisWeek.forEach(tx => {
+    memberTotal[tx.member] = (memberTotal[tx.member]||0) + tx.amount;
+  });
+  let count = 0;
+  for(let m in memberTotal){
+    if(memberTotal[m] >= WEEKLY_TARGET) count++;
+  }
+  return count;
+}
+
+// NEW: Rating labels
 function rating(m){
   const now=new Date(),p=90,start=new Date(now);start.setDate(now.getDate()-p);
   const deps=S.ledger.filter(e=>e.member===m&&(e.type==='deposit'||e.type==='welfare')&&new Date(e.date+'T00:00:00')>=start);
@@ -937,18 +1030,27 @@ function rating(m){
   const wks=Math.ceil(p/7),wSet=new Set();
   deps.forEach(d=>{const wi=Math.floor((new Date(d.date+'T00:00:00')-start)/(7*864e5));wSet.add(wi);});
   const score=Math.min(freq/20,1)*.4+Math.min(avg/200000,1)*.3+(wks?wSet.size/wks:0)*.3;
-  if(score>=.8)return{l:'Excellent',s:5,c:'var(--g)'};
-  if(score>=.6)return{l:'Good',s:4,c:'#4ade80'};
-  if(score>=.4)return{l:'Fair',s:3,c:'var(--gold)'};
-  return{l:'Needs Work',s:2,c:'var(--red)'};
+  if(score>=.8)return{l:'Top Saver',s:5,c:'var(--g)'};
+  if(score>=.6)return{l:'On Track',s:4,c:'#4ade80'};
+  if(score>=.4)return{l:'Needs Boost',s:3,c:'var(--gold)'};
+  return{l:'Behind',s:2,c:'var(--red)'};
 }
+
 function fmtN(n,c=false){n=Number(n);if(c&&n>=1000000)return(n/1e6).toFixed(1)+'M';if(c&&n>=1000)return(n/1000).toFixed(0)+'K';return n.toLocaleString('en-UG');}
 function escH(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);}
 function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
 function txIco(t){return t==='deposit'?'💰':t==='withdraw'?'💸':t==='welfare'?'🤝':'📌';}
 function txIcoC(t){return t==='deposit'?'tic-d':t==='withdraw'?'tic-w':'tic-we';}
 
-/* ══════════════════════════════════════ RENDER ALL */
+/* ===== LEDGER VIEW TOGGLE ===== */
+function toggleLedgerView(){
+  ledgerShowAll = !ledgerShowAll;
+  const btn = document.getElementById('viewAllBtn');
+  btn.textContent = ledgerShowAll ? 'Show Less' : 'View All';
+  renderLedger();
+}
+
+/* ===== RENDER ALL ===== */
 function renderAll(){
   const bal=balances(),ts=totalSav(),te=totalExp(),cb=cashBal();
   const paid=S.members.filter(m=>bal[m]>0).length;
@@ -958,6 +1060,15 @@ function renderAll(){
   setEl('h-pct',pct+'%');
   const pf=document.getElementById('h-pbar');if(pf)pf.style.width=pct+'%';
   setEl('h-pbar-sub',`${paid} of ${S.members.length} members have positive balance`);
+  
+  // Weekly paid members
+  const weeklyPaid = weeklyPaidMembers();
+  const weeklyPct = S.members.length ? Math.round(weeklyPaid / S.members.length * 100) : 0;
+  setEl('weekly-pct', weeklyPct+'%');
+  const wpBar = document.getElementById('weekly-pbar');
+  if(wpBar) wpBar.style.width = weeklyPct+'%';
+  setEl('weekly-pbar-sub', `${weeklyPaid} of ${S.members.length} met weekly target (UGX ${fmtN(WEEKLY_TARGET)})`);
+
   setEl('bs-s',fmtN(ts,true));setEl('bs-e',fmtN(te,true));setEl('bs-n',fmtN(cb,true));
   const rr=document.getElementById('h-recent');
   if(rr){const items=S.ledger.slice(0,8);rr.innerHTML=items.length?items.map((l,i)=>txHtml(l,i)).join(''):'<div class="muted" style="text-align:center;padding:24px;font-size:.85rem;">No transactions yet</div>';}
@@ -965,6 +1076,7 @@ function renderAll(){
   applyGroupMeta();
   if(curTab==='members')renderMembers();
   if(curTab==='ledger')renderLedger();
+  if(curTab==='summary')renderSummary();
   if(curTab==='admin')renderAdmLists();
   if(curTab==='chat')renderChat();
 }
@@ -1012,11 +1124,16 @@ function renderMembers(){
 function renderLedger(){
   const list=document.getElementById('ledger-list');if(!list)return;
   const data=lfilt==='all'?S.ledger:S.ledger.filter(e=>e.type===lfilt);
-  list.innerHTML=data.length?data.map(l=>txHtml(l)).join(''):'<div class="muted" style="text-align:center;padding:24px;font-size:.85rem;">No transactions found</div>';
+  const displayData = ledgerShowAll ? data : data.slice(0,20);
+  list.innerHTML=displayData.length?displayData.map(l=>txHtml(l)).join(''):'<div class="muted" style="text-align:center;padding:24px;font-size:.85rem;">No transactions found</div>';
 }
 function setLF(f,btn){
   lfilt=f;document.querySelectorAll('[id^="lf-"]').forEach(b=>{b.style.borderColor='';b.style.color='';});
-  if(btn){btn.style.borderColor='var(--g)';btn.style.color='var(--g)';}renderLedger();
+  if(btn){btn.style.borderColor='var(--g)';btn.style.color='var(--g)';}
+  // reset view all flag when filter changes
+  ledgerShowAll = false;
+  document.getElementById('viewAllBtn').textContent = 'View All';
+  renderLedger();
 }
 
 function renderAdmLists(){
@@ -1048,7 +1165,96 @@ function renderAdmLists(){
     </div>`).join('')||'<div class="micro muted">No transactions</div>';
 }
 
-/* ══════════════════════════════════════ CHARTS */
+/* ===== SUMMARY RENDER ===== */
+function renderSummary(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const day = now.getDate();
+
+  // This week
+  const { start: weekStart, end: weekEnd } = getWeekRange(now);
+  // This month
+  const monthStart = new Date(year, month, 1);
+  const monthEnd = new Date(year, month+1, 0);
+  monthEnd.setHours(23,59,59,999);
+  // This year
+  const yearStart = new Date(year, 0, 1);
+  const yearEnd = new Date(year, 11, 31);
+  yearEnd.setHours(23,59,59,999);
+
+  function filterLedger(start, end){
+    return S.ledger.filter(tx => {
+      const d = new Date(tx.date+'T00:00:00');
+      return d >= start && d <= end;
+    });
+  }
+  function filterExpenses(start, end){
+    return S.expenses.filter(ex => {
+      const d = new Date(ex.date+'T00:00:00');
+      return d >= start && d <= end;
+    });
+  }
+  function sumAmount(arr, type){
+    return arr.reduce((acc, tx) => {
+      if(type === 'savings' && (tx.type==='deposit'||tx.type==='welfare')) return acc + tx.amount;
+      if(type === 'withdraw') return acc + (tx.type==='withdraw'?tx.amount:0);
+      return acc;
+    },0);
+  }
+  function expSum(arr){
+    return arr.reduce((acc, ex) => acc + ex.amount, 0);
+  }
+
+  const weekLedger = filterLedger(weekStart, weekEnd);
+  const weekSavings = sumAmount(weekLedger, 'savings');
+  const weekWithdraw = sumAmount(weekLedger, 'withdraw');
+  const weekExp = expSum(filterExpenses(weekStart, weekEnd));
+  const weekNet = weekSavings - weekWithdraw - weekExp;
+
+  const monthLedger = filterLedger(monthStart, monthEnd);
+  const monthSavings = sumAmount(monthLedger, 'savings');
+  const monthWithdraw = sumAmount(monthLedger, 'withdraw');
+  const monthExp = expSum(filterExpenses(monthStart, monthEnd));
+  const monthNet = monthSavings - monthWithdraw - monthExp;
+
+  const yearLedger = filterLedger(yearStart, yearEnd);
+  const yearSavings = sumAmount(yearLedger, 'savings');
+  const yearWithdraw = sumAmount(yearLedger, 'withdraw');
+  const yearExp = expSum(filterExpenses(yearStart, yearEnd));
+  const yearNet = yearSavings - yearWithdraw - yearExp;
+
+  setEl('weekSavings', fmtN(weekSavings));
+  setEl('weekExpenses', fmtN(weekExp));
+  setEl('weekNet', fmtN(weekNet));
+  setEl('weekTx', weekLedger.length);
+
+  setEl('monthSavings', fmtN(monthSavings));
+  setEl('monthExpenses', fmtN(monthExp));
+  setEl('monthNet', fmtN(monthNet));
+  setEl('monthTx', monthLedger.length);
+
+  setEl('yearSavings', fmtN(yearSavings));
+  setEl('yearExpenses', fmtN(yearExp));
+  setEl('yearNet', fmtN(yearNet));
+  setEl('yearTx', yearLedger.length);
+
+  // Average weekly savings (based on weeks with data)
+  const weeksMap = {};
+  S.ledger.forEach(tx => {
+    if(tx.type==='deposit'||tx.type==='welfare'){
+      const d = new Date(tx.date+'T00:00:00');
+      const wk = getWeekNumber(d) + '-' + d.getFullYear();
+      weeksMap[wk] = (weeksMap[wk]||0) + tx.amount;
+    }
+  });
+  const weekValues = Object.values(weeksMap);
+  const avgWeek = weekValues.length ? weekValues.reduce((a,b)=>a+b,0)/weekValues.length : 0;
+  setEl('avgWeekSavings', fmtN(avgWeek));
+  setEl('projAnnual', fmtN(avgWeek * 52));
+}
+
+/* ===== CHARTS ===== */
 function renderCharts(){renderLineChart();renderBarChart();renderExpChart();renderChartStats();}
 function monthlyData(){
   const map={};
@@ -1097,7 +1303,7 @@ function renderChartStats(){
   if(S.ledger.length){const old=S.ledger[S.ledger.length-1];setEl('cs-age',Math.round((Date.now()-new Date(old.date+'T00:00:00'))/(864e5)));}
 }
 
-/* ══════════════════════════════════════ CHAT */
+/* ===== CHAT ===== */
 function saveDisplayName(){
   const v=(document.getElementById('chat-name-inp').value||'').trim();
   if(!v){toast('Enter a display name','#ef4444');return;}
@@ -1140,7 +1346,7 @@ function adminSendMsg(){
 function showChatBadge(n){const b=document.getElementById('chat-badge');if(!b)return;b.classList.remove('hidden');b.textContent=n>9?'9+':n;}
 function clearChatBadge(){const b=document.getElementById('chat-badge');if(b)b.classList.add('hidden');}
 
-/* ══════════════════════════════════════ ADMIN AUTH */
+/* ===== ADMIN AUTH ===== */
 function togglePwdField(id){const el=document.getElementById(id);if(!el)return;el.type=el.type==='password'?'text':'password';}
 function doLogin(){
   const v=document.getElementById('adm-pwd').value||'';
@@ -1173,7 +1379,7 @@ function saveSettings(){
   pushBin();applyGroupMeta();toast('Group settings saved','#22c55e');
 }
 
-/* ══════════════════════════════════════ MEMBER ACTIONS */
+/* ===== MEMBER ACTIONS ===== */
 function addMember(){
   if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
   const inp=document.getElementById('nm-name');
@@ -1183,7 +1389,6 @@ function addMember(){
   S.members.push(name);inp.value='';
   pushBin();renderAll();renderAdmLists();
   toast(name+' added','#22c55e');confetti();
-  // scroll to newly added member at bottom of members list and admin list
   if(curTab==='members') scrollLastIntoView('members-list','t-members');
   scrollLastIntoView('adm-mbr-list','t-admin');
 }
@@ -1203,7 +1408,7 @@ function removeMember(i){
   pushBin();renderAll();renderAdmLists();toast(name+' removed','#ef4444');
 }
 
-/* ══════════════════════════════════════ LEDGER ACTIONS */
+/* ===== LEDGER ACTIONS ===== */
 function mgAddTx(){
   if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
   const mbr=document.getElementById('mg-mbr').value,type=document.getElementById('mg-type').value;
@@ -1214,7 +1419,6 @@ function mgAddTx(){
   document.getElementById('mg-amt').value='';document.getElementById('mg-note').value='';
   pushBin();renderAll();
   toast(`${mbr}: ${type} UGX ${fmtN(amt)}`,'#22c55e');
-  // new tx is at top — scroll ledger and admin tx list to top to show it
   scrollTabToTop('t-ledger');
   scrollFirstIntoView('ledger-list');
   scrollFirstIntoView('adm-tx-list');
@@ -1239,8 +1443,20 @@ function delTxConfirm(){
   S.ledger.splice(editTxIdx,1);pushBin();closeOv('ov-edit-tx');editTxIdx=null;
   renderAll();renderAdmLists();toast('Transaction deleted','#ef4444');
 }
+// NEW: Delete all transactions
+function deleteAllTransactions(){
+  if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
+  if(!confirm('⚠️ Are you sure you want to delete ALL transactions? This cannot be undone.')) return;
+  if(!confirm('Final warning – type "DELETE" to confirm.')) return;
+  const userInput = prompt('Type "DELETE" to confirm permanent deletion of all transactions:');
+  if(userInput !== 'DELETE'){ toast('Deletion cancelled','#F5C543'); return; }
+  S.ledger = [];
+  pushBin();
+  renderAll(); renderAdmLists();
+  toast('All transactions deleted','#ef4444');
+}
 
-/* ══════════════════════════════════════ EXPENSE ACTIONS */
+/* ===== EXPENSE ACTIONS ===== */
 function addExpense(){
   if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
   const desc=(document.getElementById('ex-desc').value||'').trim();
@@ -1251,7 +1467,6 @@ function addExpense(){
   document.getElementById('ex-desc').value='';document.getElementById('ex-amt').value='';
   pushBin();renderAll();renderAdmLists();
   toast('Expense recorded','#F5C543');
-  // scroll expense list to show the new one at bottom
   scrollLastIntoView('adm-exp-list','t-admin');
 }
 function delExpense(i){
@@ -1259,7 +1474,7 @@ function delExpense(i){
   S.expenses.splice(i,1);pushBin();renderAll();renderAdmLists();toast('Expense deleted','#ef4444');
 }
 
-/* ══════════════════════════════════════ DOWNLOADS */
+/* ===== DOWNLOADS ===== */
 function dlCSV(rows,name){
   const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
@@ -1275,7 +1490,7 @@ function downloadPayouts(){
   dlCSV([['Member','Balance (UGX)','Rating'],...S.members.map(m=>[m,bal[m]||0,rating(m).l]),['','',''],['Total Savings',totalSav(),''],['Total Expenses',totalExp(),''],['Cash Balance',cashBal(),'']],'kadama_payouts.csv');
 }
 
-/* ══════════════════════════════════════ CONFETTI */
+/* ===== CONFETTI ===== */
 const cc=document.getElementById('cc'),cx=cc.getContext('2d');
 let cp=[],cr=false;
 function rsC(){cc.width=innerWidth;cc.height=innerHeight;}addEventListener('resize',rsC);rsC();
@@ -1284,7 +1499,7 @@ function confetti(){
   if(!cr)(function L(){cr=true;requestAnimationFrame(L);cx.clearRect(0,0,cc.width,cc.height);for(let i=cp.length-1;i>=0;i--){const p=cp[i];p.life++;p.x+=p.vx;p.y+=p.vy;p.vy+=.3;p.rot+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.55);cx.restore();if(p.y>cc.height+40||p.life>200)cp.splice(i,1);}if(!cp.length)cr=false;})();
 }
 
-/* ══════════════════════════════════════ TOAST */
+/* ===== TOAST ===== */
 function toast(msg,color='#22c55e'){
   const w=document.getElementById('twrap');const el=document.createElement('div');el.className='toast';
   const dot=document.createElement('div');dot.className='tdot';dot.style.background=color;dot.style.boxShadow='0 0 8px '+color;
@@ -1292,7 +1507,7 @@ function toast(msg,color='#22c55e'){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300);},3500);
 }
 
-/* ══════════════════════════════════════ MODALS */
+/* ===== MODALS ===== */
 function openOv(id){document.getElementById(id).classList.add('on');}
 function closeOv(id){document.getElementById(id).classList.remove('on');}
 function maybeClose(e,id){if(e.target===document.getElementById(id))closeOv(id);}
@@ -1302,10 +1517,10 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&document.activeElement.id==='nm-name')addMember();
 });
 
-/* ══════════════════════════════════════ UTIL */
+/* ===== UTIL ===== */
 function setEl(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 
-/* ══════════════════════════════════════ INIT */
+/* ===== INIT ===== */
 async function init(){
   const tod=new Date().toISOString().split('T')[0];
   ['mg-date','ex-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=tod;});
