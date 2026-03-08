@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#020810">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Kadama Saving Group - Live</title>
+<!-- Web App Manifest (points to your manifest.json) -->
+<link rel="manifest" href="manifest.json">
+<title>Kadama Saving Group</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════ TOKENS */
+/* ========== TOKENS (same as original) ========== */
 :root{
   --bg:#020810;--bg2:#071226;--bg3:#0C1C38;--bg4:#112244;
   --g:#22c55e;--g2:#16a34a;--g3:rgba(34,197,94,.14);--g4:rgba(34,197,94,.06);
@@ -33,7 +35,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .muted{color:var(--t2);}
 .micro{font-size:.7rem;color:var(--t3);}
 
-/* ═══════════════════════════════════════ FUN WELCOME SCREEN */
+/* ========== FUN WELCOME SCREEN ========== */
 #welcome{
   position:fixed;inset:0;z-index:8000;
   background:linear-gradient(145deg,#030C1E 0%,#071226 60%,#020810 100%);
@@ -228,7 +230,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   50%{opacity:1;transform:translateX(-50%) scale(1.5);}
 }
 
-/* ═══════════════════════════════════════ LOADING */
+/* ========== LOADING ========== */
 #loading{
   position:fixed;inset:0;z-index:7000;
   background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;
@@ -240,7 +242,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .ld-fill{height:100%;background:linear-gradient(90deg,var(--g),var(--gold));border-radius:99px;animation:ldAnim 1.6s ease-in-out infinite;}
 @keyframes ldAnim{0%{width:0;margin-left:0;}60%{width:100%;margin-left:0;}100%{width:0;margin-left:100%};}
 
-/* ═══════════════════════════════════════ BUTTONS */
+/* ========== BUTTONS ========== */
 button{cursor:pointer;border:none;outline:none;transition:all .18s;}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:14px 22px;border-radius:var(--r3);font-weight:700;font-size:.92rem;min-height:50px;letter-spacing:.2px;}
 .btn-g{background:var(--g);color:#000;}
@@ -255,7 +257,7 @@ button{cursor:pointer;border:none;outline:none;transition:all .18s;}
 .btn-icon:active{background:rgba(255,255,255,.14);}
 .btn:active{transform:scale(.97);}
 
-/* ═══════════════════════════════════════ INPUTS */
+/* ========== INPUTS ========== */
 .inp{width:100%;background:rgba(255,255,255,.07);border:1.5px solid var(--br);border-radius:var(--r3);color:var(--t);padding:13px 14px;font-size:.92rem;font-family:'Outfit',sans-serif;outline:none;transition:border .2s;}
 .inp:focus{border-color:rgba(34,197,94,.5);}
 .inp::placeholder{color:var(--t3);}
@@ -264,7 +266,7 @@ select.inp option{background:var(--bg3);}
 .fld{margin-bottom:12px;}
 textarea.inp{resize:vertical;min-height:80px;}
 
-/* ═══════════════════════════════════════ APP SHELL */
+/* ========== APP SHELL ========== */
 #app{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .4s;pointer-events:none;}
 #app.on{opacity:1;transform:none;pointer-events:all;}
 #hdr{height:var(--hdr);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:rgba(2,8,16,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--br);z-index:20;}
@@ -279,18 +281,18 @@ textarea.inp{resize:vertical;min-height:80px;}
 @keyframes sdotPulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .chat-badge{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:var(--red);border-radius:50%;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);}
 
-/* ═══════════════════════════════════════ CONTENT + NAV - FIXED SCROLLING */
-#content{flex:1;overflow-y:auto;position:relative;height:100%;}
-.tab{min-height:100%;padding:14px 14px calc(var(--nav) + 20px);opacity:0;pointer-events:none;transform:translateX(16px);transition:opacity .22s,transform .22s;}
+/* ========== CONTENT + NAV ========== */
+#content{flex:1;overflow:hidden;position:relative;}
+.tab{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(var(--nav)+14px);opacity:0;pointer-events:none;transform:translateX(16px);transition:opacity .22s,transform .22s;}
 .tab.on{opacity:1;pointer-events:all;transform:none;}
-#nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);display:flex;background:rgba(2,8,16,.98);backdrop-filter:blur(20px);border-top:1px solid var(--br);padding-bottom:env(safe-area-inset-bottom);z-index:20;}
+#nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav);display:flex;background:rgba(2,8,16,.98);backdrop-filter:blur(20px);border-top:1px solid var(--br);padding-bottom:env(safe-area-inset-bottom);z-index:20;}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;color:var(--t3);font-size:.6rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;position:relative;}
 .ni:active{background:rgba(255,255,255,.04);}
 .ni.on{color:var(--g);}
 .ni .ico{font-size:1.35rem;line-height:1;}
 .ni.on .ico{filter:drop-shadow(0 0 5px var(--g));}
 
-/* ═══════════════════════════════════════ CARDS */
+/* ========== CARDS ========== */
 .card{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:16px;}
 .stat-card{background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid var(--br);border-radius:var(--r);padding:15px 16px;flex:1;}
 .stat-lbl{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:6px;}
@@ -311,7 +313,7 @@ textarea.inp{resize:vertical;min-height:80px;}
 .t-expense{background:var(--gd2);color:var(--gold);}.t-expense::before{background:var(--gold);}
 .t-paid{background:var(--g3);color:var(--g);}.t-pending{background:var(--gd2);color:var(--gold);}
 
-/* ═══════════════════════════════════════ TX CARD */
+/* ========== TX CARD ========== */
 .txc{background:var(--card);border:1px solid var(--br);border-radius:var(--r2);padding:12px 13px;margin-bottom:8px;display:flex;align-items:center;gap:11px;}
 .txc-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
 .tic-d{background:var(--g3);}
@@ -322,7 +324,7 @@ textarea.inp{resize:vertical;min-height:80px;}
 .txc-amt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;text-align:right;flex-shrink:0;}
 .amt-p{color:var(--g);}.amt-n{color:var(--red);}
 
-/* ═══════════════════════════════════════ MEMBER CARD */
+/* ========== MEMBER CARD ========== */
 .mc{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:14px;margin-bottom:10px;}
 .mc-av{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1.5px solid var(--br);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:var(--gold);flex-shrink:0;}
 .mc-name{font-weight:800;font-size:.95rem;}
@@ -330,7 +332,7 @@ textarea.inp{resize:vertical;min-height:80px;}
 .bp{color:var(--g);}.bn{color:var(--red);}.bz{color:var(--t2);}
 .stars{color:var(--gold);font-size:.75rem;}
 
-/* ═══════════════════════════════════════ SHARE BANNER - FIXED */
+/* ========== SHARE BANNER ========== */
 #share-banner{
   display:none;margin-bottom:14px;
   background:linear-gradient(90deg,rgba(34,197,94,.07),rgba(245,197,67,.05));
@@ -346,13 +348,13 @@ textarea.inp{resize:vertical;min-height:80px;}
 .copy-b:active{background:var(--g2);}
 .copy-b.ok{background:var(--gold);color:#000;}
 
-/* ═══════════════════════════════════════ CHART */
+/* ========== CHART ========== */
 .chart-wrap{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:16px;margin-bottom:13px;overflow:hidden;}
 .chart-h{font-size:.88rem;font-weight:800;margin-bottom:2px;}
 .chart-sub{font-size:.67rem;color:var(--t3);margin-bottom:14px;}
 svg.chart{width:100%;overflow:visible;}
 
-/* ═══════════════════════════════════════ CHAT */
+/* ========== CHAT ========== */
 .chat-msg{margin-bottom:8px;max-width:85%;}
 .chat-msg.me{margin-left:auto;}
 .chat-msg.me .chat-bubble{background:var(--g);color:#000;border-radius:14px 14px 4px 14px;}
@@ -367,7 +369,7 @@ svg.chart{width:100%;overflow:visible;}
 .chat-input-row textarea{flex:1;min-height:46px;max-height:100px;border-radius:12px;}
 .chat-name-row{display:flex;gap:8px;margin-bottom:8px;}
 
-/* ═══════════════════════════════════════ MODAL / BOTTOM SHEET */
+/* ========== MODAL / BOTTOM SHEET ========== */
 .ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s;}
 .ov.on{opacity:1;pointer-events:all;}
 .bs{width:100%;background:var(--bg2);border:1px solid var(--br);border-radius:20px 20px 0 0;padding:8px 20px 36px;transform:translateY(100%);transition:transform .3s cubic-bezier(.22,1,.36,1);max-height:92vh;overflow-y:auto;}
@@ -378,7 +380,7 @@ svg.chart{width:100%;overflow:visible;}
 .pwd-row .inp{padding-right:46px;}
 .pwd-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--t3);font-size:1rem;cursor:pointer;padding:4px;}
 
-/* ═══════════════════════════════════════ TOAST */
+/* ========== TOAST ========== */
 .twrap{position:fixed;bottom:calc(var(--nav)+12px);left:14px;right:14px;z-index:9999;pointer-events:none;display:flex;flex-direction:column;gap:7px;}
 .toast{background:rgba(7,18,38,.95);border:1px solid var(--br);border-radius:var(--r2);padding:11px 14px;display:flex;align-items:center;gap:10px;font-size:.85rem;font-weight:600;box-shadow:var(--sh);animation:toastIn .3s ease;}
 .toast.out{animation:toastOut .3s ease forwards;}
@@ -386,7 +388,7 @@ svg.chart{width:100%;overflow:visible;}
 @keyframes toastOut{to{opacity:0;transform:translateY(10px);}}
 .tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-/* ═══════════════════════════════════════ ADMIN LOCK SCREEN */
+/* ========== ADMIN LOCK SCREEN ========== */
 .lock-wrap{display:flex;flex-direction:column;align-items:center;padding:50px 20px;text-align:center;gap:14px;}
 .lock-ico{font-size:3.5rem;margin-bottom:4px;}
 
@@ -399,7 +401,7 @@ svg.chart{width:100%;overflow:visible;}
 <canvas id="cc" aria-hidden="true"></canvas>
 <div class="twrap" id="twrap"></div>
 
-<!-- ═══════════════════════════ FUN WELCOME SCREEN -->
+<!-- FUN WELCOME SCREEN -->
 <div id="welcome">
   <canvas id="wlc-canvas"></canvas>
   <div class="welcome-content">
@@ -434,7 +436,7 @@ svg.chart{width:100%;overflow:visible;}
   <div class="pulse-dot"></div>
 </div>
 
-<!-- ═══════════════════════════ LOADING -->
+<!-- LOADING -->
 <div id="loading">
   <div class="ld-icon">🌿</div>
   <div style="font-size:1rem;font-weight:700;color:var(--t2);" id="ld-grp">Kadama Saving Group</div>
@@ -442,7 +444,7 @@ svg.chart{width:100%;overflow:visible;}
   <div class="ld-bar"><div class="ld-fill"></div></div>
 </div>
 
-<!-- ═══════════════════════════ MAIN APP -->
+<!-- MAIN APP -->
 <div id="app">
   <div id="hdr">
     <div class="hdr-l">
@@ -454,6 +456,8 @@ svg.chart{width:100%;overflow:visible;}
     </div>
     <div class="hdr-r">
       <div class="sdot" id="sdot" title="Sync"></div>
+      <!-- WORKING INSTALL BUTTON (replaces old placeholder) -->
+      <button class="btn-icon" id="installButton" onclick="installApp()" title="Install App">📲</button>
       <button class="btn-icon" onclick="toggleShare()" title="Share">⬆</button>
       <div style="position:relative;display:inline-block;">
         <button class="btn-icon" onclick="goChat()" title="Chat">💬</button>
@@ -507,15 +511,12 @@ svg.chart{width:100%;overflow:visible;}
       </div>
       <div class="section-h">Recent Transactions</div>
       <div id="h-recent"></div>
-      <!-- Extra padding to ensure scroll to bottom -->
-      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── MEMBERS ─── -->
     <div id="t-members" class="tab">
       <div class="section-h">All Members (<span id="m-count">0</span>)</div>
       <div id="members-list"></div>
-      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── LEDGER ─── -->
@@ -531,7 +532,6 @@ svg.chart{width:100%;overflow:visible;}
         <button class="btn btn-sm btn-sec" onclick="setLF('welfare',this)" id="lf-welfare">Welfare</button>
       </div>
       <div id="ledger-list"></div>
-      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── CHARTS ─── -->
@@ -557,7 +557,6 @@ svg.chart{width:100%;overflow:visible;}
         <div class="stat-card"><div class="stat-lbl">Top Saver</div><div class="stat-val sv-go" style="font-size:1rem;font-weight:900;" id="cs-top">—</div><div class="stat-sub" id="cs-top-sub">member</div></div>
         <div class="stat-card"><div class="stat-lbl">All Transactions</div><div class="stat-val sv-s mono" id="cs-cnt">0</div><div class="stat-sub">records</div></div>
       </div>
-      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── CHAT ─── -->
@@ -576,7 +575,6 @@ svg.chart{width:100%;overflow:visible;}
         <button class="btn btn-g" style="min-height:46px;padding:0 18px;" onclick="sendMsg()">Send</button>
       </div>
       <div style="font-size:.65rem;color:var(--t3);margin-top:6px;text-align:center;">Chat syncs live. Admin replies appear in gold.</div>
-      <div style="height:20px;"></div>
     </div>
 
     <!-- ─── ADMIN ─── -->
@@ -676,7 +674,6 @@ svg.chart{width:100%;overflow:visible;}
           <button class="btn btn-sm btn-sec" onclick="downloadPayouts()">⬇ Payouts CSV</button>
         </div>
       </div>
-      <div style="height:20px;"></div>
     </div>
   </div><!-- #content -->
 
@@ -689,7 +686,7 @@ svg.chart{width:100%;overflow:visible;}
   </div>
 </div><!-- #app -->
 
-<!-- ═══════════════ MODALS -->
+<!-- MODALS (unchanged) -->
 <div class="ov" id="ov-admin" onclick="maybeClose(event,'ov-admin')">
   <div class="bs">
     <div class="bs-handle"></div>
@@ -743,9 +740,7 @@ svg.chart{width:100%;overflow:visible;}
 </div>
 
 <script>
-/* ════════════════════════════════════════
-   WELCOME CANVAS — particles
-════════════════════════════════════════ */
+/* ========== WELCOME CANVAS ========== */
 (function(){
   const c=document.getElementById('wlc-canvas');
   const x=c.getContext('2d');
@@ -774,9 +769,39 @@ svg.chart{width:100%;overflow:visible;}
   })();
 })();
 
-/* ════════════════════════════════════════
-   STATE — with all original data
-════════════════════════════════════════ */
+/* ========== PWA INSTALL PROMPT ========== */
+let deferredPrompt;
+const installButton = document.getElementById('installButton');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installButton) installButton.style.display = 'flex'; // ensure visible
+});
+
+function installApp() {
+  if (!deferredPrompt) {
+    toast('App already installed or not available', '#F5C543');
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      toast('Thank you for installing!', '#22c55e');
+    } else {
+      toast('Installation cancelled', '#ef4444');
+    }
+    deferredPrompt = null;
+    // Optionally hide button after install
+    // installButton.style.display = 'none';
+  });
+}
+
+/* ========== CONFIGURATION – YOUR LIVE SYNC KEY ========== */
+const BIN = 'https://api.jsonbin.io/v3/b';
+const MASTER_KEY = '$2a$10$.n47qk8gaFhf0WVRwLGI5edzEmxAOkp1VA72QqCiF0UpP8My3lmVC'; // your master key
+
+/* ========== STATE – with all original data ========== */
 let S={
   groupName:'Kadama Saving Group',
   branch:'Kabondo Branch',
@@ -809,13 +834,23 @@ let myName=localStorage.getItem('ksg_myname')||'';
 let lastChatLen=0;
 const LKEY='ksg_v5';
 
-/* ════════════════════════════════════════
-   JSONBIN CONFIG — YOUR KEYS ADDED
-════════════════════════════════════════ */
-const BIN='https://api.jsonbin.io/v3/b';
-const MASTER_KEY = '$2a$10$.n47qk8gaFhf0WVRwLGI5edzEmxAOkp1VA72QqCiF0UpP8My3lmVC';
-const ACCESS_KEY = '$2a$10$Wh14Z/uJ3DSRigLWe4z64eSIrklUjaAAv09QG5pBWkiw5l80Cn1Mm';
+/* ========== LOCAL STORAGE ========== */
+function saveLocal(){
+  try{localStorage.setItem(LKEY,JSON.stringify({...S,binId}));}catch(e){}
+}
+function loadLocal(){
+  try{
+    const d=JSON.parse(localStorage.getItem(LKEY)||'null');
+    if(!d)return false;
+    ['groupName','branch','welcomeMsg','members','ledger','expenses','chat','adminHash'].forEach(k=>{
+      if(d[k]!==undefined)S[k]=d[k];
+    });
+    if(d.binId)binId=d.binId;
+    return true;
+  }catch(e){return false;}
+}
 
+/* ========== JSONBIN LIVE SYNC ========== */
 function getBinFromUrl(){const h=location.hash.replace('#','');return h.length>10?h:null;}
 function setBinId(id){
   binId=id;
@@ -839,7 +874,6 @@ async function createBin(){
       headers:{
         'Content-Type':'application/json',
         'X-Master-Key': MASTER_KEY,
-        'X-Access-Key': ACCESS_KEY,
         'X-Bin-Private':'false',
         'X-Bin-Name':S.groupName
       },
@@ -867,8 +901,7 @@ async function pushBin(){
       method:'PUT',
       headers:{
         'Content-Type':'application/json',
-        'X-Master-Key': MASTER_KEY,
-        'X-Access-Key': ACCESS_KEY
+        'X-Master-Key': MASTER_KEY
       },
       body:JSON.stringify(S)
     });
@@ -880,10 +913,7 @@ async function pushBin(){
 async function loadBin(id){
   try{
     const r=await fetch(`${BIN}/${id}/latest`,{
-      headers:{
-        'X-Master-Key': MASTER_KEY,
-        'X-Access-Key': ACCESS_KEY
-      }
+      headers: { 'X-Master-Key': MASTER_KEY }
     });
     if(r.ok){
       const d=await r.json(),rec=d.record;
@@ -897,21 +927,6 @@ async function loadBin(id){
   return false;
 }
 
-function saveLocal(){
-  try{localStorage.setItem(LKEY,JSON.stringify({...S,binId}));}catch(e){}
-}
-function loadLocal(){
-  try{
-    const d=JSON.parse(localStorage.getItem(LKEY)||'null');
-    if(!d)return false;
-    ['groupName','branch','welcomeMsg','members','ledger','expenses','chat','adminHash'].forEach(k=>{
-      if(d[k]!==undefined)S[k]=d[k];
-    });
-    if(d.binId)binId=d.binId;
-    return true;
-  }catch(e){return false;}
-}
-
 let lastRemote=null;
 function startPoll(){
   clearInterval(pollTimer);clearInterval(chatPollTimer);
@@ -919,10 +934,7 @@ function startPoll(){
     if(!binId||isSaving)return;
     try{
       const r=await fetch(`${BIN}/${binId}/latest`,{
-        headers:{
-          'X-Master-Key': MASTER_KEY,
-          'X-Access-Key': ACCESS_KEY
-        }
+        headers: { 'X-Master-Key': MASTER_KEY }
       });
       if(r.ok){
         const d=await r.json();
@@ -947,14 +959,12 @@ function startPoll(){
 }
 
 function refreshShareUrl(){
-  const url=binId?window.location.origin+window.location.pathname+'#'+binId:'Generating your permanent link…';
+  const url=binId?location.origin+location.pathname+'#'+binId:'Generating your permanent link…';
   const inp=document.getElementById('share-inp');
-  if(inp) inp.value=url;
+  if(inp)inp.value=url;
 }
 
-/* ════════════════════════════════════════
-   NAVIGATION
-════════════════════════════════════════ */
+/* ========== NAVIGATION ========== */
 function enterApp(){
   document.getElementById('welcome').classList.add('out');
   setTimeout(()=>{
@@ -1018,9 +1028,7 @@ function doCopy(){
   });
 }
 
-/* ════════════════════════════════════════
-   GROUP META
-════════════════════════════════════════ */
+/* ========== GROUP META ========== */
 function applyGroupMeta(){
   const n=S.groupName||'Kadama Saving Group';
   const b=S.branch||'Kabondo Branch';
@@ -1033,9 +1041,7 @@ function applyGroupMeta(){
   const wm=document.getElementById('st-wmsg');if(wm)wm.value=S.welcomeMsg;
 }
 
-/* ════════════════════════════════════════
-   COMPUTATIONS
-════════════════════════════════════════ */
+/* ========== COMPUTATIONS ========== */
 function balances(){
   const b={};S.members.forEach(m=>b[m]=0);
   S.ledger.slice().reverse().forEach(e=>{
@@ -1066,9 +1072,7 @@ function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUppe
 function txIco(t){return t==='deposit'?'💰':t==='withdraw'?'💸':t==='welfare'?'🤝':'📌';}
 function txIcoC(t){return t==='deposit'?'tic-d':t==='withdraw'?'tic-w':'tic-we';}
 
-/* ════════════════════════════════════════
-   RENDER ALL
-════════════════════════════════════════ */
+/* ========== RENDER ALL ========== */
 function renderAll(){
   const bal=balances(),ts=totalSav(),te=totalExp(),cb=cashBal();
   const paid=S.members.filter(m=>bal[m]>0).length;
@@ -1173,9 +1177,7 @@ function renderAdmLists(){
     </div>`).join('')||'<div class="micro muted">No transactions</div>';
 }
 
-/* ════════════════════════════════════════
-   CHARTS
-════════════════════════════════════════ */
+/* ========== CHARTS ========== */
 function renderCharts(){
   renderLineChart();renderBarChart();renderExpChart();renderChartStats();
 }
@@ -1287,9 +1289,7 @@ function renderChartStats(){
   }
 }
 
-/* ════════════════════════════════════════
-   LIVE CHAT
-════════════════════════════════════════ */
+/* ========== LIVE CHAT ========== */
 function saveDisplayName(){
   const v=(document.getElementById('chat-name-inp').value||'').trim();
   if(!v){toast('Enter a display name','#ef4444');return;}
@@ -1353,9 +1353,7 @@ function clearChatBadge(){
   if(b)b.classList.add('hidden');
 }
 
-/* ════════════════════════════════════════
-   ADMIN AUTH
-════════════════════════════════════════ */
+/* ========== ADMIN AUTH ========== */
 function togglePwdField(id){
   const el=document.getElementById(id);if(!el)return;
   el.type=el.type==='password'?'text':'password';
@@ -1395,9 +1393,7 @@ function changePassword(){
   pushBin();toast('Password changed successfully','#22c55e');
 }
 
-/* ════════════════════════════════════════
-   GROUP SETTINGS
-════════════════════════════════════════ */
+/* ========== GROUP SETTINGS ========== */
 function saveSettings(){
   if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
   const gn=(document.getElementById('st-gname').value||'').trim();
@@ -1410,9 +1406,7 @@ function saveSettings(){
   toast('Group settings saved','#22c55e');
 }
 
-/* ════════════════════════════════════════
-   MEMBER ACTIONS
-════════════════════════════════════════ */
+/* ========== MEMBER ACTIONS ========== */
 function addMember(){
   if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
   const inp=document.getElementById('nm-name');
@@ -1445,9 +1439,7 @@ function removeMember(i){
   pushBin();renderAll();renderAdmLists();toast(name+' removed','#ef4444');
 }
 
-/* ════════════════════════════════════════
-   LEDGER ACTIONS
-════════════════════════════════════════ */
+/* ========== LEDGER ACTIONS ========== */
 function mgAddTx(){
   if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
   const mbr=document.getElementById('mg-mbr').value;
@@ -1492,9 +1484,7 @@ function delTxConfirm(){
   renderAll();renderAdmLists();toast('Transaction deleted','#ef4444');
 }
 
-/* ════════════════════════════════════════
-   EXPENSE ACTIONS
-════════════════════════════════════════ */
+/* ========== EXPENSE ACTIONS ========== */
 function addExpense(){
   if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
   const desc=(document.getElementById('ex-desc').value||'').trim();
@@ -1511,9 +1501,7 @@ function delExpense(i){
   S.expenses.splice(i,1);pushBin();renderAll();renderAdmLists();toast('Expense deleted','#ef4444');
 }
 
-/* ════════════════════════════════════════
-   DOWNLOADS
-════════════════════════════════════════ */
+/* ========== DOWNLOADS ========== */
 function dlCSV(rows,name){
   const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
@@ -1537,9 +1525,7 @@ function downloadPayouts(){
     'kadama_payouts.csv');
 }
 
-/* ════════════════════════════════════════
-   CONFETTI
-════════════════════════════════════════ */
+/* ========== CONFETTI ========== */
 const cc=document.getElementById('cc'),cx=cc.getContext('2d');
 let cp=[],cr=false;
 function rsC(){cc.width=innerWidth;cc.height=innerHeight;}
@@ -1549,9 +1535,7 @@ function confetti(){
   if(!cr)(function L(){cr=true;requestAnimationFrame(L);cx.clearRect(0,0,cc.width,cc.height);for(let i=cp.length-1;i>=0;i--){const p=cp[i];p.life++;p.x+=p.vx;p.y+=p.vy;p.vy+=.3;p.rot+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.55);cx.restore();if(p.y>cc.height+40||p.life>200)cp.splice(i,1);}if(!cp.length)cr=false;})();
 }
 
-/* ════════════════════════════════════════
-   TOAST
-════════════════════════════════════════ */
+/* ========== TOAST ========== */
 function toast(msg,color='#22c55e'){
   const w=document.getElementById('twrap');
   const el=document.createElement('div');el.className='toast';
@@ -1561,9 +1545,7 @@ function toast(msg,color='#22c55e'){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300);},3500);
 }
 
-/* ════════════════════════════════════════
-   MODAL HELPERS
-════════════════════════════════════════ */
+/* ========== MODAL HELPERS ========== */
 function openOv(id){document.getElementById(id).classList.add('on');}
 function closeOv(id){document.getElementById(id).classList.remove('on');}
 function maybeClose(e,id){if(e.target===document.getElementById(id))closeOv(id);}
@@ -1573,14 +1555,10 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&document.activeElement.id==='nm-name')addMember();
 });
 
-/* ════════════════════════════════════════
-   UTILITY
-════════════════════════════════════════ */
+/* ========== UTILITY ========== */
 function setEl(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 
-/* ════════════════════════════════════════
-   INIT
-════════════════════════════════════════ */
+/* ========== INIT (with service worker registration) ========== */
 async function init(){
   const today=new Date().toISOString().split('T')[0];
   ['mg-date','ex-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=today;});
@@ -1605,6 +1583,16 @@ async function init(){
     loadLocal();
     applyGroupMeta();
     // Welcome screen is already visible
+  }
+
+  // Register service worker for PWA
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('sw.js');
+      console.log('Service Worker registered:', registration.scope);
+    } catch (error) {
+      console.log('Service Worker registration failed:', error);
+    }
   }
 }
 init();
