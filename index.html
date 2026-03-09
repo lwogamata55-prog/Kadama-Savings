@@ -1022,18 +1022,18 @@ function weeklyPaidMembers(){
   return count;
 }
 
-// NEW: Rating labels
+// NEW: Rating based on total balance percentile
 function rating(m){
-  const now=new Date(),p=90,start=new Date(now);start.setDate(now.getDate()-p);
-  const deps=S.ledger.filter(e=>e.member===m&&(e.type==='deposit'||e.type==='welfare')&&new Date(e.date+'T00:00:00')>=start);
-  const freq=deps.length,avg=deps.length?deps.reduce((s,e)=>s+Number(e.amount),0)/deps.length:0;
-  const wks=Math.ceil(p/7),wSet=new Set();
-  deps.forEach(d=>{const wi=Math.floor((new Date(d.date+'T00:00:00')-start)/(7*864e5));wSet.add(wi);});
-  const score=Math.min(freq/20,1)*.4+Math.min(avg/200000,1)*.3+(wks?wSet.size/wks:0)*.3;
-  if(score>=.8)return{l:'Top Saver',s:5,c:'var(--g)'};
-  if(score>=.6)return{l:'On Track',s:4,c:'#4ade80'};
-  if(score>=.4)return{l:'Needs Boost',s:3,c:'var(--gold)'};
-  return{l:'Behind',s:2,c:'var(--red)'};
+  const bal = balances();
+  const values = Object.values(bal).filter(v => v > 0); // only positive balances matter for ranking? We'll include zero/negative but they'll be at bottom.
+  const sorted = [...S.members].map(m => ({ member: m, balance: bal[m] || 0 })).sort((a,b) => b.balance - a.balance);
+  const index = sorted.findIndex(item => item.member === m);
+  if (index === -1) return {l:'Behind',s:2,c:'var(--red)'};
+  const percentile = index / (S.members.length - 1); // 0 = top, 1 = bottom
+  if (percentile <= 0.2) return {l:'Top Saver',s:5,c:'var(--g)'};
+  if (percentile <= 0.5) return {l:'On Track',s:4,c:'#4ade80'};
+  if (percentile <= 0.8) return {l:'Needs Boost',s:3,c:'var(--gold)'};
+  return {l:'Behind',s:2,c:'var(--red)'};
 }
 
 function fmtN(n,c=false){n=Number(n);if(c&&n>=1000000)return(n/1e6).toFixed(1)+'M';if(c&&n>=1000)return(n/1000).toFixed(0)+'K';return n.toLocaleString('en-UG');}
@@ -1548,4 +1548,4 @@ async function init(){
 init();
 </script>
 </body>
-</html>
+        </html>
