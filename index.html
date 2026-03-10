@@ -8,7 +8,11 @@
 <link rel="manifest" href="manifest.json">
 <title>Kadama Saving Group</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Firebase SDK (v8 compat) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <style>
+/* ===== ORIGINAL ROOT (green/gold) ===== */
 :root{
   --bg:#020810;--bg2:#071226;--bg3:#0C1C38;--bg4:#112244;
   --g:#22c55e;--g2:#16a34a;--g3:rgba(34,197,94,.14);--g4:rgba(34,197,94,.06);
@@ -33,7 +37,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .muted{color:var(--t2);}
 .micro{font-size:.7rem;color:var(--t3);}
 
-/* ══════════════════════════════════════ WELCOME — UPGRADED ANIMATIONS */
+/* ===== WELCOME (unchanged) ===== */
 #welcome{
   position:fixed;inset:0;z-index:8000;
   background:linear-gradient(145deg,#030C1E 0%,#071226 60%,#020810 100%);
@@ -44,24 +48,12 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 }
 #welcome.out{opacity:0;transform:scale(1.08) translateY(-20px);pointer-events:none;}
 #welcome canvas{position:absolute;inset:0;pointer-events:none;}
-
-/* Floating orbs behind content */
-.orb{
-  position:absolute;border-radius:50%;pointer-events:none;
-  filter:blur(60px);animation:orbFloat 8s ease-in-out infinite;
-}
+.orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(60px);animation:orbFloat 8s ease-in-out infinite;}
 .orb1{width:300px;height:300px;background:rgba(34,197,94,.08);top:-80px;left:-80px;animation-delay:0s;}
 .orb2{width:250px;height:250px;background:rgba(245,197,67,.06);bottom:-60px;right:-60px;animation-delay:2s;}
 .orb3{width:200px;height:200px;background:rgba(56,189,248,.06);top:40%;left:60%;animation-delay:4s;}
-@keyframes orbFloat{
-  0%,100%{transform:translate(0,0) scale(1);}
-  33%{transform:translate(20px,-30px) scale(1.1);}
-  66%{transform:translate(-15px,20px) scale(0.95);}
-}
-
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(20px,-30px) scale(1.1);}66%{transform:translate(-15px,20px) scale(0.95);}}
 .welcome-content{position:relative;z-index:2;max-width:600px;width:100%;}
-
-/* Title: each letter enters one by one */
 .welcome-title{
   font-size:clamp(3rem,13vw,6.5rem);
   font-weight:900;line-height:1.1;margin-bottom:16px;
@@ -69,35 +61,15 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 }
 .wt-line{display:flex;justify-content:center;gap:2px;}
 .wt-letter{
-  display:inline-block;
-  opacity:0;
+  display:inline-block;opacity:0;
   transform:translateY(60px) rotate(8deg) scale(0.6);
   animation:letterDrop .6s cubic-bezier(0.34,1.56,.64,1) forwards;
 }
-@keyframes letterDrop{
-  to{opacity:1;transform:translateY(0) rotate(0deg) scale(1);}
-}
-/* gradient cycling per letter */
-.wt-letter:nth-child(odd){
-  background:linear-gradient(135deg,#fff 0%,var(--g) 60%,var(--gold) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.wt-letter:nth-child(even){
-  background:linear-gradient(135deg,var(--g) 0%,#fff 50%,var(--gold) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-/* subtle continuous float on each letter after entrance */
-.wt-letter.floated{
-  animation:letterDrop .6s cubic-bezier(0.34,1.56,.64,1) forwards,
-            letterWave 4s ease-in-out infinite;
-  animation-delay:var(--ld),var(--lw);
-}
-@keyframes letterWave{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
-}
-
-/* Shimmering underline */
+@keyframes letterDrop{to{opacity:1;transform:translateY(0) rotate(0deg) scale(1);}}
+.wt-letter:nth-child(odd){background:linear-gradient(135deg,#fff 0%,var(--g) 60%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.wt-letter:nth-child(even){background:linear-gradient(135deg,var(--g) 0%,#fff 50%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.wt-letter.floated{animation:letterDrop .6s cubic-bezier(0.34,1.56,.64,1) forwards, letterWave 4s ease-in-out infinite;animation-delay:var(--ld),var(--lw);}
+@keyframes letterWave{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 .title-underline{
   height:4px;width:0;border-radius:99px;margin:12px auto 0;
   background:linear-gradient(90deg,var(--g),var(--gold),var(--g));
@@ -106,7 +78,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 }
 @keyframes underlineGrow{to{width:240px;}}
 @keyframes shimmer{0%{background-position:0% 0%;}100%{background-position:200% 0%;}}
-
 .welcome-sub{
   font-size:clamp(1rem,4vw,1.5rem);font-weight:400;color:var(--t2);
   margin:20px 0 0;letter-spacing:2px;
@@ -114,7 +85,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   animation:slideUp .8s ease 1.6s forwards;
 }
 @keyframes slideUp{to{opacity:1;transform:translateY(0);}}
-
 .welcome-stats{
   display:flex;gap:24px;justify-content:center;margin:32px 0 24px;
   opacity:0;transform:scale(0.8);
@@ -127,8 +97,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;
 }
 .welcome-stat .label{font-size:.82rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
-
-/* Buttons with stagger */
 .welcome-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
 .welcome-btn{
   padding:15px 36px;border-radius:60px;font-weight:800;font-size:1rem;
@@ -140,11 +108,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .welcome-btn:nth-child(2){animation:buttonsUp .7s ease 2.4s forwards;}
 .welcome-btn:nth-child(3){animation:buttonsUp .7s ease 2.6s forwards;}
 @keyframes buttonsUp{to{opacity:1;transform:translateY(0);}}
-.welcome-btn::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2));
-  opacity:0;transition:opacity .3s;
-}
+.welcome-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2));opacity:0;transition:opacity .3s;}
 .welcome-btn:hover::after{opacity:1;}
 .welcome-btn.primary{background:linear-gradient(135deg,var(--g),var(--g2));color:#000;box-shadow:0 0 28px rgba(34,197,94,.4);}
 .welcome-btn.primary:hover{transform:scale(1.08) translateY(-2px);box-shadow:0 0 48px rgba(34,197,94,.6);}
@@ -152,8 +116,6 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .welcome-btn.secondary:hover{background:var(--g);color:#000;transform:scale(1.08) translateY(-2px);}
 .welcome-btn.exit{background:rgba(255,255,255,.04);border:2px solid var(--t3);color:var(--t2);}
 .welcome-btn.exit:hover{border-color:var(--red);color:#fff;background:rgba(239,68,68,.18);transform:scale(1.04);}
-
-/* pulsing dot at bottom */
 .pulse-dot{
   position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
   width:10px;height:10px;background:var(--g);border-radius:50%;
@@ -163,7 +125,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 @keyframes pulseIn{to{opacity:1;}}
 @keyframes pulseAnim{0%,100%{transform:translateX(-50%) scale(1);box-shadow:0 0 24px var(--g);}50%{transform:translateX(-50%) scale(1.6);box-shadow:0 0 40px var(--g);}}
 
-/* ══════════════════════════════════════ LOADING */
+/* ===== LOADING ===== */
 #loading{position:fixed;inset:0;z-index:7000;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 #loading.show{display:flex;}
 .ld-icon{font-size:2.8rem;animation:bounce .9s ease-in-out infinite;}
@@ -172,7 +134,7 @@ input,select,textarea,button{font-family:'Outfit',sans-serif;}
 .ld-fill{height:100%;background:linear-gradient(90deg,var(--g),var(--gold));border-radius:99px;animation:ldAnim 1.6s ease-in-out infinite;}
 @keyframes ldAnim{0%{width:0;margin-left:0;}60%{width:100%;margin-left:0;}100%{width:0;margin-left:100%};}
 
-/* ══════════════════════════════════════ BUTTONS */
+/* ===== BUTTONS / INPUTS ===== */
 button{cursor:pointer;border:none;outline:none;transition:all .18s;}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:14px 22px;border-radius:var(--r3);font-weight:700;font-size:.92rem;min-height:50px;letter-spacing:.2px;}
 .btn-g{background:var(--g);color:#000;}.btn-g:active{background:var(--g2);}
@@ -184,7 +146,6 @@ button{cursor:pointer;border:none;outline:none;transition:all .18s;}
 .btn-icon:active{background:rgba(255,255,255,.14);}
 .btn:active{transform:scale(.97);}
 
-/* ══════════════════════════════════════ INPUTS */
 .inp{width:100%;background:rgba(255,255,255,.07);border:1.5px solid var(--br);border-radius:var(--r3);color:var(--t);padding:13px 14px;font-size:.92rem;font-family:'Outfit',sans-serif;outline:none;transition:border .2s;}
 .inp:focus{border-color:rgba(34,197,94,.5);}
 .inp::placeholder{color:var(--t3);}
@@ -193,7 +154,7 @@ select.inp option{background:var(--bg3);}
 .fld{margin-bottom:12px;}
 textarea.inp{resize:vertical;min-height:80px;}
 
-/* ══════════════════════════════════════ APP SHELL */
+/* ===== APP SHELL ===== */
 #app{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .4s;pointer-events:none;}
 #app.on{opacity:1;transform:none;pointer-events:all;}
 #hdr{height:var(--hdr);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:rgba(2,8,16,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--br);z-index:20;}
@@ -208,21 +169,17 @@ textarea.inp{resize:vertical;min-height:80px;}
 @keyframes sdotPulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .chat-badge{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:var(--red);border-radius:50%;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);}
 
-/* ══════════════════════════════════════ CONTENT + NAV */
+/* ===== TABS & NAV ===== */
 #content{flex:1;overflow:hidden;position:relative;}
-
-/* KEY FIX: generous bottom padding so last item is never hidden under nav */
 .tab{
   position:absolute;inset:0;
   overflow-y:auto;-webkit-overflow-scrolling:touch;
-  /* extra 56px beyond nav so last card clears nav + has breathing room */
   padding:14px 14px calc(var(--nav) + 56px);
   opacity:0;pointer-events:none;transform:translateX(16px);
   transition:opacity .22s,transform .22s;
   scroll-behavior:smooth;
 }
 .tab.on{opacity:1;pointer-events:all;transform:none;}
-
 #nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav);display:flex;background:rgba(2,8,16,.98);backdrop-filter:blur(20px);border-top:1px solid var(--br);padding-bottom:env(safe-area-inset-bottom);z-index:20;}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;color:var(--t3);font-size:.6rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;position:relative;}
 .ni:active{background:rgba(255,255,255,.04);}
@@ -230,7 +187,7 @@ textarea.inp{resize:vertical;min-height:80px;}
 .ni .ico{font-size:1.35rem;line-height:1;}
 .ni.on .ico{filter:drop-shadow(0 0 5px var(--g));}
 
-/* ══════════════════════════════════════ CARDS */
+/* ===== CARDS ===== */
 .card{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:16px;}
 .stat-card{background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid var(--br);border-radius:var(--r);padding:15px 16px;flex:1;}
 .stat-lbl{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:6px;}
@@ -251,7 +208,6 @@ textarea.inp{resize:vertical;min-height:80px;}
 .t-expense{background:var(--gd2);color:var(--gold);}.t-expense::before{background:var(--gold);}
 .t-paid{background:var(--g3);color:var(--g);}.t-pending{background:var(--gd2);color:var(--gold);}
 
-/* ══════════════════════════════════════ TX CARD */
 .txc{background:var(--card);border:1px solid var(--br);border-radius:var(--r2);padding:12px 13px;margin-bottom:8px;display:flex;align-items:center;gap:11px;}
 .txc-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
 .tic-d{background:var(--g3);}.tic-w{background:var(--rd2);}.tic-we{background:var(--sk2);}
@@ -260,19 +216,16 @@ textarea.inp{resize:vertical;min-height:80px;}
 .txc-amt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;text-align:right;flex-shrink:0;}
 .amt-p{color:var(--g);}.amt-n{color:var(--red);}
 
-/* ══════════════════════════════════════ MEMBER CARD */
 .mc{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:14px;margin-bottom:10px;}
 .mc-av{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1.5px solid var(--br);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:var(--gold);flex-shrink:0;}
 .mc-name{font-weight:800;font-size:.95rem;}
 .mc-bal{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.95rem;}
 .bp{color:var(--g);}.bn{color:var(--red);}.bz{color:var(--t2);}
 .stars{color:var(--gold);font-size:.75rem;}
-
-/* newly added item highlight */
-@keyframes newItem{from{background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.5);}to{background:var(--card);border-color:var(--br);}}
 .new-item{animation:newItem 1.8s ease forwards;}
+@keyframes newItem{from{background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.5);}to{background:var(--card);border-color:var(--br);}}
 
-/* ══════════════════════════════════════ SHARE BANNER */
+/* ===== SHARE BANNER ===== */
 #share-banner{display:none;margin-bottom:14px;background:linear-gradient(90deg,rgba(34,197,94,.07),rgba(245,197,67,.05));border:1.5px solid rgba(34,197,94,.22);border-radius:var(--r2);padding:12px;}
 #share-banner.show{display:block;animation:fadeUp .3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
@@ -283,38 +236,51 @@ textarea.inp{resize:vertical;min-height:80px;}
 .copy-b{background:var(--g);color:#000;border:none;border-radius:6px;padding:10px 16px;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .18s;flex-shrink:0;}
 .copy-b:active{background:var(--g2);}.copy-b.ok{background:var(--gold);color:#000;}
 
-/* ══════════════════════════════════════ CHART */
+/* ===== CHART ===== */
 .chart-wrap{background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:16px;margin-bottom:13px;overflow:hidden;}
 .chart-h{font-size:.88rem;font-weight:800;margin-bottom:2px;}
 .chart-sub{font-size:.67rem;color:var(--t3);margin-bottom:14px;}
 svg.chart{width:100%;overflow:visible;}
 
-/* ══════════════════════════════════════ CHAT */
-.chat-msg{margin-bottom:8px;max-width:85%;}
-.chat-msg.me{margin-left:auto;}
-.chat-msg.me .chat-bubble{background:var(--g);color:#000;border-radius:14px 14px 4px 14px;}
-.chat-msg.admin .chat-bubble{background:var(--bg3);border:1px solid var(--br);border-radius:14px 14px 14px 4px;}
-.chat-msg.system .chat-bubble{background:var(--gd2);border:1px solid rgba(245,197,67,.2);text-align:center;font-size:.72rem;border-radius:8px;color:var(--gold);}
-.chat-msg.system{max-width:100%;margin:0 auto 8px;}
-.chat-bubble{padding:10px 13px;font-size:.85rem;line-height:1.5;}
-.chat-from{font-size:.62rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:3px;padding:0 4px;}
-.chat-time{font-size:.6rem;color:var(--t3);padding:0 4px;margin-top:2px;}
-.chat-area{height:calc(100vh - var(--hdr) - var(--nav) - 170px);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px;margin-bottom:10px;}
-.chat-input-row{display:flex;gap:8px;align-items:flex-end;}
-.chat-input-row textarea{flex:1;min-height:46px;max-height:100px;border-radius:12px;}
-.chat-name-row{display:flex;gap:8px;margin-bottom:8px;}
+/* ===== WHATSAPP CHAT ===== */
+.wa-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px;text-align:center;gap:14px;min-height:50vh;}
+.wa-icon-wrap{width:90px;height:90px;border-radius:28px;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;font-size:2.8rem;box-shadow:0 0 48px rgba(37,211,102,.3),inset 0 1px 0 rgba(255,255,255,.2);animation:waFloat 3s ease-in-out infinite;}
+@keyframes waFloat{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-10px) rotate(3deg);}}
+.wa-title{font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:700;}
+.wa-sub{font-size:.86rem;color:var(--t2);max-width:270px;line-height:1.6;}
+.wa-btn{display:inline-flex;align-items:center;gap:12px;padding:16px 32px;border-radius:16px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;font-weight:700;font-size:1rem;border:none;cursor:pointer;box-shadow:0 8px 28px rgba(37,211,102,.4),inset 0 1px 0 rgba(255,255,255,.2);transition:transform .2s,box-shadow .2s;text-decoration:none;margin-top:6px;}
+.wa-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(37,211,102,.55);}
+.wa-btn:active{transform:scale(.97);}
+.wa-note{font-size:.7rem;color:var(--t3);}
+.wa-admin-section{width:100%;max-width:320px;margin-top:20px;}
+.wa-admin-lbl{font-size:.65rem;font-weight:700;color:var(--t3);margin-bottom:7px;letter-spacing:.5px;text-align:left;}
+.wa-link-row{display:flex;gap:8px;}
+.wa-link-inp{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--br);border-radius:10px;color:var(--t);padding:11px 12px;font-size:.78rem;outline:none;font-family:'JetBrains Mono',monospace;}
+.wa-link-inp:focus{border-color:rgba(37,211,102,.4);}
+.wa-set-btn{background:#25D366;color:#fff;border:none;border-radius:10px;padding:11px 16px;font-weight:700;font-size:.78rem;cursor:pointer;flex-shrink:0;transition:background .18s;}
+.wa-set-btn:active{background:#128C7E;}
 
-/* ══════════════════════════════════════ MODAL / BOTTOM SHEET */
-.ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s;}
+/* ===== ADMIN GRID ===== */
+.adm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.adm-btn{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:background .18s,border-color .18s,transform .15s;font-family:'Outfit',sans-serif;}
+.adm-btn:hover{background:rgba(255,255,255,.06);border-color:var(--br2);}
+.adm-btn:active{transform:scale(.95);}
+.adm-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.ai-g{background:var(--g3);}.ai-gold{background:var(--gd2);}.ai-red{background:var(--rd2);}
+.adm-label{font-size:.63rem;font-weight:600;color:var(--t2);text-align:center;line-height:1.3;}
+.adm-badge{position:absolute;top:6px;right:6px;min-width:18px;height:18px;background:var(--red);border-radius:99px;font-size:.58rem;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+
+/* ===== MODALS ===== */
+.ov{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s;}
 .ov.on{opacity:1;pointer-events:all;}
-.bs{width:100%;background:var(--bg2);border:1px solid var(--br);border-radius:20px 20px 0 0;padding:8px 20px 36px;transform:translateY(100%);transition:transform .3s cubic-bezier(.22,1,.36,1);max-height:92vh;overflow-y:auto;}
+.bs{width:100%;background:linear-gradient(180deg,var(--bg3) 0%,var(--bg2) 100%);border:1px solid var(--br);border-radius:22px 22px 0 0;padding:6px 20px 40px;transform:translateY(100%);transition:transform .32s cubic-bezier(.22,1,.36,1);max-height:92vh;overflow-y:auto;}
 .ov.on .bs{transform:translateY(0);}
-.bs-handle{width:36px;height:4px;background:var(--br);border-radius:99px;margin:8px auto 16px;}
-.bs-title{font-size:1.1rem;font-weight:800;margin-bottom:16px;}
+.bs::before{content:'';display:block;width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:99px;margin:10px auto 18px;}
+.bs-title{font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:16px;}
 .pwd-row{position:relative;}.pwd-row .inp{padding-right:46px;}
-.pwd-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--t3);font-size:1rem;cursor:pointer;padding:4px;}
+.pwd-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--t3);cursor:pointer;font-size:1rem;padding:4px;}
 
-/* ══════════════════════════════════════ TOAST */
+/* ===== TOAST ===== */
 .twrap{position:fixed;bottom:calc(var(--nav)+12px);left:14px;right:14px;z-index:9999;pointer-events:none;display:flex;flex-direction:column;gap:7px;}
 .toast{background:rgba(7,18,38,.95);border:1px solid var(--br);border-radius:var(--r2);padding:11px 14px;display:flex;align-items:center;gap:10px;font-size:.85rem;font-weight:600;box-shadow:var(--sh);animation:toastIn .3s ease;}
 .toast.out{animation:toastOut .3s ease forwards;}
@@ -332,27 +298,19 @@ svg.chart{width:100%;overflow:visible;}
 <canvas id="cc" aria-hidden="true"></canvas>
 <div class="twrap" id="twrap"></div>
 
-<!-- ══════════ WELCOME PAGE ══════════ -->
+<!-- WELCOME (unchanged) -->
 <div id="welcome">
   <canvas id="wlc-canvas"></canvas>
-  <!-- background orbs -->
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
-
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
   <div class="welcome-content">
-    <div class="welcome-title" id="wt">
-      <!-- letters injected by JS for per-letter animation -->
-    </div>
+    <div class="welcome-title" id="wt"></div>
     <div class="title-underline" id="t-ul"></div>
     <div class="welcome-sub">Kabondo Branch · Est. 2024</div>
-
     <div class="welcome-stats">
       <div class="welcome-stat"><div class="number" id="ws-members">9</div><div class="label">Members</div></div>
       <div class="welcome-stat"><div class="number">24/7</div><div class="label">Live Sync</div></div>
       <div class="welcome-stat"><div class="number">💬</div><div class="label">Live Chat</div></div>
     </div>
-
     <div class="welcome-buttons">
       <button class="welcome-btn primary" onclick="enterApp()">🚀 Enter Dashboard</button>
       <button class="welcome-btn secondary" onclick="openOv('ov-admin')">🔐 Admin</button>
@@ -385,17 +343,14 @@ svg.chart{width:100%;overflow:visible;}
       <button class="btn-icon" id="installButton" onclick="installApp()" title="Install App" style="display:none;">📲</button>
       <button class="btn-icon" onclick="shareViaWhatsApp()" title="Share on WhatsApp">📱</button>
       <button class="btn-icon" onclick="toggleShare()" title="Copy Link">⬆</button>
-      <div style="position:relative;display:inline-block;">
-        <button class="btn-icon" onclick="goChat()" title="Chat">💬</button>
-        <div class="chat-badge hidden" id="chat-badge">0</div>
-      </div>
+      <button class="btn-icon" onclick="goTab('chat')" title="Chat">💬</button>
       <button class="btn-icon" style="color:var(--red);font-weight:900;font-size:.9rem;" onclick="exitToWelcome()" title="Exit">✕</button>
     </div>
   </div>
 
   <div id="content">
 
-    <!-- HOME -->
+    <!-- HOME (unchanged) -->
     <div id="t-home" class="tab on">
       <div id="share-banner">
         <div class="share-lbl">🔗 Permanent Live Link</div>
@@ -419,7 +374,7 @@ svg.chart{width:100%;overflow:visible;}
         <div class="pbar"><div class="pbar-f" id="h-pbar" style="width:0%"></div></div>
         <div style="font-size:.7rem;color:var(--t3);" id="h-pbar-sub"></div>
       </div>
-      <div style="background:var(--card);border:1px solid var(--br);border-radius:var(--r);padding:14px;margin-bottom:12px;">
+      <div class="card">
         <div class="section-h">Balance Summary</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
           <div style="padding:9px;background:var(--g4);border-radius:8px;text-align:center;"><div class="micro" style="margin-bottom:3px;">SAVINGS</div><div style="font-size:.82rem;font-weight:800;color:var(--g);font-family:'JetBrains Mono',monospace;" id="bs-s">0</div></div>
@@ -431,13 +386,13 @@ svg.chart{width:100%;overflow:visible;}
       <div id="h-recent"></div>
     </div>
 
-    <!-- MEMBERS -->
+    <!-- MEMBERS (unchanged) -->
     <div id="t-members" class="tab">
       <div class="section-h">All Members (<span id="m-count">0</span>)</div>
       <div id="members-list"></div>
     </div>
 
-    <!-- LEDGER -->
+    <!-- LEDGER (unchanged) -->
     <div id="t-ledger" class="tab">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
         <div class="section-h" style="margin:0;">All Transactions</div>
@@ -448,51 +403,81 @@ svg.chart{width:100%;overflow:visible;}
         <button class="btn btn-sm btn-sec" onclick="setLF('deposit',this)" id="lf-deposit">Deposits</button>
         <button class="btn btn-sm btn-sec" onclick="setLF('withdraw',this)" id="lf-withdraw">Withdrawals</button>
         <button class="btn btn-sm btn-sec" onclick="setLF('welfare',this)" id="lf-welfare">Welfare</button>
+        <button class="btn btn-sm btn-sec" id="viewAllBtn" onclick="toggleLedgerView()">View All</button>
       </div>
       <div id="ledger-list"></div>
     </div>
 
-    <!-- CHARTS -->
-    <div id="t-charts" class="tab">
-      <div class="chart-wrap">
-        <div class="chart-h">📈 Savings Trend</div>
-        <div class="chart-sub">Monthly deposits — all time</div>
-        <svg class="chart" id="chart-line" height="160" viewBox="0 0 320 160" preserveAspectRatio="none"></svg>
+    <!-- SUMMARY (unchanged) -->
+    <div id="t-summary" class="tab">
+      <div class="section-h">📆 Weekly Summary</div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">This Week</span>
+        <span class="sum-value sv-g" id="weekSavings">0</span>
       </div>
-      <div class="chart-wrap">
-        <div class="chart-h">📊 Member Balances</div>
-        <div class="chart-sub">Current UGX balance per member</div>
-        <div id="chart-bars"></div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">Expenses</span>
+        <span class="sum-value sv-r" id="weekExpenses">0</span>
       </div>
-      <div class="chart-wrap">
-        <div class="chart-h">💸 Expense Breakdown</div>
-        <div class="chart-sub">By category</div>
-        <div id="chart-exp"></div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">Net</span>
+        <span class="sum-value sv-go" id="weekNet">0</span>
       </div>
-      <div class="g2">
-        <div class="stat-card"><div class="stat-lbl">Avg Deposit</div><div class="stat-val sv-g mono" id="cs-avg">0</div><div class="stat-sub">UGX per tx</div></div>
-        <div class="stat-card"><div class="stat-lbl">Group Age</div><div class="stat-val sv-s mono" id="cs-age">—</div><div class="stat-sub">days active</div></div>
-        <div class="stat-card"><div class="stat-lbl">Top Saver</div><div class="stat-val sv-go" style="font-size:1rem;font-weight:900;" id="cs-top">—</div><div class="stat-sub" id="cs-top-sub">member</div></div>
-        <div class="stat-card"><div class="stat-lbl">All Transactions</div><div class="stat-val sv-s mono" id="cs-cnt">0</div><div class="stat-sub">records</div></div>
+      <div class="micro" style="margin:-4px 0 16px 14px;">Transactions: <span id="weekTx">0</span></div>
+
+      <div class="section-h">📅 Monthly Summary</div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">This Month</span>
+        <span class="sum-value sv-g" id="monthSavings">0</span>
       </div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">Expenses</span>
+        <span class="sum-value sv-r" id="monthExpenses">0</span>
+      </div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">Net</span>
+        <span class="sum-value sv-go" id="monthNet">0</span>
+      </div>
+      <div class="micro" style="margin:-4px 0 16px 14px;">Transactions: <span id="monthTx">0</span></div>
+
+      <div class="section-h">📊 Yearly Summary</div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">This Year</span>
+        <span class="sum-value sv-g" id="yearSavings">0</span>
+      </div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">Expenses</span>
+        <span class="sum-value sv-r" id="yearExpenses">0</span>
+      </div>
+      <div class="sum-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--card);border:1px solid var(--br);border-radius:var(--r2);margin-bottom:8px;">
+        <span class="sum-label">Net</span>
+        <span class="sum-value sv-go" id="yearNet">0</span>
+      </div>
+      <div class="micro" style="margin:-4px 0 16px 14px;">Transactions: <span id="yearTx">0</span></div>
+
+      <div class="summary-note" style="font-size:.7rem;color:var(--t3);text-align:center;margin-top:12px;">📈 Avg weekly savings: <span id="avgWeekSavings">0</span> UGX</div>
+      <div class="summary-note" style="font-size:.7rem;color:var(--t3);text-align:center;">📊 Projected annual: <span id="projAnnual">0</span> UGX</div>
     </div>
 
-    <!-- CHAT -->
+    <!-- CHAT (WhatsApp) -->
     <div id="t-chat" class="tab">
-      <div class="section-h">Live Group Chat</div>
-      <div id="chat-name-section" style="margin-bottom:10px;">
-        <div class="chat-name-row">
-          <input class="inp" id="chat-name-inp" placeholder="Your display name (e.g. Hajji)" style="flex:1;" />
-          <button class="btn btn-sm btn-g" onclick="saveDisplayName()">Set</button>
+      <div class="wa-hero">
+        <div class="wa-icon-wrap">💬</div>
+        <div class="wa-title">WhatsApp Group</div>
+        <div class="wa-sub" id="wa-sub-text">Chat with all members in real time.</div>
+        <a class="wa-btn" id="wa-link" href="#" target="_blank" rel="noopener" style="display:none;">
+          <span style="font-size:1.4rem;">📱</span>Open WhatsApp Group
+        </a>
+        <div class="wa-note" id="wa-note">Contact admin to get the group link.</div>
+        <div class="wa-admin-section" id="wa-admin-section" style="display:none;">
+          <div class="wa-admin-lbl">SET WHATSAPP GROUP LINK (ADMIN ONLY)</div>
+          <div class="wa-link-row">
+            <input class="wa-link-inp" id="wa-inp" placeholder="https://chat.whatsapp.com/..."/>
+            <button class="wa-set-btn" onclick="saveWaLink()">Save</button>
+          </div>
+          <div style="font-size:.64rem;color:var(--t3);margin-top:5px;">Paste your WhatsApp group invite link above.</div>
         </div>
-        <div style="font-size:.68rem;color:var(--t3);">Set your name once to identify yourself in chat.</div>
       </div>
-      <div class="chat-area" id="chat-area"></div>
-      <div class="chat-input-row">
-        <textarea class="inp" id="chat-msg-inp" placeholder="Type a message…" rows="1" onkeydown="chatKeydown(event)"></textarea>
-        <button class="btn btn-g" style="min-height:46px;padding:0 18px;" onclick="sendMsg()">Send</button>
-      </div>
-      <div style="font-size:.65rem;color:var(--t3);margin-top:6px;text-align:center;">Chat syncs live. Admin replies appear in gold.</div>
     </div>
 
     <!-- ADMIN -->
@@ -504,76 +489,48 @@ svg.chart{width:100%;overflow:visible;}
         <button class="btn btn-g" style="width:220px;margin-top:8px;" onclick="openOv('ov-admin')">Unlock Admin Panel</button>
       </div>
       <div id="adm-panel" class="hidden">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
           <div><div style="font-size:1.05rem;font-weight:800;">Admin Panel</div><div class="micro">Full management access</div></div>
-          <button class="btn btn-sm btn-red" onclick="lockAdmin()">Lock</button>
+          <button class="btn btn-sm btn-red" onclick="lockAdmin()">🔒 Lock</button>
         </div>
-        <div class="card" style="margin-bottom:12px;">
-          <div class="section-h">Add Transaction</div>
-          <div class="fld"><label class="inp-label">Member</label><select class="inp" id="mg-mbr"></select></div>
-          <div class="fld"><label class="inp-label">Type</label>
-            <select class="inp" id="mg-type">
-              <option value="deposit">💰 Deposit</option>
-              <option value="withdraw">💸 Withdrawal</option>
-              <option value="welfare">🤝 Welfare</option>
-            </select>
-          </div>
-          <div class="g2">
-            <div class="fld"><label class="inp-label">Amount (UGX)</label><input class="inp" id="mg-amt" type="number" placeholder="50000"/></div>
-            <div class="fld"><label class="inp-label">Date</label><input class="inp" id="mg-date" type="date"/></div>
-          </div>
-          <div class="fld"><label class="inp-label">Note (optional)</label><input class="inp" id="mg-note" placeholder="e.g. Week 12 contribution"/></div>
-          <button class="btn btn-g" style="width:100%;" onclick="mgAddTx()">+ Add Transaction</button>
+
+        <!-- Admin grid buttons -->
+        <div class="adm-grid">
+          <button class="adm-btn" onclick="openOv('ov-add-tx')">
+            <div class="adm-icon ai-g">➕</div>
+            <div class="adm-label">Add Transaction</div>
+          </button>
+          <button class="adm-btn" onclick="openOv('ov-add-mbr')">
+            <div class="adm-icon ai-g">👤</div>
+            <div class="adm-label">Add Member</div>
+          </button>
+          <button class="adm-btn" onclick="openOv('ov-add-exp')">
+            <div class="adm-icon ai-gold">💸</div>
+            <div class="adm-label">Record Expense</div>
+          </button>
+          <button class="adm-btn" onclick="openOv('ov-settings')">
+            <div class="adm-icon ai-g">⚙️</div>
+            <div class="adm-label">Group Settings</div>
+          </button>
+          <button class="adm-btn" onclick="downloadLedger()">
+            <div class="adm-icon ai-g">⬇</div>
+            <div class="adm-label">Export CSV</div>
+          </button>
+          <button class="adm-btn" onclick="openOv('ov-apps')" style="position:relative;">
+            <div class="adm-icon ai-g">📋</div>
+            <div class="adm-label">Applications</div>
+            <div class="adm-badge hidden" id="apps-badge">0</div>
+          </button>
         </div>
-        <div class="card" style="margin-bottom:12px;">
-          <div class="section-h">Add Member</div>
-          <div class="fld"><label class="inp-label">Full Name</label><input class="inp" id="nm-name" placeholder="e.g. Nakato Sarah"/></div>
-          <button class="btn btn-g" style="width:100%;" onclick="addMember()">+ Add Member</button>
-        </div>
-        <div class="card" style="margin-bottom:12px;">
-          <div class="section-h">Record Expense</div>
-          <div class="fld"><label class="inp-label">Description</label><input class="inp" id="ex-desc" placeholder="e.g. Meeting venue"/></div>
-          <div class="g2">
-            <div class="fld"><label class="inp-label">Amount (UGX)</label><input class="inp" id="ex-amt" type="number" placeholder="0"/></div>
-            <div class="fld"><label class="inp-label">Category</label>
-              <select class="inp" id="ex-cat"><option>Operations</option><option>Welfare</option><option>Transport</option><option>Stationery</option><option>Other</option></select>
-            </div>
-          </div>
-          <div class="fld"><label class="inp-label">Date</label><input class="inp" id="ex-date" type="date"/></div>
-          <button class="btn btn-gold" style="width:100%;" onclick="addExpense()">+ Record Expense</button>
-        </div>
-        <div class="card" style="margin-bottom:12px;">
-          <div class="section-h">⚙️ Group Settings</div>
-          <div class="fld"><label class="inp-label">Group Name</label><input class="inp" id="st-gname" placeholder="Group name"/></div>
-          <div class="fld"><label class="inp-label">Branch Name</label><input class="inp" id="st-branch" placeholder="Branch name"/></div>
-          <div class="fld"><label class="inp-label">Welcome Message</label><textarea class="inp" id="st-wmsg" rows="2" placeholder="Message shown on welcome screen"></textarea></div>
-          <button class="btn btn-sec" style="width:100%;margin-bottom:8px;" onclick="saveSettings()">💾 Save Group Settings</button>
-          <div class="divider"></div>
-          <div class="section-h">Change Admin Password</div>
-          <div class="fld"><label class="inp-label">Current Password</label>
-            <div class="pwd-row"><input class="inp" id="pw-old" type="password" placeholder="Current password"/><button class="pwd-eye" onclick="togglePwdField('pw-old')">👁</button></div>
-          </div>
-          <div class="fld"><label class="inp-label">New Password</label>
-            <div class="pwd-row"><input class="inp" id="pw-new" type="password" placeholder="New password (min 6 chars)"/><button class="pwd-eye" onclick="togglePwdField('pw-new')">👁</button></div>
-          </div>
-          <div class="fld"><label class="inp-label">Confirm New Password</label>
-            <div class="pwd-row"><input class="inp" id="pw-cfm" type="password" placeholder="Confirm new password"/><button class="pwd-eye" onclick="togglePwdField('pw-cfm')">👁</button></div>
-          </div>
-          <button class="btn btn-sec" style="width:100%;margin-bottom:8px;" onclick="changePassword()">🔑 Update Password</button>
-          <div class="divider"></div>
-          <div class="section-h">Admin Chat Reply</div>
-          <div class="fld"><textarea class="inp" id="adm-reply" rows="2" placeholder="Type admin reply to send in chat…"></textarea></div>
-          <button class="btn btn-gold" style="width:100%;margin-bottom:8px;" onclick="adminSendMsg()">📢 Send as Admin</button>
-        </div>
+
+        <!-- Manage Members section -->
         <div class="section-h">Manage Members</div>
         <div id="adm-mbr-list" style="margin-bottom:12px;"></div>
-        <div class="section-h">Manage Expenses</div>
-        <div id="adm-exp-list" style="margin-bottom:12px;"></div>
-        <div class="section-h">Recent Transactions (tap to edit/delete)</div>
-        <div id="adm-tx-list" style="margin-bottom:14px;"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;padding-bottom:8px;">
-          <button class="btn btn-sm btn-sec" onclick="downloadLedger()">⬇ Ledger CSV</button>
-          <button class="btn btn-sm btn-sec" onclick="downloadPayouts()">⬇ Payouts CSV</button>
+
+        <!-- Danger Zone -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;margin-bottom:8px;">
+          <div class="section-h" style="margin:0;">Danger Zone</div>
+          <button class="btn btn-sm btn-red" onclick="deleteAllTransactions()">🗑 Delete All Tx</button>
         </div>
       </div>
     </div>
@@ -584,32 +541,112 @@ svg.chart{width:100%;overflow:visible;}
     <button class="ni on" onclick="goTab('home',this)" id="ni-home"><span class="ico">🏠</span><span>Home</span></button>
     <button class="ni" onclick="goTab('members',this)" id="ni-members"><span class="ico">👥</span><span>Members</span></button>
     <button class="ni" onclick="goTab('ledger',this)" id="ni-ledger"><span class="ico">📋</span><span>Ledger</span></button>
-    <button class="ni" onclick="goTab('charts',this)" id="ni-charts"><span class="ico">📊</span><span>Charts</span></button>
+    <button class="ni" onclick="goTab('summary',this)" id="ni-summary"><span class="ico">📊</span><span>Summary</span></button>
+    <button class="ni" onclick="goTab('chat',this)" id="ni-chat"><span class="ico">💬</span><span>Chat</span></button>
     <button class="ni" onclick="goTab('admin',this)" id="ni-admin"><span class="ico">⚙️</span><span>Admin</span></button>
   </div>
 </div><!-- #app -->
 
-<!-- MODALS -->
+<!-- MODALS (unchanged) -->
 <div class="ov" id="ov-admin" onclick="maybeClose(event,'ov-admin')">
   <div class="bs">
-    <div class="bs-handle"></div>
-    <div style="text-align:center;font-size:2.2rem;margin-bottom:8px;">🔐</div>
+    <div style="text-align:center;font-size:2rem;margin-bottom:6px;">🔐</div>
     <div class="bs-title" style="text-align:center;">Admin Access</div>
-    <p style="font-size:.85rem;color:var(--t2);text-align:center;margin-bottom:16px;">Enter admin password to unlock management features.</p>
-    <div class="fld"><div class="pwd-row"><input class="inp" id="adm-pwd" type="password" placeholder="Admin password"/><button class="pwd-eye" onclick="togglePwdField('adm-pwd')">👁</button></div></div>
+    <p style="font-size:.84rem;color:var(--t2);text-align:center;margin-bottom:16px;">Enter your admin password.</p>
+    <div class="fld"><div class="pwd-row"><input class="inp" id="adm-pwd" type="password" placeholder="Admin password"/><button class="pwd-eye" onclick="togglePwd('adm-pwd')">👁</button></div></div>
     <div style="display:flex;gap:10px;">
       <button class="btn btn-sec" style="flex:1;" onclick="closeOv('ov-admin')">Cancel</button>
-      <button class="btn btn-g" style="flex:1;" onclick="doLogin()">Unlock</button>
+      <button class="btn btn-g" style="flex:1;" onclick="doAdminLogin()">Unlock</button>
     </div>
   </div>
 </div>
 
+<div class="ov" id="ov-add-tx" onclick="maybeClose(event,'ov-add-tx')">
+  <div class="bs">
+    <div class="bs-title">➕ Add Transaction</div>
+    <div class="fld"><label class="inp-label">Member</label><select class="inp" id="mg-mbr"></select></div>
+    <div class="fld"><label class="inp-label">Type</label>
+      <select class="inp" id="mg-type"><option value="deposit">💰 Deposit</option><option value="withdraw">💸 Withdrawal</option><option value="welfare">🤝 Welfare</option></select>
+    </div>
+    <div class="g2">
+      <div class="fld"><label class="inp-label">Amount (UGX)</label><input class="inp" id="mg-amt" type="number" placeholder="50000"/></div>
+      <div class="fld"><label class="inp-label">Date</label><input class="inp" id="mg-date" type="date"/></div>
+    </div>
+    <div class="fld"><label class="inp-label">Note (optional)</label><input class="inp" id="mg-note" placeholder="e.g. Week 12 contribution"/></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-sec" style="flex:1;" onclick="closeOv('ov-add-tx')">Cancel</button>
+      <button class="btn btn-g" style="flex:1;" onclick="mgAddTx()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="ov-add-mbr" onclick="maybeClose(event,'ov-add-mbr')">
+  <div class="bs">
+    <div class="bs-title">👤 Add Member</div>
+    <div class="fld"><label class="inp-label">Full Name</label><input class="inp" id="nm-name" placeholder="e.g. Nakato Sarah"/></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-sec" style="flex:1;" onclick="closeOv('ov-add-mbr')">Cancel</button>
+      <button class="btn btn-g" style="flex:1;" onclick="addMember()">Add Member</button>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="ov-add-exp" onclick="maybeClose(event,'ov-add-exp')">
+  <div class="bs">
+    <div class="bs-title">💸 Record Expense</div>
+    <div class="fld"><label class="inp-label">Description</label><input class="inp" id="ex-desc" placeholder="e.g. Meeting venue"/></div>
+    <div class="g2">
+      <div class="fld"><label class="inp-label">Amount (UGX)</label><input class="inp" id="ex-amt" type="number" placeholder="0"/></div>
+      <div class="fld"><label class="inp-label">Date</label><input class="inp" id="ex-date" type="date"/></div>
+    </div>
+    <div class="fld"><label class="inp-label">Category</label>
+      <select class="inp" id="ex-cat"><option>Operations</option><option>Welfare</option><option>Transport</option><option>Stationery</option><option>Other</option></select>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-sec" style="flex:1;" onclick="closeOv('ov-add-exp')">Cancel</button>
+      <button class="btn btn-gold" style="flex:1;" onclick="addExpense()">Record</button>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="ov-settings" onclick="maybeClose(event,'ov-settings')">
+  <div class="bs">
+    <div class="bs-title">⚙️ Group Settings</div>
+    <div class="fld"><label class="inp-label">Group Name</label><input class="inp" id="st-gname"/></div>
+    <div class="fld"><label class="inp-label">Branch Name</label><input class="inp" id="st-branch"/></div>
+    <button class="btn btn-sec" style="width:100%;margin-bottom:16px;" onclick="saveSettings()">💾 Save Settings</button>
+    <div style="height:1px;background:var(--br);margin-bottom:16px;"></div>
+    <div style="font-weight:700;margin-bottom:12px;">CHANGE ADMIN PASSWORD</div>
+    <div class="fld"><label class="inp-label">Current Password</label>
+      <div class="pwd-row"><input class="inp" id="pw-old" type="password" placeholder="Current password"/><button class="pwd-eye" onclick="togglePwd('pw-old')">👁</button></div>
+    </div>
+    <div class="g2">
+      <div class="fld"><label class="inp-label">New Password</label>
+        <div class="pwd-row"><input class="inp" id="pw-new" type="password" placeholder="Min 6 chars"/><button class="pwd-eye" onclick="togglePwd('pw-new')">👁</button></div>
+      </div>
+      <div class="fld"><label class="inp-label">Confirm</label>
+        <div class="pwd-row"><input class="inp" id="pw-cfm" type="password" placeholder="Repeat"/><button class="pwd-eye" onclick="togglePwd('pw-cfm')">👁</button></div>
+      </div>
+    </div>
+    <button class="btn btn-sec" style="width:100%;" onclick="changePassword()">🔑 Update Password</button>
+  </div>
+</div>
+
+<div class="ov" id="ov-apps" onclick="maybeClose(event,'ov-apps')">
+  <div class="bs">
+    <div class="bs-title">📬 Applications</div>
+    <div id="apps-list"></div>
+  </div>
+</div>
+
+<!-- Edit modals -->
 <div class="ov" id="ov-edit-tx" onclick="maybeClose(event,'ov-edit-tx')">
   <div class="bs">
-    <div class="bs-handle"></div>
     <div class="bs-title">Edit Transaction</div>
     <div class="fld"><label class="inp-label">Member</label><select class="inp" id="et-mbr" style="width:100%;"></select></div>
-    <div class="fld"><label class="inp-label">Type</label><select class="inp" id="et-type" style="width:100%;"><option value="deposit">Deposit</option><option value="withdraw">Withdraw</option><option value="welfare">Welfare</option></select></div>
+    <div class="fld"><label class="inp-label">Type</label>
+      <select class="inp" id="et-type" style="width:100%;"><option value="deposit">Deposit</option><option value="withdraw">Withdrawal</option><option value="welfare">Welfare</option></select>
+    </div>
     <div class="g2">
       <div class="fld"><label class="inp-label">Amount</label><input class="inp" id="et-amt" type="number"/></div>
       <div class="fld"><label class="inp-label">Date</label><input class="inp" id="et-date" type="date"/></div>
@@ -625,7 +662,6 @@ svg.chart{width:100%;overflow:visible;}
 
 <div class="ov" id="ov-edit-mbr" onclick="maybeClose(event,'ov-edit-mbr')">
   <div class="bs">
-    <div class="bs-handle"></div>
     <div class="bs-title">Edit Member</div>
     <div class="fld"><label class="inp-label">Name</label><input class="inp" id="em-name" placeholder="Member name"/></div>
     <div style="display:flex;gap:10px;">
@@ -635,11 +671,8 @@ svg.chart{width:100%;overflow:visible;}
   </div>
 </div>
 
-
 <script>
-/* ══════════════════════════════════════
-   WELCOME TITLE — letter-by-letter entrance
-══════════════════════════════════════ */
+/* ===== WELCOME TITLE (unchanged) ===== */
 (function buildTitle(){
   const words = ['Kadama', 'Saving', 'Group'];
   const container = document.getElementById('wt');
@@ -659,15 +692,12 @@ svg.chart{width:100%;overflow:visible;}
     }
     container.appendChild(line);
   });
-  // after all letters land, add wave float class
   setTimeout(() => {
     document.querySelectorAll('.wt-letter').forEach(el => el.classList.add('floated'));
   }, totalDelay * 1000 + 400);
 })();
 
-/* ══════════════════════════════════════
-   WELCOME PARTICLE CANVAS
-══════════════════════════════════════ */
+/* ===== WELCOME CANVAS (unchanged) ===== */
 (function(){
   const c=document.getElementById('wlc-canvas');
   const x=c.getContext('2d');
@@ -696,9 +726,7 @@ svg.chart{width:100%;overflow:visible;}
   })();
 })();
 
-/* ══════════════════════════════════════
-   PWA
-══════════════════════════════════════ */
+/* ===== PWA (unchanged) ===== */
 let deferredPrompt;
 const installButton = document.getElementById('installButton');
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -713,60 +741,39 @@ function installApp() {
   });
 }
 function shareViaWhatsApp(){
-  const url=groupKey?location.origin+location.pathname+'#'+groupKey:location.href;
+  const url=location.href.split('#')[0]; // just the base URL
   window.open(`https://wa.me/?text=${encodeURIComponent('Join Kadama Saving Group: '+url)}`, '_blank');
 }
 
-/* ══════════════════════════════════════
-   SCROLL HELPERS
-══════════════════════════════════════ */
-// scroll to the very end of a tab's content
-function scrollTabToBottom(tabId){
-  const t=document.getElementById(tabId);
-  if(t) requestAnimationFrame(()=>{ t.scrollTop=t.scrollHeight; });
-}
-// scroll to top of a tab
-function scrollTabToTop(tabId){
-  const t=document.getElementById(tabId);
-  if(t) requestAnimationFrame(()=>{ t.scrollTo({top:0,behavior:'smooth'}); });
-}
-// scroll last child of container into view
-function scrollLastIntoView(containerId, tabId){
-  const c=document.getElementById(containerId);
-  if(!c)return;
-  requestAnimationFrame(()=>{
-    const last=c.lastElementChild;
-    if(last){
-      last.scrollIntoView({behavior:'smooth',block:'nearest'});
-      last.classList.add('new-item');
-      setTimeout(()=>last.classList.remove('new-item'),1800);
-    }
-  });
-}
-// scroll first child into view (for prepended items like ledger)
-function scrollFirstIntoView(containerId){
-  const c=document.getElementById(containerId);
-  if(!c)return;
-  requestAnimationFrame(()=>{
-    const first=c.firstElementChild;
-    if(first){
-      first.scrollIntoView({behavior:'smooth',block:'nearest'});
-      first.classList.add('new-item');
-      setTimeout(()=>first.classList.remove('new-item'),1800);
-    }
-  });
-}
+/* ===== FIREBASE INIT (same project as Harvest Trust) ===== */
+const firebaseConfig = {
+  apiKey: "AIzaSyDNiIPuw3yrLsbieOobrhlUww-mQ4uigGQ",
+  authDomain: "savinggroups-142e7.firebaseapp.com",
+  databaseURL: "https://savinggroups-142e7-default-rtdb.firebaseio.com",
+  projectId: "savinggroups-142e7",
+  storageBucket: "savinggroups-142e7.firebasestorage.app",
+  messagingSenderId: "59557732077",
+  appId: "1:59557732077:web:aa79eb14010d05728176e4",
+  measurementId: "G-Z6CHHM6FCN"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const dataRef = db.ref('kadama'); // separate from Harvest Trust
 
-/* ══════════════════════════════════════
-   STATE
-══════════════════════════════════════ */
+/* ===== STATE (unchanged) ===== */
 let S={
   groupName:'Kadama Saving Group',
   branch:'Kabondo Branch',
   welcomeMsg:'Empowering our community through collective saving.',
   members:["Hajji","Hajjat","Mutebi","Nansubu","Namsoke","Nakkazi","Lwoga","Nakiberu","Namutebi"],
-  ledger:[],expenses:[],chat:[],
-  adminHash:btoa('kadama2025'),lastUpdated:null
+  ledger:[],
+  expenses:[],
+  chat:[],
+  adminHash:btoa('kadama2025'),
+  whatsappLink:'',
+  applications:[],                 // optional
+  approvedApplicants:[],            // optional
+  lastUpdated:null
 };
 
 const today=new Date().toISOString().split('T')[0];
@@ -784,140 +791,100 @@ S.expenses=[
 
 let adminUnlocked=false;
 let editTxIdx=null,editMbrIdx=null,lfilt='all';
+let ledgerShowAll=false;
 let myName=localStorage.getItem('ksg_myname')||'';
 let lastChatLen=0;
-const LKEY='ksg_v5_fb';
-const SYNC_KEYS=['groupName','branch','welcomeMsg','members','ledger','expenses','chat','adminHash','whatsappLink','lastUpdated'];
+const LKEY='ksg_v5';
 
-
-/* ════════════ LOCAL STORAGE ════════════ */
-function saveLocal(){try{localStorage.setItem(LKEY,JSON.stringify({...S,groupKey}));}catch(e){}}
+/* ===== LOCAL STORAGE (backup) ===== */
+function saveLocal(){try{localStorage.setItem(LKEY,JSON.stringify(S));}catch(e){}}
 function loadLocal(){
   try{
     const d=JSON.parse(localStorage.getItem(LKEY)||'null');if(!d)return false;
-    SYNC_KEYS.forEach(k=>{if(d[k]!==undefined)S[k]=d[k];});
-    if(d.groupKey)groupKey=d.groupKey;return true;
+    ['groupName','branch','welcomeMsg','members','ledger','expenses','chat','adminHash','whatsappLink','applications','approvedApplicants'].forEach(k=>{if(d[k]!==undefined)S[k]=d[k];});
+    return true;
   }catch(e){return false;}
 }
 
-/* ════════════ SYNC DOT ════════════ */
-function setSdot(s){
-  const d=document.getElementById('sdot');if(!d)return;
-  d.className='sdot';
-  if(s==='live')d.classList.add('live');
-  else if(s==='sync')d.classList.add('sync');
-  else if(s==='error')d.classList.add('error');
+/* ===== FIREBASE SYNC ===== */
+function setSdot(state) {
+  const d = document.getElementById('sdot');
+  d.className = 'sdot';
+  if (state === 'live') d.classList.add('live');
+  else if (state === 'sync') d.classList.add('sync');
 }
 
-/* ════════════════════════════════════════════════
-   🔥 FIREBASE REST API — no SDK, pure fetch()
-   Base URL: https://<project>.firebaseio.com/<path>.json
-   POST  → creates node, returns {name: "-Nxxx..."} (the key)
-   PUT   → overwrites node at key
-   GET   → reads node
-   We poll every 5s for remote changes (no WebSocket needed)
-════════════════════════════════════════════════ */
-const FB_URL='https://savinggroups-142e7-default-rtdb.firebaseio.com/groups';
-let groupKey=null,pollTimer=null,lastRemoteTs=null,isSyncing=false,pendingSync=false;
-
-function getBinFromUrl(){const h=location.hash.replace('#','');return h.length>=15?h:null;}
-function setGroupKey(key){
-  groupKey=key;
-  history.replaceState(null,'',location.pathname+'#'+key);
-  refreshShareUrl();saveLocal();
-}
-function refreshShareUrl(){
-  const url=groupKey?`${location.origin}${location.pathname}#${groupKey}`:'Generating your permanent link…';
-  const inp=document.getElementById('share-inp');if(inp)inp.value=url;
+function pushToFirebase() {
+  setSdot('sync');
+  S.lastUpdated = new Date().toISOString();
+  dataRef.set(S)
+    .then(() => setSdot('live'))
+    .catch(() => setSdot(''));
 }
 
-/* ── WRITE ── */
-async function pushToFirebase(){
-  S.lastUpdated=new Date().toISOString();
-  saveLocal();setSdot('sync');
-  if(isSyncing){pendingSync=true;return;}
-  isSyncing=true;
-  try{
-    if(!groupKey){
-      /* First save — POST to create a new node */
-      const r=await fetch(FB_URL+'.json',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(S)
-      });
-      if(r.ok){
-        const d=await r.json();
-        setGroupKey(d.name);
-        lastRemoteTs=S.lastUpdated;
-        startPoll();
-        setSdot('live');
-        toast('🔥 Firebase live link ready! Tap ⬆ to share.','#22c55e');
-      }else setSdot('error');
-    }else{
-      /* Subsequent saves — PUT to overwrite */
-      const r=await fetch(`${FB_URL}/${groupKey}.json`,{
-        method:'PUT',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(S)
-      });
-      if(r.ok){lastRemoteTs=S.lastUpdated;setSdot('live');}
-      else setSdot('error');
+// Real-time listener
+dataRef.on('value', (snapshot) => {
+  const val = snapshot.val();
+  if (val) {
+    Object.assign(S, val);
+    saveLocal();
+    renderAll();
+    updateWaTab();
+    if (S.chat && S.chat.length > lastChatLen && lastChatLen > 0)
+      showChatBadge(S.chat.length - lastChatLen);
+    lastChatLen = S.chat ? S.chat.length : 0;
+  } else {
+    // No data yet – push local
+    pushToFirebase();
+  }
+  setSdot('live');
+}, (error) => {
+  console.warn('Firebase read failed', error);
+  setSdot('');
+});
+
+/* ===== SCROLL HELPERS (unchanged) ===== */
+function scrollTabToBottom(tabId){
+  const t=document.getElementById(tabId);
+  if(t) requestAnimationFrame(()=>{ t.scrollTop=t.scrollHeight; });
+}
+function scrollTabToTop(tabId){
+  const t=document.getElementById(tabId);
+  if(t) requestAnimationFrame(()=>{ t.scrollTo({top:0,behavior:'smooth'}); });
+}
+function scrollLastIntoView(containerId, tabId){
+  const c=document.getElementById(containerId);
+  if(!c)return;
+  requestAnimationFrame(()=>{
+    const last=c.lastElementChild;
+    if(last){
+      last.scrollIntoView({behavior:'smooth',block:'nearest'});
+      last.classList.add('new-item');
+      setTimeout(()=>last.classList.remove('new-item'),1800);
     }
-  }catch(e){setSdot('error');toast('No connection — saved locally','#F5C543');}
-  isSyncing=false;
-  if(pendingSync){pendingSync=false;pushToFirebase();}
+  });
 }
-function pushBin(){return pushToFirebase();}
-function createBin(){return pushToFirebase();}
-
-/* ── READ ONCE ── */
-async function loadBin(key){
-  try{
-    const r=await fetch(`${FB_URL}/${key}.json`);
-    if(r.ok){
-      const rec=await r.json();
-      if(rec){
-        SYNC_KEYS.forEach(k=>{if(rec[k]!==undefined)S[k]=rec[k];});
-        setGroupKey(key);lastRemoteTs=rec.lastUpdated||null;return true;
-      }
+function scrollFirstIntoView(containerId){
+  const c=document.getElementById(containerId);
+  if(!c)return;
+  requestAnimationFrame(()=>{
+    const first=c.firstElementChild;
+    if(first){
+      first.scrollIntoView({behavior:'smooth',block:'nearest'});
+      first.classList.add('new-item');
+      setTimeout(()=>first.classList.remove('new-item'),1800);
     }
-  }catch(e){}
-  return false;
+  });
 }
 
-/* ── POLL (every 5s) ── */
-function startPoll(){
-  clearInterval(pollTimer);
-  pollTimer=setInterval(async()=>{
-    if(!groupKey||isSyncing)return;
-    try{
-      const r=await fetch(`${FB_URL}/${groupKey}.json`);
-      if(r.ok){
-        const rec=await r.json();
-        if(rec&&rec.lastUpdated&&rec.lastUpdated!==lastRemoteTs){
-          lastRemoteTs=rec.lastUpdated;
-          SYNC_KEYS.forEach(k=>{if(rec[k]!==undefined)S[k]=rec[k];});
-          saveLocal();renderAll();applyGroupMeta();
-          if(S.chat&&S.chat.length>lastChatLen&&lastChatLen>0)showChatBadge(S.chat.length-lastChatLen);
-          lastChatLen=S.chat?S.chat.length:0;
-        }
-        setSdot('live');
-      }
-    }catch(e){setSdot('error');}
-  },5000);
-}
-function attachFbListener(key){
-  /* REST API version just starts polling */
-  startPoll();
-}
-
-/* ════════════ NAVIGATION ════════════ */
+/* ===== NAVIGATION ===== */
 function enterApp(){
   document.getElementById('welcome').classList.add('out');
   setTimeout(()=>{
     document.getElementById('welcome').style.display='none';
     document.getElementById('app').classList.add('on');
     renderAll();
-    if(!groupKey)setTimeout(pushToFirebase,1800);
-    else{setSdot('live');attachFbListener(groupKey);}
+    updateWaTab();
   },500);
 }
 function exitToWelcome(){
@@ -933,45 +900,40 @@ function goTab(name,btn){
   document.getElementById('t-'+name).classList.add('on');
   (btn||document.getElementById('ni-'+name)).classList.add('on');
   curTab=name;
-  if(name==='charts')renderCharts();
-  if(name==='admin')renderAdmLists();
+  if(name==='summary')renderSummary();
   if(name==='members')renderMembers();
   if(name==='ledger')renderLedger();
-  if(name==='chat'){renderChat();clearChatBadge();}
-}
-function goChat(){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
-  document.getElementById('t-chat').classList.add('on');
-  curTab='chat';renderChat();clearChatBadge();
+  if(name==='admin'){renderAdmMbrList();updateAppsBadge();}
+  if(name==='chat')updateWaTab();
 }
 
 let shareBOpen=false;
 function toggleShare(){
   shareBOpen=!shareBOpen;const b=document.getElementById('share-banner');
-  if(shareBOpen){b.classList.add('show');refreshShareUrl();if(!groupKey)pushToFirebase();}
+  if(shareBOpen){b.classList.add('show');refreshShareUrl();}
   else b.classList.remove('show');
 }
+function refreshShareUrl(){
+  const url=location.href.split('#')[0]; // no hash needed
+  const inp=document.getElementById('share-inp');if(inp)inp.value=url;
+}
 function doCopy(){
-  const v=document.getElementById('share-inp').value;
-  if(!v||v.includes('Generating')){toast('Creating link…','#F5C543');return;}
-  const btn=document.getElementById('copy-b');
-  navigator.clipboard.writeText(v).then(()=>{btn.textContent='Copied ✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},2500);toast('Link copied! Share with all members.','#22c55e');})
-  .catch(()=>{try{document.getElementById('share-inp').select();document.execCommand('copy');toast('Link copied!','#22c55e');}catch(e){toast('Select the link manually to copy','#ef4444');}});
+  const v=document.getElementById('share-inp').value,btn=document.getElementById('copy-b');
+  navigator.clipboard.writeText(v).then(()=>{btn.textContent='Copied ✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},2500);toast('Link copied!','#22c55e');})
+  .catch(()=>{try{document.getElementById('share-inp').select();document.execCommand('copy');toast('Link copied!','#22c55e');}catch(e){}});
 }
 
-/* ══════════════════════════════════════ GROUP META */
+/* ===== GROUP META ===== */
 function applyGroupMeta(){
   const n=S.groupName||'Kadama Saving Group',b=S.branch||'Kabondo Branch';
   setEl('hdr-title',n.length>16?n.slice(0,14)+'…':n);setEl('hdr-sub',b);
   const ldEl=document.getElementById('ld-grp');if(ldEl)ldEl.textContent=n;
   const gn=document.getElementById('st-gname');if(gn)gn.value=S.groupName;
   const br=document.getElementById('st-branch');if(br)br.value=S.branch;
-  const wm=document.getElementById('st-wmsg');if(wm)wm.value=S.welcomeMsg;
-  const wsc=document.getElementById('ws-members');if(wsc)wsc.textContent=S.members.length;
+  const ws=document.getElementById('ws-members');if(ws)ws.textContent=S.members.length;
 }
 
-/* ══════════════════════════════════════ COMPUTATIONS */
+/* ===== COMPUTATIONS (unchanged) ===== */
 function balances(){
   const b={};S.members.forEach(m=>b[m]=0);
   S.ledger.slice().reverse().forEach(e=>{
@@ -984,6 +946,23 @@ function balances(){
 function totalSav(){return Object.values(balances()).reduce((a,c)=>a+c,0);}
 function totalExp(){return S.expenses.reduce((s,e)=>s+Number(e.amount),0);}
 function cashBal(){return totalSav()-totalExp();}
+function getWeekRange(date = new Date()){
+  const d = new Date(date);const day = d.getDay();
+  const monday = new Date(d);monday.setDate(d.getDate() - (day === 0 ? 6 : day-1));monday.setHours(0,0,0,0);
+  const sunday = new Date(monday);sunday.setDate(monday.getDate() + 6);sunday.setHours(23,59,59,999);
+  return { start: monday, end: sunday };
+}
+function getWeekNumber(date){
+  const d = new Date(date);d.setHours(0,0,0,0);
+  const firstJan = new Date(d.getFullYear(),0,1);
+  return Math.ceil((((d - firstJan) / 86400000) + firstJan.getDay()+1)/7);
+}
+function periodStats(start,end){
+  const txs=S.ledger.filter(t=>{const d=new Date(t.date+'T00:00:00');return d>=start&&d<=end;});
+  const savings=txs.filter(t=>t.type==='deposit'||t.type==='welfare').reduce((s,t)=>s+Number(t.amount),0);
+  const expenses=S.expenses.filter(e=>{const d=new Date((e.date||'1970-01-01')+'T00:00:00');return d>=start&&d<=end;}).reduce((s,e)=>s+Number(e.amount),0);
+  return{savings,expenses,net:savings-expenses,txCount:txs.length};
+}
 function rating(m){
   const now=new Date(),p=90,start=new Date(now);start.setDate(now.getDate()-p);
   const deps=S.ledger.filter(e=>e.member===m&&(e.type==='deposit'||e.type==='welfare')&&new Date(e.date+'T00:00:00')>=start);
@@ -1002,7 +981,7 @@ function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUppe
 function txIco(t){return t==='deposit'?'💰':t==='withdraw'?'💸':t==='welfare'?'🤝':'📌';}
 function txIcoC(t){return t==='deposit'?'tic-d':t==='withdraw'?'tic-w':'tic-we';}
 
-/* ══════════════════════════════════════ RENDER ALL */
+/* ===== RENDER ===== */
 function renderAll(){
   const bal=balances(),ts=totalSav(),te=totalExp(),cb=cashBal();
   const paid=S.members.filter(m=>bal[m]>0).length;
@@ -1019,10 +998,9 @@ function renderAll(){
   applyGroupMeta();
   if(curTab==='members')renderMembers();
   if(curTab==='ledger')renderLedger();
-  if(curTab==='admin')renderAdmLists();
-  if(curTab==='chat')renderChat();
+  if(curTab==='summary')renderSummary();
+  if(curTab==='admin')renderAdmMbrList();
 }
-
 function txHtml(l,idx){
   const isPlus=l.type!=='withdraw';
   const realIdx=idx!==undefined?S.ledger.indexOf(l):null;
@@ -1035,7 +1013,6 @@ function txHtml(l,idx){
     <div class="txc-amt ${isPlus?'amt-p':'amt-n'}">${isPlus?'+':'-'}<br>UGX ${fmtN(l.amount)}</div>
   </div>`;
 }
-
 function renderMembers(){
   const bal=balances();const list=document.getElementById('members-list');if(!list)return;
   list.innerHTML=S.members.length?S.members.map((m,i)=>{
@@ -1062,216 +1039,146 @@ function renderMembers(){
     </div>`;
   }).join(''):'<div class="muted" style="text-align:center;padding:24px;font-size:.85rem;">No members yet</div>';
 }
-
 function renderLedger(){
   const list=document.getElementById('ledger-list');if(!list)return;
   const data=lfilt==='all'?S.ledger:S.ledger.filter(e=>e.type===lfilt);
-  list.innerHTML=data.length?data.map(l=>txHtml(l)).join(''):'<div class="muted" style="text-align:center;padding:24px;font-size:.85rem;">No transactions found</div>';
+  const disp=ledgerShowAll?data:data.slice(0,20);
+  list.innerHTML=disp.length?disp.map(l=>txHtml(l)).join(''):'<div class="muted" style="text-align:center;padding:24px;font-size:.85rem;">No transactions found</div>';
+  if(!ledgerShowAll&&data.length>20){
+    list.innerHTML+=`<div style="text-align:center;padding:12px;"><button class="btn btn-sm btn-sec" onclick="toggleLedgerView()">Show all ${data.length}</button></div>`;
+  }
 }
 function setLF(f,btn){
-  lfilt=f;document.querySelectorAll('[id^="lf-"]').forEach(b=>{b.style.borderColor='';b.style.color='';});
-  if(btn){btn.style.borderColor='var(--g)';btn.style.color='var(--g)';}renderLedger();
+  lfilt=f;ledgerShowAll=false;
+  document.querySelectorAll('[id^="lf-"]').forEach(b=>{b.style.borderColor='';b.style.color='';});
+  if(btn){btn.style.borderColor='var(--g)';btn.style.color='var(--g)';}
+  renderLedger();
 }
-
-function renderAdmLists(){
-  applyGroupMeta();
-  const sel=document.getElementById('mg-mbr');
-  if(sel)sel.innerHTML=S.members.map(m=>`<option value="${escH(m)}">${escH(m)}</option>`).join('');
+function toggleLedgerView(){
+  ledgerShowAll=!ledgerShowAll;
+  document.getElementById('viewAllBtn').textContent=ledgerShowAll?'Show Less':'View All';
+  renderLedger();
+}
+function renderSummary(){
+  const now=new Date();
+  const {start:ws,end:we}=getWeekRange(now);const wk=periodStats(ws,we);
+  setEl('weekSavings','UGX '+fmtN(wk.savings,true));setEl('weekExpenses','UGX '+fmtN(wk.expenses,true));setEl('weekNet','UGX '+fmtN(wk.net,true));setEl('weekTx',wk.txCount);
+  const ms=new Date(now.getFullYear(),now.getMonth(),1),me=new Date(now.getFullYear(),now.getMonth()+1,0,23,59,59,999);const mn=periodStats(ms,me);
+  setEl('monthSavings','UGX '+fmtN(mn.savings,true));setEl('monthExpenses','UGX '+fmtN(mn.expenses,true));setEl('monthNet','UGX '+fmtN(mn.net,true));setEl('monthTx',mn.txCount);
+  const ys=new Date(now.getFullYear(),0,1),ye=new Date(now.getFullYear(),11,31,23,59,59,999);const yr=periodStats(ys,ye);
+  setEl('yearSavings','UGX '+fmtN(yr.savings,true));setEl('yearExpenses','UGX '+fmtN(yr.expenses,true));setEl('yearNet','UGX '+fmtN(yr.net,true));setEl('yearTx',yr.txCount);
+  const weeksMap={};S.ledger.forEach(tx=>{if(tx.type==='deposit'||tx.type==='welfare'){const d=new Date(tx.date+'T00:00:00');const wk=getWeekNumber(d)+'-'+d.getFullYear();weeksMap[wk]=(weeksMap[wk]||0)+tx.amount;}});
+  const wkVals=Object.values(weeksMap);const avgWk=wkVals.length?wkVals.reduce((a,b)=>a+b,0)/wkVals.length:0;
+  setEl('avgWeekSavings',fmtN(avgWk));setEl('projAnnual',fmtN(avgWk*52));
+}
+function renderAdmMbrList(){
+  const list=document.getElementById('adm-mbr-list');if(!list)return;
   const bal=balances();
-  const ml=document.getElementById('adm-mbr-list');
-  if(ml)ml.innerHTML=S.members.map((m,i)=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--card);border:1px solid var(--br);border-radius:8px;margin-bottom:6px;">
-      <div><div style="font-weight:700;font-size:.88rem;">${escH(m)}</div><div class="micro">UGX ${fmtN(bal[m]||0)}</div></div>
+  list.innerHTML=S.members.length?S.members.map((m,i)=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--card);border:1px solid var(--br);border-radius:10px;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="mc-av" style="width:32px;height:32px;border-radius:9px;font-size:.7rem;">${initials(m)}</div>
+        <div><div style="font-weight:600;font-size:.84rem;">${escH(m)}</div><div class="micro ${(bal[m]||0)>=0?'':'sv-red'}">UGX ${fmtN(bal[m]||0)}</div></div>
+      </div>
       <div style="display:flex;gap:6px;">
-        <button class="btn btn-sm btn-sec" onclick="openEditMbr(${i})">Edit</button>
+        <button class="btn btn-sm btn-sec" onclick="openEditMbr(${i})">✏️</button>
         <button class="btn btn-sm btn-red" onclick="removeMember(${i})">✕</button>
       </div>
-    </div>`).join('')||'<div class="micro muted">No members</div>';
-  const el=document.getElementById('adm-exp-list');
-  if(el)el.innerHTML=S.expenses.map((e,i)=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--card);border:1px solid var(--br);border-radius:8px;margin-bottom:6px;">
-      <div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:.85rem;">${escH(e.desc)}</div><div class="micro">${escH(e.date||'—')} · ${escH(e.category||'Other')}</div></div>
-      <div style="font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace;font-size:.82rem;flex-shrink:0;">UGX ${fmtN(e.amount)}</div>
-      <button class="btn-icon" style="width:34px;height:34px;font-size:.75rem;" onclick="delExpense(${i})">🗑</button>
-    </div>`).join('')||'<div class="micro muted">No expenses</div>';
-  const tl=document.getElementById('adm-tx-list');
-  if(tl)tl.innerHTML=S.ledger.slice(0,20).map((l,i)=>`
-    <div onclick="openEditTx(${i})" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--br);border-radius:8px;margin-bottom:6px;">
-      <div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:.82rem;">${escH(l.member)} · ${escH(l.type)}</div><div class="micro">${escH(l.date||'—')}${l.note?' · '+escH(l.note):''}</div></div>
-      <div style="font-weight:800;color:${l.type==='withdraw'?'var(--red)':'var(--g)'};font-family:'JetBrains Mono',monospace;font-size:.8rem;flex-shrink:0;">UGX ${fmtN(l.amount)}</div>
-    </div>`).join('')||'<div class="micro muted">No transactions</div>';
+    </div>`).join(''):'<div class="micro muted">No members</div>';
+}
+function updateAppsBadge(){
+  const cnt=S.applications?S.applications.filter(a=>a.status==='pending').length:0;
+  const b=document.getElementById('apps-badge');if(b){b.classList.toggle('hidden',cnt===0);b.textContent=cnt;}
 }
 
-/* ══════════════════════════════════════ CHARTS */
-function renderCharts(){renderLineChart();renderBarChart();renderExpChart();renderChartStats();}
-function monthlyData(){
-  const map={};
-  S.ledger.forEach(e=>{if(e.type==='deposit'||e.type==='welfare'){const ym=e.date?e.date.slice(0,7):'?';map[ym]=(map[ym]||0)+Number(e.amount);}});
-  return Object.keys(map).sort().slice(-12).map(ym=>({label:ym.slice(5),total:map[ym]}));
+/* ===== WHATSAPP FUNCTIONS ===== */
+function updateWaTab(){
+  const link=S.whatsappLink||'',btn=document.getElementById('wa-link');
+  if(link){btn.href=link;btn.style.display='inline-flex';setEl('wa-note','Opens WhatsApp directly');}
+  else{btn.href='#';btn.style.display='none';setEl('wa-note',adminUnlocked?'No link set — paste one below.':'Contact admin to get the group link.');}
+  const sec=document.getElementById('wa-admin-section');
+  if(sec)sec.style.display=adminUnlocked?'block':'none';
+  const inp=document.getElementById('wa-inp');if(inp)inp.value=S.whatsappLink||'';
 }
-function renderLineChart(){
-  const svg=document.getElementById('chart-line');if(!svg)return;
-  const data=monthlyData();
-  if(!data.length){svg.innerHTML=`<text x="160" y="80" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="12">No data yet</text>`;return;}
-  const W=320,H=150,PL=8,PR=10,PT=12,PB=24,iW=W-PL-PR,iH=H-PT-PB;
-  const maxV=Math.max(...data.map(d=>d.total),1);
-  const pts=data.map((d,i)=>({x:PL+i*(iW/Math.max(data.length-1,1)),y:PT+iH-(d.total/maxV)*iH,v:d.total,l:d.label}));
-  const pd=pts.map((p,i)=>(i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`)).join(' ');
-  const ad=pd+` L${pts[pts.length-1].x},${PT+iH} L${pts[0].x},${PT+iH} Z`;
-  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  svg.innerHTML=`<defs><linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity=".32"/><stop offset="100%" stop-color="#22c55e" stop-opacity=".02"/></linearGradient><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#16a34a"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs>
-    ${[.25,.5,.75,1].map(v=>`<line x1="${PL}" y1="${PT+iH-v*iH}" x2="${W-PR}" y2="${PT+iH-v*iH}" stroke="rgba(255,255,255,.04)" stroke-width="1"/>`).join('')}
-    <path d="${ad}" fill="url(#lg1)"/>
-    <path d="${pd}" fill="none" stroke="url(#lg2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><animate attributeName="stroke-dasharray" from="0 2000" to="2000 0" dur="1.4s" fill="freeze"/></path>
-    ${pts.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="#22c55e" stroke="#020810" stroke-width="2"><animate attributeName="r" from="0" to="4" dur=".3s" begin="${.1+i*.08}s" fill="freeze"/></circle><text x="${p.x}" y="${H-4}" text-anchor="middle" fill="rgba(155,180,200,.5)" font-size="8" font-family="Outfit">${p.l}</text>${p.v>0?`<text x="${p.x}" y="${p.y-8}" text-anchor="middle" fill="#22c55e" font-size="7.5" font-family="JetBrains Mono,monospace">${fmtN(p.v,true)}</text>`:''}`).join('')}`;
-}
-function renderBarChart(){
-  const wrap=document.getElementById('chart-bars');if(!wrap)return;
-  const bal=balances(),maxV=Math.max(...Object.values(bal).map(Math.abs),1);
-  wrap.innerHTML=S.members.map(m=>{const v=bal[m]||0,pct=Math.abs(v)/maxV*100,col=v>=0?'var(--g)':'var(--red)';
-    return`<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.8rem;font-weight:700;">${escH(m)}</span><span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:${col};">UGX ${fmtN(v)}</span></div><div style="height:7px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;"><div style="height:100%;background:${col};border-radius:99px;transition:width 1s ease;" data-w="${pct.toFixed(1)}%"></div></div></div>`;
-  }).join('');
-  setTimeout(()=>{wrap.querySelectorAll('[data-w]').forEach(el=>el.style.width=el.getAttribute('data-w'));},80);
-}
-function renderExpChart(){
-  const wrap=document.getElementById('chart-exp');if(!wrap)return;
-  if(!S.expenses.length){wrap.innerHTML='<div class="micro muted">No expenses yet</div>';return;}
-  const cats={};S.expenses.forEach(e=>{const c=e.category||'Other';cats[c]=(cats[c]||0)+Number(e.amount);});
-  const tot=Object.values(cats).reduce((a,b)=>a+b,1);
-  const cols=['var(--gold)','var(--g)','var(--sky)','var(--red)','#c084fc','#fb923c'];
-  wrap.innerHTML=Object.entries(cats).map(([c,a],i)=>`<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.8rem;font-weight:700;">${escH(c)}</span><span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:${cols[i%cols.length]};">UGX ${fmtN(a)}</span></div><div style="height:6px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;"><div style="height:100%;background:${cols[i%cols.length]};border-radius:99px;transition:width 1s ease;" data-w="${(a/tot*100).toFixed(1)}%"></div></div></div>`).join('');
-  setTimeout(()=>{wrap.querySelectorAll('[data-w]').forEach(el=>el.style.width=el.getAttribute('data-w'));},80);
-}
-function renderChartStats(){
-  const deps=S.ledger.filter(e=>e.type==='deposit'||e.type==='welfare');
-  const avg=deps.length?Math.round(deps.reduce((s,e)=>s+Number(e.amount),0)/deps.length):0;
-  setEl('cs-avg',fmtN(avg,true));setEl('cs-cnt',S.ledger.length);
-  const bal=balances();const top=Object.entries(bal).sort(([,a],[,b])=>b-a)[0];
-  if(top){setEl('cs-top',fmtN(top[1],true));setEl('cs-top-sub',top[0]);}
-  if(S.ledger.length){const old=S.ledger[S.ledger.length-1];setEl('cs-age',Math.round((Date.now()-new Date(old.date+'T00:00:00'))/(864e5)));}
+function saveWaLink(){
+  if(!adminUnlocked)return toast('Unlock admin first','#ef4444');
+  const v=(document.getElementById('wa-inp').value||'').trim();
+  if(v&&!v.startsWith('https://chat.whatsapp.com/'))return toast('Paste a valid WhatsApp invite link','#ef4444');
+  S.whatsappLink=v;saveLocal();pushToFirebase();updateWaTab();toast(v?'WhatsApp link saved! ✅':'Link cleared','#25D366');
 }
 
-/* ══════════════════════════════════════ CHAT */
-function saveDisplayName(){
-  const v=(document.getElementById('chat-name-inp').value||'').trim();
-  if(!v){toast('Enter a display name','#ef4444');return;}
-  myName=v;localStorage.setItem('ksg_myname',v);
-  document.getElementById('chat-name-inp').value='';
-  document.getElementById('chat-name-section').style.display='none';
-  toast('Name set: '+v,'#22c55e');
-}
-function renderChat(){
-  const area=document.getElementById('chat-area');if(!area)return;
-  const msgs=S.chat||[];
-  if(!msgs.length){area.innerHTML='<div class="micro muted" style="text-align:center;padding:20px;">No messages yet. Say hello!</div>';return;}
-  area.innerHTML=msgs.map(m=>{
-    const isMe=m.from===myName&&m.from!=='Admin';
-    const isAdmin=m.from==='Admin'||m.role==='admin';
-    const isSystem=m.type==='system';
-    const cls=isSystem?'system':isMe?'me':'admin';
-    const bs=isAdmin?'background:linear-gradient(135deg,rgba(245,197,67,.15),rgba(245,197,67,.08));border:1px solid rgba(245,197,67,.25);':'';
-    return`<div class="chat-msg ${cls}">${!isMe&&!isSystem?`<div class="chat-from" style="${isAdmin?'color:var(--gold);':''}">${escH(m.from||'Member')}</div>`:''}<div class="chat-bubble" style="${bs}">${escH(m.text)}</div><div class="chat-time">${m.time||''}</div></div>`;
-  }).join('');
-  area.scrollTop=area.scrollHeight;lastChatLen=msgs.length;
-}
-function chatKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
-function sendMsg(){
-  const ta=document.getElementById('chat-msg-inp');
-  const text=(ta.value||'').trim();if(!text)return;
-  if(!myName){toast('Set your display name first','#F5C543');return;}
-  if(!S.chat)S.chat=[];
-  S.chat.push({from:myName,text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),id:Date.now()});
-  ta.value='';pushBin();renderChat();
-}
-function adminSendMsg(){
-  if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
-  const ta=document.getElementById('adm-reply');
-  const text=(ta.value||'').trim();if(!text)return;
-  if(!S.chat)S.chat=[];
-  S.chat.push({from:'Admin',role:'admin',text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),id:Date.now()});
-  ta.value='';pushBin();toast('Admin message sent','#F5C543');
-}
-function showChatBadge(n){const b=document.getElementById('chat-badge');if(!b)return;b.classList.remove('hidden');b.textContent=n>9?'9+':n;}
-function clearChatBadge(){const b=document.getElementById('chat-badge');if(b)b.classList.add('hidden');}
-
-/* ══════════════════════════════════════ ADMIN AUTH */
-function togglePwdField(id){const el=document.getElementById(id);if(!el)return;el.type=el.type==='password'?'text':'password';}
-function doLogin(){
+/* ===== ADMIN AUTH ===== */
+function togglePwd(id){const el=document.getElementById(id);if(!el)return;el.type=el.type==='password'?'text':'password';}
+function doAdminLogin(){
   const v=document.getElementById('adm-pwd').value||'';
   if(btoa(v)===S.adminHash){
     adminUnlocked=true;document.getElementById('adm-pwd').value='';closeOv('ov-admin');
     document.getElementById('adm-lock').classList.add('hidden');document.getElementById('adm-panel').classList.remove('hidden');
-    renderAdmLists();renderAll();toast('Admin unlocked','#F5C543');
+    renderAll();updateWaTab();toast('Admin unlocked','#F5C543');
   }else{
     document.getElementById('adm-pwd').style.borderColor='var(--red)';
     setTimeout(()=>document.getElementById('adm-pwd').style.borderColor='',1400);
     toast('Incorrect password','#ef4444');
   }
 }
-function lockAdmin(){adminUnlocked=false;document.getElementById('adm-lock').classList.remove('hidden');document.getElementById('adm-panel').classList.add('hidden');renderAll();toast('Admin locked','#8BA4BE');}
-function changePassword(){
-  if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
-  const old=document.getElementById('pw-old').value||'',nw=document.getElementById('pw-new').value||'',cfm=document.getElementById('pw-cfm').value||'';
-  if(btoa(old)!==S.adminHash){toast('Current password is wrong','#ef4444');return;}
-  if(nw.length<6){toast('New password must be at least 6 characters','#ef4444');return;}
-  if(nw!==cfm){toast('Passwords do not match','#ef4444');return;}
-  S.adminHash=btoa(nw);['pw-old','pw-new','pw-cfm'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  pushBin();toast('Password changed successfully','#22c55e');
-}
+function lockAdmin(){adminUnlocked=false;document.getElementById('adm-lock').classList.remove('hidden');document.getElementById('adm-panel').classList.add('hidden');renderAll();updateWaTab();toast('Admin locked','#8BA4BE');}
 function saveSettings(){
-  if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
-  const gn=(document.getElementById('st-gname').value||'').trim();
-  const br=(document.getElementById('st-branch').value||'').trim();
-  const wm=(document.getElementById('st-wmsg').value||'').trim();
-  if(gn)S.groupName=gn;if(br)S.branch=br;if(wm)S.welcomeMsg=wm;
-  pushBin();applyGroupMeta();toast('Group settings saved','#22c55e');
+  if(!adminUnlocked)return toast('Unlock admin first','#ef4444');
+  const gn=(document.getElementById('st-gname').value||'').trim();const br=(document.getElementById('st-branch').value||'').trim();
+  if(gn)S.groupName=gn;if(br)S.branch=br;
+  saveLocal();pushToFirebase();applyGroupMeta();closeOv('ov-settings');toast('Settings saved','#22c55e');
+}
+function changePassword(){
+  if(!adminUnlocked)return toast('Unlock admin first','#ef4444');
+  const old=document.getElementById('pw-old').value||'',nw=document.getElementById('pw-new').value||'',cfm=document.getElementById('pw-cfm').value||'';
+  if(btoa(old)!==S.adminHash)return toast('Current password is wrong','#ef4444');
+  if(nw.length<6)return toast('New password must be at least 6 characters','#ef4444');
+  if(nw!==cfm)return toast('Passwords do not match','#ef4444');
+  S.adminHash=btoa(nw);['pw-old','pw-new','pw-cfm'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  saveLocal();pushToFirebase();toast('Password changed successfully','#22c55e');
 }
 
-/* ══════════════════════════════════════ MEMBER ACTIONS */
+/* ===== MEMBER ACTIONS ===== */
 function addMember(){
-  if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
+  if(!adminUnlocked)return toast('Unlock admin first','#ef4444');
   const inp=document.getElementById('nm-name');
   const name=(inp.value||'').trim();
-  if(!name){toast('Enter a name','#ef4444');return;}
-  if(S.members.includes(name)){toast('Member already exists','#ef4444');return;}
+  if(!name)return toast('Enter a name','#ef4444');
+  if(S.members.includes(name))return toast('Member already exists','#ef4444');
   S.members.push(name);inp.value='';
-  pushBin();renderAll();renderAdmLists();
-  toast(name+' added','#22c55e');confetti();
-  // scroll to newly added member at bottom of members list and admin list
+  saveLocal();pushToFirebase();renderAll();renderAdmMbrList();closeOv('ov-add-mbr');toast(name+' added','#22c55e');confetti();
   if(curTab==='members') scrollLastIntoView('members-list','t-members');
-  scrollLastIntoView('adm-mbr-list','t-admin');
 }
-function openEditMbr(i){editMbrIdx=i;document.getElementById('em-name').value=S.members[i];openOv('ov-edit-mbr');}
+function openEditMbr(i){
+  editMbrIdx=i;document.getElementById('em-name').value=S.members[i];openOv('ov-edit-mbr');
+}
 function saveEditMbr(){
   if(editMbrIdx===null)return;
   const old=S.members[editMbrIdx],nw=(document.getElementById('em-name').value||'').trim();
-  if(!nw){toast('Name cannot be empty','#ef4444');return;}
+  if(!nw)return toast('Name cannot be empty','#ef4444');
   S.members[editMbrIdx]=nw;S.ledger.forEach(e=>{if(e.member===old)e.member=nw;});
-  pushBin();closeOv('ov-edit-mbr');editMbrIdx=null;
-  renderAll();renderAdmLists();toast(`Renamed: ${old} → ${nw}`,'#F5C543');
+  saveLocal();pushToFirebase();closeOv('ov-edit-mbr');editMbrIdx=null;
+  renderAll();renderAdmMbrList();toast(`Renamed: ${old} → ${nw}`,'#F5C543');
 }
 function removeMember(i){
-  if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
-  const name=S.members[i];if(!confirm('Remove '+name+' and all their transactions?'))return;
+  if(!adminUnlocked)return toast('Unlock admin first','#ef4444');
+  const name=S.members[i];
+  if(!confirm('Remove '+name+' and all their transactions?'))return;
   S.members.splice(i,1);S.ledger=S.ledger.filter(e=>e.member!==name);
-  pushBin();renderAll();renderAdmLists();toast(name+' removed','#ef4444');
+  saveLocal();pushToFirebase();renderAll();renderAdmMbrList();toast(name+' removed','#ef4444');
 }
 
-/* ══════════════════════════════════════ LEDGER ACTIONS */
+/* ===== LEDGER ACTIONS ===== */
 function mgAddTx(){
-  if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
+  if(!adminUnlocked)return toast('Unlock admin first','#ef4444');
   const mbr=document.getElementById('mg-mbr').value,type=document.getElementById('mg-type').value;
   const amt=parseFloat(document.getElementById('mg-amt').value),date=document.getElementById('mg-date').value;
   const note=(document.getElementById('mg-note').value||'').trim();
-  if(!mbr||!date||isNaN(amt)||amt<=0){toast('Fill all required fields','#ef4444');return;}
+  if(!mbr||!date||isNaN(amt)||amt<=0)return toast('Fill all required fields','#ef4444');
   S.ledger.unshift({id:Date.now(),date,member:mbr,type,amount:Math.round(amt),note});
   document.getElementById('mg-amt').value='';document.getElementById('mg-note').value='';
-  pushBin();renderAll();
-  toast(`${mbr}: ${type} UGX ${fmtN(amt)}`,'#22c55e');
-  // new tx is at top — scroll ledger and admin tx list to top to show it
-  scrollTabToTop('t-ledger');
-  scrollFirstIntoView('ledger-list');
-  scrollFirstIntoView('adm-tx-list');
+  saveLocal();pushToFirebase();closeOv('ov-add-tx');renderAll();toast(`${mbr}: ${type} UGX ${fmtN(amt)}`,'#22c55e');
+  scrollTabToTop('t-ledger');scrollFirstIntoView('ledger-list');
 }
 function openEditTx(i){
   if(!adminUnlocked)return;editTxIdx=i;const l=S.ledger[i];
@@ -1285,39 +1192,38 @@ function saveEditTx(){
   l.date=document.getElementById('et-date').value||l.date;l.member=document.getElementById('et-mbr').value;
   l.type=document.getElementById('et-type').value;l.note=document.getElementById('et-note').value;
   const a=parseFloat(document.getElementById('et-amt').value);if(!isNaN(a)&&a>0)l.amount=Math.round(a);
-  pushBin();closeOv('ov-edit-tx');editTxIdx=null;
-  renderAll();renderAdmLists();toast('Transaction updated','#F5C543');
+  saveLocal();pushToFirebase();closeOv('ov-edit-tx');editTxIdx=null;renderAll();toast('Transaction updated','#F5C543');
 }
 function delTxConfirm(){
   if(editTxIdx===null)return;if(!confirm('Delete this transaction?'))return;
-  S.ledger.splice(editTxIdx,1);pushBin();closeOv('ov-edit-tx');editTxIdx=null;
-  renderAll();renderAdmLists();toast('Transaction deleted','#ef4444');
+  S.ledger.splice(editTxIdx,1);saveLocal();pushToFirebase();closeOv('ov-edit-tx');editTxIdx=null;renderAll();toast('Transaction deleted','#ef4444');
+}
+function deleteAllTransactions(){
+  if(!adminUnlocked)return toast('Unlock admin first','#ef4444');
+  if(!confirm('⚠️ Are you sure you want to delete ALL transactions? This cannot be undone.')) return;
+  if(!confirm('Final warning – type "DELETE" to confirm.')) return;
+  const userInput = prompt('Type "DELETE" to confirm permanent deletion of all transactions:');
+  if(userInput !== 'DELETE'){ toast('Deletion cancelled','#F5C543'); return; }
+  S.ledger = [];
+  saveLocal();pushToFirebase();renderAll();renderAdmMbrList();toast('All transactions deleted','#ef4444');
 }
 
-/* ══════════════════════════════════════ EXPENSE ACTIONS */
+/* ===== EXPENSE ACTIONS ===== */
 function addExpense(){
-  if(!adminUnlocked){toast('Unlock admin first','#ef4444');return;}
+  if(!adminUnlocked)return toast('Unlock admin first','#ef4444');
   const desc=(document.getElementById('ex-desc').value||'').trim();
-  if(!desc){toast('Enter description','#ef4444');return;}
+  if(!desc)return toast('Enter description','#ef4444');
   const amt=parseFloat(document.getElementById('ex-amt').value)||0;
-  if(amt<=0){toast('Enter a valid amount','#ef4444');return;}
+  if(amt<=0)return toast('Enter a valid amount','#ef4444');
   S.expenses.push({id:Date.now(),desc,amount:Math.round(amt),date:document.getElementById('ex-date').value,category:document.getElementById('ex-cat').value});
   document.getElementById('ex-desc').value='';document.getElementById('ex-amt').value='';
-  pushBin();renderAll();renderAdmLists();
-  toast('Expense recorded','#F5C543');
-  // scroll expense list to show the new one at bottom
-  scrollLastIntoView('adm-exp-list','t-admin');
-}
-function delExpense(i){
-  if(!adminUnlocked)return;if(!confirm('Delete this expense?'))return;
-  S.expenses.splice(i,1);pushBin();renderAll();renderAdmLists();toast('Expense deleted','#ef4444');
+  saveLocal();pushToFirebase();closeOv('ov-add-exp');renderAll();toast('Expense recorded','#F5C543');
 }
 
-/* ══════════════════════════════════════ DOWNLOADS */
+/* ===== DOWNLOADS ===== */
 function dlCSV(rows,name){
   const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download=name;document.body.appendChild(a);a.click();a.remove();toast('Downloaded: '+name,'#22c55e');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=name;document.body.appendChild(a);a.click();a.remove();toast('Downloaded: '+name,'#22c55e');
 }
 function downloadLedger(){
   const bal=balances();
@@ -1329,7 +1235,7 @@ function downloadPayouts(){
   dlCSV([['Member','Balance (UGX)','Rating'],...S.members.map(m=>[m,bal[m]||0,rating(m).l]),['','',''],['Total Savings',totalSav(),''],['Total Expenses',totalExp(),''],['Cash Balance',cashBal(),'']],'kadama_payouts.csv');
 }
 
-/* ══════════════════════════════════════ CONFETTI */
+/* ===== CONFETTI ===== */
 const cc=document.getElementById('cc'),cx=cc.getContext('2d');
 let cp=[],cr=false;
 function rsC(){cc.width=innerWidth;cc.height=innerHeight;}addEventListener('resize',rsC);rsC();
@@ -1338,7 +1244,7 @@ function confetti(){
   if(!cr)(function L(){cr=true;requestAnimationFrame(L);cx.clearRect(0,0,cc.width,cc.height);for(let i=cp.length-1;i>=0;i--){const p=cp[i];p.life++;p.x+=p.vx;p.y+=p.vy;p.vy+=.3;p.rot+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.55);cx.restore();if(p.y>cc.height+40||p.life>200)cp.splice(i,1);}if(!cp.length)cr=false;})();
 }
 
-/* ══════════════════════════════════════ TOAST */
+/* ===== TOAST ===== */
 function toast(msg,color='#22c55e'){
   const w=document.getElementById('twrap');const el=document.createElement('div');el.className='toast';
   const dot=document.createElement('div');dot.className='tdot';dot.style.background=color;dot.style.boxShadow='0 0 8px '+color;
@@ -1346,49 +1252,35 @@ function toast(msg,color='#22c55e'){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300);},3500);
 }
 
-/* ══════════════════════════════════════ MODALS */
-function openOv(id){document.getElementById(id).classList.add('on');}
+/* ===== MODAL HELPERS ===== */
+function openOv(id){
+  if(id==='ov-add-tx')populateSel('mg-mbr');
+  if(id==='ov-settings'){
+    document.getElementById('st-gname').value=S.groupName||'';
+    document.getElementById('st-branch').value=S.branch||'';
+  }
+  document.getElementById(id).classList.add('on');
+}
 function closeOv(id){document.getElementById(id).classList.remove('on');}
 function maybeClose(e,id){if(e.target===document.getElementById(id))closeOv(id);}
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape')document.querySelectorAll('.ov.on').forEach(o=>o.classList.remove('on'));
-  if(e.key==='Enter'&&document.activeElement.id==='adm-pwd')doLogin();
-  if(e.key==='Enter'&&document.activeElement.id==='nm-name')addMember();
-});
+function populateSel(selId){
+  const sel=document.getElementById(selId);if(!sel)return;
+  sel.innerHTML=S.members.length?S.members.map(m=>`<option value="${escH(m)}">${escH(m)}</option>`).join(''):'<option>No members yet</option>';
+}
 
-/* ══════════════════════════════════════ UTIL */
+/* ===== UTILITY ===== */
 function setEl(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 
-
-/* ════════════ INIT ════════════ */
+/* ===== INIT ===== */
 async function init(){
   const tod=new Date().toISOString().split('T')[0];
   ['mg-date','ex-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=tod;});
-  // Restore chat display name if already set
-  const chatNameSec=document.getElementById('chat-name-section');
-  const chatNameInp=document.getElementById('chat-name-inp');
-  if(myName){if(chatNameSec)chatNameSec.style.display='none';if(chatNameInp)chatNameInp.value=myName;}
+  if(myName){ /* chat name not used */ }
 
-  const urlKey=getBinFromUrl();
-
-  if(urlKey){
-    // ── Opened via shared link ──────────────────────────────
-    document.getElementById('welcome').style.display='none';
-    document.getElementById('loading').classList.add('show');
-    loadLocal();                          // show cached data while fetching
-    const ok=await loadBin(urlKey);
-    document.getElementById('loading').classList.remove('show');
-    if(!ok)toast('Offline — showing cached data','#F5C543');
-    applyGroupMeta();
-    document.getElementById('app').classList.add('on');
-    renderAll();setSdot('live');
-    attachFbListener(urlKey);             // real-time updates from Firebase
-    lastChatLen=S.chat?S.chat.length:0;
-  }else{
-    // ── Normal open — show welcome screen ──────────────────
-    loadLocal();applyGroupMeta();
-    if(groupKey){setSdot('live');attachFbListener(groupKey);}
-  }
+  loadLocal(); // load backup
+  applyGroupMeta();
+  updateWaTab();
+  // Firebase listener is already attached – it will update S and render when remote data arrives
 }
 init();
 </script>
