@@ -350,7 +350,7 @@ svg.chart{width:100%;overflow:visible;}
 
   <div id="content">
 
-    <!-- HOME (unchanged) -->
+    <!-- HOME (updated with deposit number card) -->
     <div id="t-home" class="tab on">
       <div id="share-banner">
         <div class="share-lbl">🔗 Permanent Live Link</div>
@@ -382,6 +382,18 @@ svg.chart{width:100%;overflow:visible;}
           <div style="padding:9px;background:var(--gd3);border-radius:8px;text-align:center;"><div class="micro" style="margin-bottom:3px;">NET</div><div style="font-size:.82rem;font-weight:800;color:var(--gold);font-family:'JetBrains Mono',monospace;" id="bs-n">0</div></div>
         </div>
       </div>
+
+      <!-- +++ NEW DEPOSIT CARD +++ -->
+      <div class="card" style="margin-bottom:12px; background: var(--gd3); border-color: var(--gold);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div><span class="section-h" style="color:var(--gold);">💰 Deposit Money</span>
+          <div style="font-size:.7rem; color:var(--t2);">Send contributions to this number</div></div>
+          <button class="btn-icon" style="background:var(--gold); color:#000;" onclick="copyDepositNumber()" title="Copy number">📋</button>
+        </div>
+        <div style="font-size:1.5rem; font-weight:900; font-family:'JetBrains Mono', monospace; color:var(--gold); margin-top:5px;">0770 371 720</div>
+        <div class="micro" style="margin-top:5px;">MTN Mobile Money / Airtel</div>
+      </div>
+
       <div class="section-h">Recent Transactions</div>
       <div id="h-recent"></div>
     </div>
@@ -1270,6 +1282,23 @@ function populateSel(selId){
 
 /* ===== UTILITY ===== */
 function setEl(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
+
+/* ===== COPY DEPOSIT NUMBER (new) ===== */
+function copyDepositNumber() {
+  const num = "0770371720";
+  navigator.clipboard.writeText(num).then(() => {
+    toast('Deposit number copied!', '#F5C543');
+  }).catch(() => {
+    // fallback for older browsers
+    const textarea = document.createElement('textarea');
+    textarea.value = num;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    toast('Deposit number copied!', '#F5C543');
+  });
+}
 
 /* ===== INIT ===== */
 async function init(){
